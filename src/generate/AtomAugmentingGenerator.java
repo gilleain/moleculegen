@@ -1,86 +1,43 @@
 package generate;
 
-import group.SSPermutationGroup;
 import handler.GenerateHandler;
 import handler.PrintStreamHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import validate.MoleculeValidator;
+import validate.SimpleValidator;
+
 public class AtomAugmentingGenerator {
-	
-	private GenerateHandler handler;
-	
-	public AtomAugmentingGenerator() {
-		this(new PrintStreamHandler());
-	}
-	
-	public AtomAugmentingGenerator(GenerateHandler handler) {
-		this.handler = handler;
-	}
-	
-	public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
-		int maxDegreeForCurrent = getMaxDegree(parent.getAtom(currentAtomIndex));
-		SSPermutationGroup autG = getGroup(parent);
-		List<IAtomContainer> children = new ArrayList<IAtomContainer>();
-		for (List<Integer> multiset : getMultisets(parent, maxDegreeForCurrent)) {
-			if (isMinimal(multiset, autG)) {
-				makeChild(parent, multiset, children);
-			}
-		}
-		
-		for (IAtomContainer child : children) {
-			if (isCanonical(child)) {
-				if (isConnected(child) && isValidMol(child)) {
-					handler.handle(parent, child);
-				}
-				extend(child, currentAtomIndex + 1, size);
-			}
-		}
-	}
 
-	private boolean isValidMol(IAtomContainer child) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    private GenerateHandler handler;
 
-	private boolean isConnected(IAtomContainer child) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    private MoleculeValidator validator;
+    
+    private ChildLister childLister;
 
-	private boolean isCanonical(IAtomContainer child) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public AtomAugmentingGenerator() {
+        this(new PrintStreamHandler());
+    }
 
-	private void makeChild(
-			IAtomContainer parent, List<Integer> multiset, List<IAtomContainer> children) {
-		// TODO Auto-generated method stub
-		
-	}
+    public AtomAugmentingGenerator(GenerateHandler handler) {
+        this.handler = handler;
+        validator = new SimpleValidator();
+        childLister = new AtomSymmetricChildLister();
+    }
 
-	private boolean isMinimal(List<Integer> multiset, SSPermutationGroup autG) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
+        List<IAtomContainer> children = childLister.listChildren(parent, currentAtomIndex);
 
-	private List<List<Integer>> getMultisets(IAtomContainer parent, int maxDegreeForCurrent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private SSPermutationGroup getGroup(IAtomContainer parent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private int getMaxDegree(IAtom atom) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+        for (IAtomContainer child : children) {
+            if (validator.isCanonical(parent, child)) {
+                if (validator.isConnected(child) && validator.isValidMol(child)) {
+                    handler.handle(parent, child);
+                }
+                extend(child, currentAtomIndex + 1, size);
+            }
+        }
+    }
 }

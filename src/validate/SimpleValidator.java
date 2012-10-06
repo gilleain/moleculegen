@@ -17,7 +17,7 @@ public class SimpleValidator implements MoleculeValidator {
     }
 
     @Override
-    public boolean isCanonical(IAtomContainer atomContainer) {
+    public boolean isCanonical(IAtomContainer parent, IAtomContainer child) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -8,6 +8,6 @@ public interface MoleculeValidator {
 
 	public boolean isConnected(IAtomContainer atomContainer);
 
-	public boolean isCanonical(IAtomContainer atomContainer);
+	public boolean isCanonical(IAtomContainer parent, IAtomContainer child);
 
 }
