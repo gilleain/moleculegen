@@ -4,6 +4,7 @@ import group.Permutation;
 import group.SSPermutationGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,31 +42,37 @@ public class AtomSymmetricChildLister implements ChildLister {
         int maxDegreeForCurrent = getMaxDegree(parent.getAtom(currentAtomIndex));
         SSPermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
-        for (List<Integer> multiset : getMultisets(parent, maxDegreeForCurrent)) {
-            int[] bondOrderArray = toIntArray(multiset, currentAtomIndex);
-            if (isMinimal(bondOrderArray, autG)) {
-                children.add(makeChild(parent, multiset, currentAtomIndex));
+        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeForCurrent);
+        System.out.println("mms " + maxMultisetSize);
+        for (List<Integer> multiset : getMultisets(parent, maxMultisetSize)) {
+            int[] bondOrderArray = toIntArray(multiset, maxMultisetSize);
+            if (bondOrderArray != null && isMinimal(bondOrderArray, autG)) {
+//                System.out.println(Arrays.toString(bondOrderArray));
+                children.add(makeChild(parent, bondOrderArray, currentAtomIndex));
             }
         }
         return children;
     }
     
     public IAtomContainer makeChild(
-            IAtomContainer parent, List<Integer> multiset, int lastIndex) {
+            IAtomContainer parent, int[] bondOrderArr, int lastIndex) {
         try {
             IAtomContainer child = (IAtomContainer) parent.clone();
-            for (int value : multiset) {
+            for (int index = 0; index < bondOrderArr.length; index++) {
+                int value = bondOrderArr[index];
                 if (value > 0) {
                     Order order;
                     switch (value) {
-                        case 1: order = Order.SINGLE;
-                        case 2: order = Order.DOUBLE;
-                        case 3: order = Order.TRIPLE;
+                        case 1: order = Order.SINGLE; break;
+                        case 2: order = Order.DOUBLE; break;
+                        case 3: order = Order.TRIPLE; break;
                         default: order = Order.SINGLE;
                     }
-                    child.addBond(value, lastIndex, order);
+                    child.addBond(index, lastIndex, order);
                 }
             }
+//            System.out.println(Arrays.toString(bondOrderArr) + "\t" 
+//                    + AtomContainerPrinter.toString(child));
             return child;
         } catch (CloneNotSupportedException cnse) {
             // TODO
@@ -73,7 +80,7 @@ public class AtomSymmetricChildLister implements ChildLister {
         }
     }
     
-    public List<List<Integer>> getMultisets(IAtomContainer parent, int maxDegreeForCurrent) {
+    public List<List<Integer>> getMultisets(IAtomContainer parent, int max) {
         // these are the atom indices that can have bonds added
         List<Integer> baseSet = new ArrayList<Integer>();
         for (int index = 0; index < parent.getAtomCount(); index++) {
@@ -83,7 +90,7 @@ public class AtomSymmetricChildLister implements ChildLister {
         }
         
         List<List<Integer>> multisets = new ArrayList<List<Integer>>();
-        for (int k = 1; k <= maxDegreeForCurrent; k++) {
+        for (int k = 1; k <= max; k++) {
             MultiKSubsetLister<Integer> lister = new MultiKSubsetLister<Integer>(k, baseSet);
             for (List<Integer> multiset : lister) {
                 multisets.add(multiset);
@@ -95,20 +102,51 @@ public class AtomSymmetricChildLister implements ChildLister {
     public int[] toIntArray(List<Integer> multiset, int size) {
         int[] intArray = new int[size];
         for (int atomIndex : multiset) {
-           intArray[atomIndex]++;
+            if (atomIndex >= size) return null; // XXX
+            intArray[atomIndex]++;
         }
         return intArray;
     }
 
     public boolean isMinimal(int[] bondOrderArray, SSPermutationGroup autG) {
+//        boolean isMin = true;
+        String oStr = Arrays.toString(bondOrderArray);
         for (Permutation p : autG.all()) {
-            for (int index = 0; index < bondOrderArray.length; index++) {
-                if (bondOrderArray[p.get(index)] < bondOrderArray[index]) {
-                    return false;
-                }
+//            System.out.println(Arrays.toString(bondOrderArray) + "\t" + p);
+            String pStr = Arrays.toString(permute(bondOrderArray, p));
+            if (oStr.compareTo(pStr) < 0) {
+//                System.out.println(oStr + " > " + pStr);
+                return false;
             }
+//            for (int index = 0; index < bondOrderArray.length; index++) {
+//                int permutedIndex = p.get(index);
+//                int permutedValue = bondOrderArray[permutedIndex];
+//                int value = bondOrderArray[index];
+//                System.out.println("p(" + index + ") = " + permutedIndex +
+//                                   ", o[" + index + "] = " + value +
+//                                   ", o[p[" + index + "]] = " + permutedValue);
+//                if (permutedValue <= value) {
+//                    continue;
+//                } else {
+//                    System.out.println(index + " : " + permutedIndex + " = " 
+//                                       + permutedValue + " > " + bondOrderArray[index]
+//                                       + " in " + Arrays.toString(bondOrderArray)
+//                                       + " under " + p);
+//                    return false;
+//                    isMin = false;
+//                }
+//            }
         }
+//        return isMin;
         return true;
+    }
+    
+    private int[] permute(int[] a, Permutation p) {
+        int[] pA = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            pA[p.get(i)] = a[i];
+        }
+        return pA;
     }
 
     private boolean isUndersaturated(IAtomContainer parent, int index) {
@@ -146,8 +184,7 @@ public class AtomSymmetricChildLister implements ChildLister {
     }
 
     private int getMaxDegree(IAtom atom) {
-        // TODO Auto-generated method stub
-        return 0;
+        return degreeMap.get(atom.getSymbol());
     }
 
 }
