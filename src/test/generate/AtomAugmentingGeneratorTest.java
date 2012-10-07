@@ -10,6 +10,12 @@ import org.openscience.cdk.interfaces.IBond;
 
 public class AtomAugmentingGeneratorTest {
     
+    public IAtomContainer makeSingleC() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        return ac;
+    }
+    
     public IAtomContainer makeSingleCCEdge() {
         IAtomContainer ac = new AtomContainer();
         ac.addAtom(new Atom("C"));
@@ -24,6 +30,14 @@ public class AtomAugmentingGeneratorTest {
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCC");
         generator.extend(initial, 2, 4);
+    }
+    
+    @Test
+    public void testFoursFromSingleAtom() {
+        IAtomContainer initial = makeSingleC();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCCC");
+        generator.extend(initial, 1, 4);
     }
 
 }
