@@ -107,37 +107,15 @@ public class AtomSymmetricChildLister implements ChildLister {
         }
         return intArray;
     }
-
+    
     public boolean isMinimal(int[] bondOrderArray, SSPermutationGroup autG) {
-//        boolean isMin = true;
         String oStr = Arrays.toString(bondOrderArray);
         for (Permutation p : autG.all()) {
-//            System.out.println(Arrays.toString(bondOrderArray) + "\t" + p);
             String pStr = Arrays.toString(permute(bondOrderArray, p));
             if (oStr.compareTo(pStr) < 0) {
-//                System.out.println(oStr + " > " + pStr);
                 return false;
             }
-//            for (int index = 0; index < bondOrderArray.length; index++) {
-//                int permutedIndex = p.get(index);
-//                int permutedValue = bondOrderArray[permutedIndex];
-//                int value = bondOrderArray[index];
-//                System.out.println("p(" + index + ") = " + permutedIndex +
-//                                   ", o[" + index + "] = " + value +
-//                                   ", o[p[" + index + "]] = " + permutedValue);
-//                if (permutedValue <= value) {
-//                    continue;
-//                } else {
-//                    System.out.println(index + " : " + permutedIndex + " = " 
-//                                       + permutedValue + " > " + bondOrderArray[index]
-//                                       + " in " + Arrays.toString(bondOrderArray)
-//                                       + " under " + p);
-//                    return false;
-//                    isMin = false;
-//                }
-//            }
         }
-//        return isMin;
         return true;
     }
     
@@ -147,6 +125,33 @@ public class AtomSymmetricChildLister implements ChildLister {
             pA[p.get(i)] = a[i];
         }
         return pA;
+    }
+
+    // XXX - alternative test for minimality that tests without stringifying the
+    // bondOrderArrays, but tests them in-place - doesn't work!
+    public boolean isMinimal_(int[] bondOrderArray, SSPermutationGroup autG) {
+        boolean isMin = true;
+        for (Permutation p : autG.all()) {
+            for (int index = 0; index < bondOrderArray.length; index++) {
+                int permutedIndex = p.get(index);
+                int permutedValue = bondOrderArray[permutedIndex];
+                int value = bondOrderArray[index];
+                System.out.println("p(" + index + ") = " + permutedIndex +
+                                   ", o[" + index + "] = " + value +
+                                   ", o[p[" + index + "]] = " + permutedValue);
+                if (permutedValue <= value) {
+                    continue;
+                } else {
+                    System.out.println(index + " : " + permutedIndex + " = " 
+                                       + permutedValue + " > " + bondOrderArray[index]
+                                       + " in " + Arrays.toString(bondOrderArray)
+                                       + " under " + p);
+                    isMin = false;
+                    break;
+                }
+            }
+        }
+        return isMin;
     }
 
     private boolean isUndersaturated(IAtomContainer parent, int index) {

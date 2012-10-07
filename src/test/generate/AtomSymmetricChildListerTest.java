@@ -4,6 +4,7 @@ import generate.AtomSymmetricChildLister;
 import group.Permutation;
 import group.SSPermutationGroup;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.signature.MoleculeSignature;
 
 import test.AtomContainerPrinter;
 
@@ -74,6 +76,23 @@ public class AtomSymmetricChildListerTest {
         int len = parent.getAtomCount() - 1;
         for (IAtomContainer child : lister.listChildren(parent, len)) {
             AtomContainerPrinter.print(child);
+        }
+    }
+    
+    @Test
+    public void nonRedundantChildren() {
+        IAtomContainer parent = make3Star();
+        parent.addAtom(new Atom("C"));
+        AtomContainerPrinter.print(parent);
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
+        int len = parent.getAtomCount() - 1;
+        List<String> certs = new ArrayList<String>();
+        for (IAtomContainer child : lister.listChildren(parent, len)) {
+            MoleculeSignature molSig = new MoleculeSignature(child);
+            String cert = molSig.toCanonicalString();
+            if (certs.contains(cert)) {
+                System.out.println("dup " + AtomContainerPrinter.toString(child));
+            }
         }
     }
 }
