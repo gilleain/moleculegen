@@ -24,8 +24,9 @@ public class AtomAugmentingGenerator {
 
     public AtomAugmentingGenerator(GenerateHandler handler) {
         this.handler = handler;
-        childLister = new AtomSymmetricChildLister();
-        validator = new SimpleValidator((AtomSymmetricChildLister)childLister);
+//        childLister = new AtomSymmetricChildLister();
+        childLister = new AtomFilteringChildLister();
+        validator = new SimpleValidator((SignatureChildLister)childLister);
     }
     
     public void setElementString(String elementString) {

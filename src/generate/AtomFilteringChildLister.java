@@ -1,10 +1,6 @@
 package generate;
 
-import group.Permutation;
-import group.SSPermutationGroup;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +11,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.signature.MoleculeSignature;
-import org.openscience.cdk.signature.Orbit;
 
 import combinatorics.MultiKSubsetLister;
 
@@ -26,7 +21,7 @@ import combinatorics.MultiKSubsetLister;
  * @author maclean
  *
  */
-public class AtomSymmetricChildLister implements SignatureChildLister {
+public class AtomFilteringChildLister implements SignatureChildLister {
     
     /**
      * TODO : this is a very crude method
@@ -45,7 +40,7 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
      */
     private List<String> elementSymbols;
     
-    public AtomSymmetricChildLister() {
+    public AtomFilteringChildLister() {
         degreeMap = new HashMap<String, Integer>();
         degreeMap.put("C", 4);
         degreeMap.put("O", 3);
@@ -56,7 +51,7 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
      * 
      * @param elementString
      */
-    public AtomSymmetricChildLister(String elementString) {
+    public AtomFilteringChildLister(String elementString) {
         this();
         setElementString(elementString);
     }
@@ -78,15 +73,23 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
         int maxDegreeForCurrent = degreeMap.get(elementSymbols.get(currentAtomIndex));
-        SSPermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
+        List<String> certs = new ArrayList<String>();
         int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeForCurrent);
-//        System.out.println("mms " + maxMultisetSize);
+        parentSignature = new MoleculeSignature(parent).toCanonicalString();
         for (List<Integer> multiset : getMultisets(parent, maxMultisetSize)) {
+            
             int[] bondOrderArray = toIntArray(multiset, maxMultisetSize);
-            if (bondOrderArray != null && isMinimal(bondOrderArray, autG)) {
-//                System.out.println(Arrays.toString(bondOrderArray));
-                children.add(makeChild(parent, bondOrderArray, currentAtomIndex));
+            if (bondOrderArray != null) {
+                IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
+                MoleculeSignature molSig = new MoleculeSignature(child);
+                String molSigString = molSig.toCanonicalString();
+                if (certs.contains(molSigString)) {
+                    continue;
+                } else {
+                    children.add(child);
+                    certs.add(molSigString);
+                }
             }
         }
         return children;
@@ -147,53 +150,6 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
         return intArray;
     }
     
-    public boolean isMinimal(int[] bondOrderArray, SSPermutationGroup autG) {
-        String oStr = Arrays.toString(bondOrderArray);
-        for (Permutation p : autG.all()) {
-//            System.out.println("comparing " + oStr + " and " + p + " of " + Arrays.toString(bondOrderArray));
-            String pStr = Arrays.toString(permute(bondOrderArray, p));
-            if (oStr.compareTo(pStr) < 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private int[] permute(int[] a, Permutation p) {
-        int[] pA = new int[a.length];
-        for (int i = 0; i < a.length; i++) {
-            pA[p.get(i)] = a[i];
-        }
-        return pA;
-    }
-
-    // XXX - alternative test for minimality that tests without stringifying the
-    // bondOrderArrays, but tests them in-place - doesn't work!
-    public boolean isMinimal_(int[] bondOrderArray, SSPermutationGroup autG) {
-        boolean isMin = true;
-        for (Permutation p : autG.all()) {
-            for (int index = 0; index < bondOrderArray.length; index++) {
-                int permutedIndex = p.get(index);
-                int permutedValue = bondOrderArray[permutedIndex];
-                int value = bondOrderArray[index];
-                System.out.println("p(" + index + ") = " + permutedIndex +
-                                   ", o[" + index + "] = " + value +
-                                   ", o[p[" + index + "]] = " + permutedValue);
-                if (permutedValue <= value) {
-                    continue;
-                } else {
-                    System.out.println(index + " : " + permutedIndex + " = " 
-                                       + permutedValue + " > " + bondOrderArray[index]
-                                       + " in " + Arrays.toString(bondOrderArray)
-                                       + " under " + p);
-                    isMin = false;
-                    break;
-                }
-            }
-        }
-        return isMin;
-    }
-
     private boolean isUndersaturated(IAtomContainer parent, int index) {
         IAtom atom = parent.getAtom(index);
         String elementSymbol = atom.getSymbol();
@@ -203,30 +159,5 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
             degree += bond.getOrder().ordinal();
         }
         return degree < maxDegree;
-    }
-
-    public SSPermutationGroup getGroup(IAtomContainer parent) {
-        MoleculeSignature molSig = new MoleculeSignature(parent);
-        parentSignature = molSig.toCanonicalString();
-        
-        List<Orbit> orbits = molSig.calculateOrbits();
-        int size = parent.getAtomCount();
-        SSPermutationGroup autG = new SSPermutationGroup(size);
-        for (Orbit orbit : orbits) {
-            List<Integer> atomIndices = orbit.getAtomIndices();
-            if (atomIndices.size() > 1) {
-                Permutation p = new Permutation(size);
-                int prev = -1;
-                for (int index : orbit) {
-                    if (prev > -1) {
-                        p.set(prev, index);
-                    }
-                    prev = index;
-                }
-                p.set(prev, atomIndices.get(0));
-                autG.enter(p);
-            }
-        }
-        return autG;
     }
 }

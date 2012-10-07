@@ -1,16 +1,20 @@
 package validate;
 
-import generate.AtomSymmetricChildLister;
+import java.util.Arrays;
+
+import generate.SignatureChildLister;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 
+import test.AtomContainerPrinter;
+
 public class SimpleValidator implements MoleculeValidator {
     
-    private AtomSymmetricChildLister childLister;
+    private SignatureChildLister childLister;
     
-    public SimpleValidator(AtomSymmetricChildLister childLister) {
+    public SimpleValidator(SignatureChildLister childLister) {
         this.childLister = childLister;
     }
 
@@ -25,22 +29,44 @@ public class SimpleValidator implements MoleculeValidator {
         MoleculeSignature molSig = new MoleculeSignature(child);
         int[] labels = molSig.getCanonicalLabels();
         int size = labels.length - 1;
-        int vertexToDelete = labels[size];
-        if (vertexToDelete == size) {
-            return true;
-        } else {
-            String parentSignature = childLister.getParentSignature();
+//        int vertexToDelete = labels[size];
+        int vertexToDelete = find(labels, size);
+//        if (vertexToDelete == size) {
+//            return true;
+//        } else {
+//            String parentSignature = childLister.getParentSignature();
+        String parentSignature = new MoleculeSignature(parent).toCanonicalString();
             try {
                 IAtomContainer canonicalParent = (IAtomContainer) child.clone();
                 IAtom atomToDelete = canonicalParent.getAtom(vertexToDelete);
                 canonicalParent.removeAtomAndConnectedElectronContainers(atomToDelete);
                 MoleculeSignature canonicalParentSig = new MoleculeSignature(canonicalParent);
-                return canonicalParentSig.toCanonicalString().equals(parentSignature);
+                String canonParentString = canonicalParentSig.toCanonicalString(); 
+                boolean canon = canonParentString.equals(parentSignature);
+//                if (canon) {
+//                    System.out.println(canonParentString 
+//                            + " == " + parentSignature
+//                            + " -> " + AtomContainerPrinter.toString(child)
+//                            + " l = " + Arrays.toString(labels));
+//                } else {
+//                    System.out.println(canonParentString 
+//                            + " != " + parentSignature
+//                            + " -> " + AtomContainerPrinter.toString(child)
+//                            + " l = " + Arrays.toString(labels));
+//                }
+                return canon;
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return false;
             }
+//        }
+    }
+    
+    private int find(int[] labels, int j) {
+        for (int i = 0; i < labels.length; i++) {
+            if (labels[i] == j) return i;
         }
+        return -1;
     }
 
 }
