@@ -27,8 +27,14 @@ public class AtomAugmentingGenerator {
         childLister = new AtomSymmetricChildLister();
         validator = new SimpleValidator((AtomSymmetricChildLister)childLister);
     }
+    
+    public void setElementString(String elementString) {
+        childLister.setElementString(elementString);
+    }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
+        if (currentAtomIndex >= size) return;
+        
         List<IAtomContainer> children = childLister.listChildren(parent, currentAtomIndex);
 
         for (IAtomContainer child : children) {

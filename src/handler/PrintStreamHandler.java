@@ -33,6 +33,7 @@ public class PrintStreamHandler implements GenerateHandler {
 	public void handle(IAtomContainer parent, IAtomContainer child) {
 		String smiles = smilesGenerator.createSMILES(child);
 		printStream.println(count + "\t" + smiles);
+		count++;
 	}
 
 }

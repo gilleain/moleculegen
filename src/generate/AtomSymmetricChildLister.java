@@ -58,6 +58,10 @@ public class AtomSymmetricChildLister implements ChildLister {
      */
     public AtomSymmetricChildLister(String elementString) {
         this();
+        setElementString(elementString);
+    }
+    
+    public void setElementString(String elementString) {
         elementSymbols = new ArrayList<String>();
         for (int i = 0; i < elementString.length(); i++) {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
@@ -146,6 +150,7 @@ public class AtomSymmetricChildLister implements ChildLister {
     public boolean isMinimal(int[] bondOrderArray, SSPermutationGroup autG) {
         String oStr = Arrays.toString(bondOrderArray);
         for (Permutation p : autG.all()) {
+//            System.out.println("comparing " + oStr + " and " + p + " of " + Arrays.toString(bondOrderArray));
             String pStr = Arrays.toString(permute(bondOrderArray, p));
             if (oStr.compareTo(pStr) < 0) {
                 return false;
