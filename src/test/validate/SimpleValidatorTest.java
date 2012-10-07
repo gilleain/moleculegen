@@ -1,4 +1,4 @@
-package validate;
+package test.validate;
 
 import generate.AtomSymmetricChildLister;
 
@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import test.AtomContainerPrinter;
+import validate.SimpleValidator;
 
 public class SimpleValidatorTest {
     
