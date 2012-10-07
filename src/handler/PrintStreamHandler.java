@@ -31,7 +31,9 @@ public class PrintStreamHandler implements GenerateHandler {
 
 	@Override
 	public void handle(IAtomContainer parent, IAtomContainer child) {
+	    String psmiles = smilesGenerator.createSMILES(parent);
 		String smiles = smilesGenerator.createSMILES(child);
+//		printStream.println(count + "\t" + psmiles + "\t" + smiles);
 		printStream.println(count + "\t" + smiles);
 		count++;
 	}
