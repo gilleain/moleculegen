@@ -24,8 +24,8 @@ public class AtomAugmentingGenerator {
 
     public AtomAugmentingGenerator(GenerateHandler handler) {
         this.handler = handler;
-        validator = new SimpleValidator();
         childLister = new AtomSymmetricChildLister();
+        validator = new SimpleValidator((AtomSymmetricChildLister)childLister);
     }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
@@ -33,7 +33,7 @@ public class AtomAugmentingGenerator {
 
         for (IAtomContainer child : children) {
             if (validator.isCanonical(parent, child)) {
-                if (validator.isConnected(child) && validator.isValidMol(child)) {
+                if (validator.isValidMol(child, size)) {
                     handler.handle(parent, child);
                 }
                 extend(child, currentAtomIndex + 1, size);

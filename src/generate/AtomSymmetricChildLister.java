@@ -32,10 +32,21 @@ public class AtomSymmetricChildLister implements ChildLister {
      */
     private Map<String, Integer> degreeMap;
     
+    /**
+     * An optimisation : since the signature of the parent has to be calculated to
+     * make the group, we calculate it here to be used in the validator for the 
+     * canonical checking step 
+     */
+    private String parentSignature;
+    
     public AtomSymmetricChildLister() {
         degreeMap = new HashMap<String, Integer>();
         degreeMap.put("C", 4);
         degreeMap.put("O", 3);
+    }
+    
+    public String getParentSignature() {
+        return parentSignature;
     }
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
@@ -43,7 +54,7 @@ public class AtomSymmetricChildLister implements ChildLister {
         SSPermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeForCurrent);
-        System.out.println("mms " + maxMultisetSize);
+//        System.out.println("mms " + maxMultisetSize);
         for (List<Integer> multiset : getMultisets(parent, maxMultisetSize)) {
             int[] bondOrderArray = toIntArray(multiset, maxMultisetSize);
             if (bondOrderArray != null && isMinimal(bondOrderArray, autG)) {
@@ -167,6 +178,8 @@ public class AtomSymmetricChildLister implements ChildLister {
 
     public SSPermutationGroup getGroup(IAtomContainer parent) {
         MoleculeSignature molSig = new MoleculeSignature(parent);
+        parentSignature = molSig.toCanonicalString();
+        
         List<Orbit> orbits = molSig.calculateOrbits();
         int size = parent.getAtomCount();
         SSPermutationGroup autG = new SSPermutationGroup(size);
