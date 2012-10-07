@@ -39,5 +39,13 @@ public class AtomAugmentingGeneratorTest {
         generator.setElementString("CCCC");
         generator.extend(initial, 1, 4);
     }
+    
+    @Test
+    public void testFivesFromSingleAtom() {
+        IAtomContainer initial = makeSingleC();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCCCC");
+        generator.extend(initial, 1, 5);
+    }
 
 }
