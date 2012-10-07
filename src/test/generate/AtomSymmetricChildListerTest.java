@@ -70,10 +70,9 @@ public class AtomSymmetricChildListerTest {
     @Test
     public void listChildren() {
         IAtomContainer parent = make3Star();
-        parent.addAtom(new Atom("C"));
         AtomContainerPrinter.print(parent);
-        AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
-        int len = parent.getAtomCount() - 1;
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
+        int len = parent.getAtomCount();
         for (IAtomContainer child : lister.listChildren(parent, len)) {
             AtomContainerPrinter.print(child);
         }
@@ -82,16 +81,15 @@ public class AtomSymmetricChildListerTest {
     @Test
     public void nonRedundantChildren() {
         IAtomContainer parent = make3Star();
-        parent.addAtom(new Atom("C"));
         AtomContainerPrinter.print(parent);
-        AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
-        int len = parent.getAtomCount() - 1;
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
+        int len = parent.getAtomCount();
         List<String> certs = new ArrayList<String>();
         for (IAtomContainer child : lister.listChildren(parent, len)) {
             MoleculeSignature molSig = new MoleculeSignature(child);
             String cert = molSig.toCanonicalString();
             if (certs.contains(cert)) {
-                System.out.println("dup " + AtomContainerPrinter.toString(child));
+                System.out.println("DUP! " + AtomContainerPrinter.toString(child));
             }
         }
     }

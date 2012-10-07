@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openscience.cdk.Atom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -39,10 +40,32 @@ public class AtomSymmetricChildLister implements ChildLister {
      */
     private String parentSignature;
     
+    /**
+     * The elements (in order) used to make this molecule.
+     */
+    private List<String> elementSymbols;
+    
     public AtomSymmetricChildLister() {
         degreeMap = new HashMap<String, Integer>();
         degreeMap.put("C", 4);
         degreeMap.put("O", 3);
+    }
+    
+    /**
+     * Convenience constructor for testing.
+     * 
+     * @param elementString
+     */
+    public AtomSymmetricChildLister(String elementString) {
+        this();
+        elementSymbols = new ArrayList<String>();
+        for (int i = 0; i < elementString.length(); i++) {
+            elementSymbols.add(String.valueOf(elementString.charAt(i)));
+        }
+    }
+    
+    public void setElementSymbols(List<String> elementSymbols) {
+        this.elementSymbols = elementSymbols;
     }
     
     public String getParentSignature() {
@@ -50,7 +73,7 @@ public class AtomSymmetricChildLister implements ChildLister {
     }
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
-        int maxDegreeForCurrent = getMaxDegree(parent.getAtom(currentAtomIndex));
+        int maxDegreeForCurrent = degreeMap.get(elementSymbols.get(currentAtomIndex));
         SSPermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeForCurrent);
@@ -69,6 +92,7 @@ public class AtomSymmetricChildLister implements ChildLister {
             IAtomContainer parent, int[] bondOrderArr, int lastIndex) {
         try {
             IAtomContainer child = (IAtomContainer) parent.clone();
+            child.addAtom(new Atom(elementSymbols.get(lastIndex)));
             for (int index = 0; index < bondOrderArr.length; index++) {
                 int value = bondOrderArr[index];
                 if (value > 0) {
@@ -200,9 +224,4 @@ public class AtomSymmetricChildLister implements ChildLister {
         }
         return autG;
     }
-
-    private int getMaxDegree(IAtom atom) {
-        return degreeMap.get(atom.getSymbol());
-    }
-
 }

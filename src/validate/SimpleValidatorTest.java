@@ -27,15 +27,14 @@ public class SimpleValidatorTest {
     @Test
     public void canonicalChecking() {
         IAtomContainer parent = make3Star();
-        parent.addAtom(new Atom("C"));
         AtomContainerPrinter.print(parent);
-        AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
         SimpleValidator validator = new SimpleValidator(lister);
-        int len = parent.getAtomCount() - 1;
+        int len = parent.getAtomCount();
         for (IAtomContainer child : lister.listChildren(parent, len)) {
             boolean isCanonical = validator.isCanonical(parent, child);
             String acp = AtomContainerPrinter.toString(child);
-            System.out.println(acp + " " + isCanonical);
+            System.out.println(isCanonical + "\t" + acp);
         }
     }
 
