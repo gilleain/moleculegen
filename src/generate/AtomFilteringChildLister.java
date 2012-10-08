@@ -47,19 +47,15 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Sig
         List<String> certs = new ArrayList<String>();
         int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeSumForCurrent);
         parentSignature = new MoleculeSignature(parent).toCanonicalString();
-        for (List<Integer> multiset : getMultisets(parent, maxMultisetSize)) {
-            
-            int[] bondOrderArray = toIntArray(multiset, maxMultisetSize, maxDegreeForCurrent);
-            if (bondOrderArray != null) {
-                IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
-                MoleculeSignature molSig = new MoleculeSignature(child);
-                String molSigString = molSig.toCanonicalString();
-                if (certs.contains(molSigString)) {
-                    continue;
-                } else {
-                    children.add(child);
-                    certs.add(molSigString);
-                }
+        for (int[] bondOrderArray : getBondOrderArrays(parent, maxMultisetSize, maxDegreeForCurrent)) {
+            IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
+            MoleculeSignature molSig = new MoleculeSignature(child);
+            String molSigString = molSig.toCanonicalString();
+            if (certs.contains(molSigString)) {
+                continue;
+            } else {
+                children.add(child);
+                certs.add(molSigString);
             }
         }
         return children;

@@ -35,9 +35,8 @@ public class AtomSymmetricChildListerTest {
     public void listMultisets() {
         IAtomContainer parent = make3Star();
         AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
-        for (List<Integer> multiset : lister.getMultisets(parent, 4)) {
-            int[] intArr = lister.toIntArray(multiset, 4, 3);
-            System.out.println(Arrays.toString(intArr) + "\t" + multiset);
+        for (int[] intArr : lister.getBondOrderArrays(parent, 4, 3)) {
+            System.out.println(Arrays.toString(intArr));
         }
     }
     
@@ -57,8 +56,7 @@ public class AtomSymmetricChildListerTest {
         int len = parent.getAtomCount();
         AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
         SSPermutationGroup autG = lister.getGroup(parent);
-        for (List<Integer> multiset : lister.getMultisets(parent, len)) {
-            int[] bondOrderArray = lister.toIntArray(multiset, len, 3);
+        for (int[] bondOrderArray : lister.getBondOrderArrays(parent, len, 3)) {
             if (lister.isMinimal(bondOrderArray, autG)) {
                 System.out.println("YES " + Arrays.toString(bondOrderArray));
             } else {

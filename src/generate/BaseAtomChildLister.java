@@ -1,7 +1,6 @@
 package generate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,7 @@ public class BaseAtomChildLister {
                     child.addBond(index, lastIndex, order);
                 }
             }
-//            System.out.println(Arrays.toString(bondOrderArr) + "\t" 
+//            System.out.println(java.util.Arrays.toString(bondOrderArr) + "\t" 
 //                    + test.AtomContainerPrinter.toString(child));
             return child;
         } catch (CloneNotSupportedException cnse) {
@@ -91,44 +90,56 @@ public class BaseAtomChildLister {
         }
     }
     
-    public List<List<Integer>> getMultisets(IAtomContainer parent, int maxSetSize) {
+    public List<int[]> getBondOrderArrays(IAtomContainer parent, int maxSetSize, int maxDegree) {
         // these are the atom indices that can have bonds added
         List<Integer> baseSet = new ArrayList<Integer>();
+        
+        // get the amount each atom is under-saturated
+        int[] saturationCapacity = getSaturationCapacity(parent);
         for (int index = 0; index < parent.getAtomCount(); index++) {
-            if (isUndersaturated(parent, index)) {
+            if (saturationCapacity[index] > 0) {
                 baseSet.add(index);
             }
         }
         
-        List<List<Integer>> multisets = new ArrayList<List<Integer>>();
+        List<int[]> bondOrderArrays = new ArrayList<int[]>();
         for (int k = 1; k <= maxSetSize; k++) {
             MultiKSubsetLister<Integer> lister = new MultiKSubsetLister<Integer>(k, baseSet);
             for (List<Integer> multiset : lister) {
-                multisets.add(multiset);
+                int[] bondOrderArray = 
+                    toIntArray(multiset, maxSetSize, maxDegree, saturationCapacity);
+                if (bondOrderArray != null) {
+                    bondOrderArrays.add(bondOrderArray);
+                }
             }
         }
-        return multisets;
+        return bondOrderArrays;
     }
     
-    public int[] toIntArray(List<Integer> multiset, int size, int maxDegree) {
+    public int[] toIntArray(List<Integer> multiset, int size, int maxDegree, int[] satCap) {
         int[] intArray = new int[size];
         for (int atomIndex : multiset) {
             if (atomIndex >= size) return null; // XXX
             intArray[atomIndex]++;
-            if (intArray[atomIndex] > maxDegree) return null;   // XXX avoid quadruple bonds 
+            // XXX avoid quadruple bonds and oversaturation 
+            if (intArray[atomIndex] > maxDegree || intArray[atomIndex] >= satCap[atomIndex]) {
+                return null;   
+            }
         }
         return intArray;
     }
-
-    private boolean isUndersaturated(IAtomContainer parent, int index) {
-        IAtom atom = parent.getAtom(index);
-        String elementSymbol = atom.getSymbol();
-        int maxDegree = maxBondOrderSumMap.get(elementSymbol);
-        int degree = 0;
-        for (IBond bond : parent.getConnectedBondsList(atom)) {
-            degree += bond.getOrder().ordinal();
+    
+    private int[] getSaturationCapacity(IAtomContainer parent) {
+        int[] satCap = new int[parent.getAtomCount()];
+        for (int index = 0; index < parent.getAtomCount(); index++) {
+            IAtom atom = parent.getAtom(index);
+            int maxDegree = maxBondOrderSumMap.get(atom.getSymbol());
+            int degree = 0;
+            for (IBond bond : parent.getConnectedBondsList(atom)) {
+                degree += bond.getOrder().ordinal();
+            }
+            satCap[index] = maxDegree - degree;
         }
-        return degree < maxDegree;
+        return satCap;
     }
-
 }
