@@ -102,9 +102,9 @@ public class AtomAugmentingGeneratorTest {
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString(elementString);
         generator.extend(ccSingle, 2, n);
-        System.out.println("--");
+//        System.out.println("--");
         generator.extend(ccDouble, 2, n);
-        System.out.println("--");
+//        System.out.println("--");
         generator.extend(ccTriple, 2, n);
     }
     

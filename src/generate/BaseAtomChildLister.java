@@ -114,8 +114,13 @@ public class BaseAtomChildLister {
             MultiKSubsetLister<Integer> lister = new MultiKSubsetLister<Integer>(k, baseSet);
             for (List<Integer> multiset : lister) {
                 int[] bondOrderArray = 
-                    toIntArray(multiset, maxSetSize, maxDegree, saturationCapacity);
+                    toIntArray(multiset, parent.getAtomCount(), maxDegree, saturationCapacity);
                 if (bondOrderArray != null) {
+//                    System.out.println(
+//                            "converting to " + java.util.Arrays.toString(bondOrderArray)
+//                            + " from " + multiset 
+//                            + " for " + test.AtomContainerPrinter.toString(parent)
+//                    );
                     bondOrderArrays.add(bondOrderArray);
                 }
             }
