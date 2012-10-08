@@ -64,7 +64,15 @@ public class PrintStreamHandler implements GenerateHandler {
 	
 	private void printAsSignature(IAtomContainer parent, IAtomContainer child) {
 	    MoleculeSignature childSignature = new MoleculeSignature(child);
-	    printStream.println(count + "\t" + childSignature.toCanonicalString());
+	    
+	    boolean debug = false;
+        debug = true;
+        if (debug) {
+            printStream.println(count + "\t" + childSignature.toCanonicalString() + "\t" 
+                               + test.AtomContainerPrinter.toString(child));
+        } else {
+    	    printStream.println(count + "\t" + childSignature.toCanonicalString());
+        }
 	}
 
 }
