@@ -89,6 +89,11 @@ public class AtomAugmentingGeneratorTest {
     }
     
     @Test
+    public void testSixesFromSingleDoubleAndTripleEdges() {
+        testNFromSingleDoubleTriple("CCCCCC", 6);
+    }
+    
+    @Test
     public void testThreesFromSingleAtom() {
         IAtomContainer initial = makeSingleC();
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();

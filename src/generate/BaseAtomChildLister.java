@@ -122,10 +122,11 @@ public class BaseAtomChildLister {
             if (atomIndex >= size) return null; // XXX
             intArray[atomIndex]++;
             // XXX avoid quadruple bonds and oversaturation 
-            if (intArray[atomIndex] > maxDegree || intArray[atomIndex] >= satCap[atomIndex]) {
+            if (intArray[atomIndex] > maxDegree || intArray[atomIndex] > satCap[atomIndex]) {
                 return null;   
             }
         }
+//        System.out.println(multiset + "\t" + Arrays.toString(intArray) + "\t" + Arrays.toString(satCap));
         return intArray;
     }
     
@@ -136,7 +137,7 @@ public class BaseAtomChildLister {
             int maxDegree = maxBondOrderSumMap.get(atom.getSymbol());
             int degree = 0;
             for (IBond bond : parent.getConnectedBondsList(atom)) {
-                degree += bond.getOrder().ordinal();
+                degree += bond.getOrder().ordinal() + 1;
             }
             satCap[index] = maxDegree - degree;
         }
