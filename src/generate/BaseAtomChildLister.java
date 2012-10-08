@@ -102,7 +102,14 @@ public class BaseAtomChildLister {
             }
         }
         
+        // the possible extensions
         List<int[]> bondOrderArrays = new ArrayList<int[]>();
+        
+        // no extension possible
+        if (baseSet.size() == 0) {
+            return bondOrderArrays;
+        }
+        
         for (int k = 1; k <= maxSetSize; k++) {
             MultiKSubsetLister<Integer> lister = new MultiKSubsetLister<Integer>(k, baseSet);
             for (List<Integer> multiset : lister) {

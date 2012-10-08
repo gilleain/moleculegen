@@ -45,6 +45,44 @@ public class AtomAugmentingGeneratorTest {
         return ac;
     }
     
+    public IAtomContainer makeCycloPentane() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addBond(0, 1, IBond.Order.SINGLE);
+        ac.addBond(0, 4, IBond.Order.SINGLE);
+        ac.addBond(1, 2, IBond.Order.SINGLE);
+        ac.addBond(2, 3, IBond.Order.SINGLE);
+        ac.addBond(3, 4, IBond.Order.SINGLE);
+        return ac;
+    }
+    
+    /**
+     * A molecule on 5 vertices that cannot be extended to 6 : C1=4C2=C3C=4C123.
+     * 
+     * @return
+     */
+    public IAtomContainer makeInextensibleFusedRingSystem() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addBond(0, 1, IBond.Order.SINGLE);
+        ac.addBond(0, 2, IBond.Order.SINGLE);
+        ac.addBond(1, 2, IBond.Order.SINGLE);
+        ac.addBond(0, 3, IBond.Order.DOUBLE);
+        ac.addBond(1, 3, IBond.Order.SINGLE);
+        ac.addBond(1, 4, IBond.Order.SINGLE);
+        ac.addBond(2, 4, IBond.Order.DOUBLE);
+        ac.addBond(3, 4, IBond.Order.SINGLE);
+        return ac;
+    }
+    
     public IAtomContainer makeButene() {
         IAtomContainer ac = new AtomContainer();
         ac.addAtom(new Atom("C"));
@@ -94,6 +132,11 @@ public class AtomAugmentingGeneratorTest {
     }
     
     @Test
+    public void testSevensFromSingleDoubleAndTripleEdges() {
+        testNFromSingleDoubleTriple("CCCCCCC", 7);
+    }
+    
+    @Test
     public void testThreesFromSingleAtom() {
         IAtomContainer initial = makeSingleC();
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
@@ -135,10 +178,26 @@ public class AtomAugmentingGeneratorTest {
     
     @Test
     public void extendButene() {
-        IAtomContainer propene = makeButene();
+        IAtomContainer butene = makeButene();
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCCC");
-        generator.extend(propene, 4, 5);
+        generator.extend(butene, 4, 5);
+    }
+    
+    @Test
+    public void extendCyclopentane() {
+        IAtomContainer cyclopentane = makeCycloPentane();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCCCCC");
+        generator.extend(cyclopentane, 5, 6);
+    }
+    
+    @Test
+    public void extendFusedRingSystem() {
+        IAtomContainer fusedSystem = makeInextensibleFusedRingSystem();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCCCCC");
+        generator.extend(fusedSystem, 5, 6);
     }
 
 }
