@@ -45,6 +45,18 @@ public class AtomAugmentingGeneratorTest {
         return ac;
     }
     
+    public IAtomContainer makeButene() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addBond(0, 1, IBond.Order.DOUBLE);
+        ac.addBond(0, 2, IBond.Order.SINGLE);
+        ac.addBond(2, 3, IBond.Order.SINGLE);
+        return ac;
+    }
+
     public void testNFromSingleDoubleTriple(String elementString, int n) {
         IAtomContainer ccSingle = makeCCEdge(IBond.Order.SINGLE);
         IAtomContainer ccDouble = makeCCEdge(IBond.Order.DOUBLE);
@@ -52,7 +64,9 @@ public class AtomAugmentingGeneratorTest {
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString(elementString);
         generator.extend(ccSingle, 2, n);
+        System.out.println("--");
         generator.extend(ccDouble, 2, n);
+        System.out.println("--");
         generator.extend(ccTriple, 2, n);
     }
     
@@ -112,6 +126,14 @@ public class AtomAugmentingGeneratorTest {
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCC");
         generator.extend(propene, 3, 4);
+    }
+    
+    @Test
+    public void extendButene() {
+        IAtomContainer propene = makeButene();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCCCC");
+        generator.extend(propene, 4, 5);
     }
 
 }
