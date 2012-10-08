@@ -1,6 +1,7 @@
 package test.generate;
 
 import generate.AtomAugmentingGenerator;
+import generate.AtomAugmentingGenerator.ListerMethod;
 import handler.PrintStreamHandler;
 import handler.PrintStreamHandler.OutputFormat;
 
@@ -94,6 +95,20 @@ public class AtomAugmentingGeneratorTest {
         ac.addBond(0, 1, IBond.Order.DOUBLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(2, 3, IBond.Order.SINGLE);
+        return ac;
+    }
+    
+    public IAtomContainer makePentene() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addBond(0, 1, IBond.Order.DOUBLE);
+        ac.addBond(0, 2, IBond.Order.SINGLE);
+        ac.addBond(1, 3, IBond.Order.SINGLE);
+        ac.addBond(2, 4, IBond.Order.SINGLE);
         return ac;
     }
 
@@ -195,6 +210,17 @@ public class AtomAugmentingGeneratorTest {
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCCCC");
         generator.extend(cyclopentane, 5, 6);
+    }
+    
+    @Test
+    public void extendPentene() {
+        IAtomContainer pentene = makePentene();
+        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
+//        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
+//        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.SYMMETRIC);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.FILTER);
+        generator.setElementString("CCCCCC");
+        generator.extend(pentene, 5, 6);
     }
     
     @Test
