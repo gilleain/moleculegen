@@ -111,7 +111,7 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
                 }
             }
 //            System.out.println(Arrays.toString(bondOrderArr) + "\t" 
-//                    + AtomContainerPrinter.toString(child));
+//                    + test.AtomContainerPrinter.toString(child));
             return child;
         } catch (CloneNotSupportedException cnse) {
             // TODO
@@ -213,20 +213,41 @@ public class AtomSymmetricChildLister implements SignatureChildLister {
         int size = parent.getAtomCount();
         SSPermutationGroup autG = new SSPermutationGroup(size);
         for (Orbit orbit : orbits) {
-            List<Integer> atomIndices = orbit.getAtomIndices();
-            if (atomIndices.size() > 1) {
-                Permutation p = new Permutation(size);
-                int prev = -1;
-                for (int index : orbit) {
-                    if (prev > -1) {
-                        p.set(prev, index);
-                    }
-                    prev = index;
-                }
-                p.set(prev, atomIndices.get(0));
-                autG.enter(p);
-            }
+           addOrbit(orbit, autG, size);
         }
         return autG;
+    }
+    
+    private void addOrbit(Orbit orbit, SSPermutationGroup autG, int size) {
+        List<Integer> atomIndices = orbit.getAtomIndices();
+        int aN = atomIndices.size();
+        if (aN == 2) {
+            Permutation pp = new Permutation(size);
+            int i = atomIndices.get(0);
+            int j = atomIndices.get(1);
+            pp.set(i, j);
+            pp.set(j, i);
+//            System.out.println("entering " + pp);
+            autG.enter(pp);
+        } else if (aN >= 3) {
+            int first = atomIndices.get(0);
+            int second = atomIndices.get(1);
+            
+            // p1 is (0, 1)
+            Permutation pp1 = new Permutation(size);
+            pp1.set(first, second);
+            pp1.set(second, first);
+//            System.out.println("entering " + pp1);
+            autG.enter(pp1);
+            
+            // p2 is (1, 2, ...., n, 0)
+            Permutation pp2 = new Permutation(size);
+            for (int i = 0; i < aN - 1; i++) {
+                pp2.set(atomIndices.get(i), atomIndices.get(i + 1));
+            }
+            pp2.set(atomIndices.get(aN - 1), atomIndices.get(0));
+//            System.out.println("entering " + pp2);
+            autG.enter(pp2);
+        }
     }
 }
