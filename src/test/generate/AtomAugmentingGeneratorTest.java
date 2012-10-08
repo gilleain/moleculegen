@@ -1,6 +1,8 @@
 package test.generate;
 
 import generate.AtomAugmentingGenerator;
+import handler.PrintStreamHandler;
+import handler.PrintStreamHandler.OutputFormat;
 
 import org.junit.Test;
 import org.openscience.cdk.Atom;
@@ -99,8 +101,11 @@ public class AtomAugmentingGeneratorTest {
         IAtomContainer ccSingle = makeCCEdge(IBond.Order.SINGLE);
         IAtomContainer ccDouble = makeCCEdge(IBond.Order.DOUBLE);
         IAtomContainer ccTriple = makeCCEdge(IBond.Order.TRIPLE);
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+//        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
+        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler);
         generator.setElementString(elementString);
+        
         generator.extend(ccSingle, 2, n);
 //        System.out.println("--");
         generator.extend(ccDouble, 2, n);
