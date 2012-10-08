@@ -82,8 +82,8 @@ public class BaseAtomChildLister {
                     child.addBond(index, lastIndex, order);
                 }
             }
-            System.out.println(Arrays.toString(bondOrderArr) + "\t" 
-                    + test.AtomContainerPrinter.toString(child));
+//            System.out.println(Arrays.toString(bondOrderArr) + "\t" 
+//                    + test.AtomContainerPrinter.toString(child));
             return child;
         } catch (CloneNotSupportedException cnse) {
             // TODO
@@ -115,6 +115,7 @@ public class BaseAtomChildLister {
         for (int atomIndex : multiset) {
             if (atomIndex >= size) return null; // XXX
             intArray[atomIndex]++;
+            if (intArray[atomIndex] > maxDegree) return null;   // XXX avoid quadruple bonds 
         }
         return intArray;
     }
