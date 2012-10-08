@@ -17,15 +17,29 @@ public class AtomAugmentingGenerator {
     private MoleculeValidator validator;
     
     private ChildLister childLister;
+    
+    public enum ListerMethod {
+        FILTER,
+        SYMMETRIC
+    };
 
     public AtomAugmentingGenerator() {
         this(new PrintStreamHandler());
     }
 
     public AtomAugmentingGenerator(GenerateHandler handler) {
+        this(handler, ListerMethod.FILTER);
+    }
+    
+    public AtomAugmentingGenerator(GenerateHandler handler, ListerMethod method) {
         this.handler = handler;
-        childLister = new AtomSymmetricChildLister();
-//        childLister = new AtomFilteringChildLister();
+        if (method == ListerMethod.FILTER) {
+            childLister = new AtomSymmetricChildLister();
+        } else if (method == ListerMethod.SYMMETRIC) {
+            childLister = new AtomFilteringChildLister();
+        } else {
+            // XXX
+        }
         validator = new SimpleValidator((SignatureChildLister)childLister);
     }
     
