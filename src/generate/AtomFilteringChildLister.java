@@ -53,8 +53,10 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Sig
             MoleculeSignature molSig = new MoleculeSignature(child);
             String molSigString = molSig.toCanonicalString();
             if (certs.contains(molSigString)) {
+//                System.out.println("seen " + molSigString);
                 continue;
             } else {
+//                System.out.println("new " + molSigString);
                 children.add(child);
                 certs.add(molSigString);
             }

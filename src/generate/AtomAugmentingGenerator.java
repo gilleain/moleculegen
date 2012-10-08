@@ -34,9 +34,9 @@ public class AtomAugmentingGenerator {
     public AtomAugmentingGenerator(GenerateHandler handler, ListerMethod method) {
         this.handler = handler;
         if (method == ListerMethod.FILTER) {
-            childLister = new AtomSymmetricChildLister();
-        } else if (method == ListerMethod.SYMMETRIC) {
             childLister = new AtomFilteringChildLister();
+        } else if (method == ListerMethod.SYMMETRIC) {
+            childLister = new AtomSymmetricChildLister();
         } else {
             // XXX
         }
