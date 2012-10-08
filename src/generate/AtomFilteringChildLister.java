@@ -41,14 +41,15 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Sig
     }
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
-        int maxDegreeForCurrent = getMaxDegree(currentAtomIndex);
+        int maxDegreeSumForCurrent = getMaxBondOrderSum(currentAtomIndex);
+        int maxDegreeForCurrent = getMaxBondOrder(currentAtomIndex);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         List<String> certs = new ArrayList<String>();
-        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeForCurrent);
+        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeSumForCurrent);
         parentSignature = new MoleculeSignature(parent).toCanonicalString();
         for (List<Integer> multiset : getMultisets(parent, maxMultisetSize)) {
             
-            int[] bondOrderArray = toIntArray(multiset, maxMultisetSize);
+            int[] bondOrderArray = toIntArray(multiset, maxMultisetSize, maxDegreeForCurrent);
             if (bondOrderArray != null) {
                 IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
                 MoleculeSignature molSig = new MoleculeSignature(child);

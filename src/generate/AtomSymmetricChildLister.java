@@ -46,13 +46,14 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
     }
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
-        int maxDegreeForCurrent = getMaxDegree(currentAtomIndex);
+        int maxDegreeSumForCurrent = getMaxBondOrderSum(currentAtomIndex);
+        int maxDegreeForCurrent = getMaxBondOrder(currentAtomIndex);
         SSPermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
-        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeForCurrent);
+        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeSumForCurrent);
 //        System.out.println("mms " + maxMultisetSize);
         for (List<Integer> multiset : getMultisets(parent, maxMultisetSize)) {
-            int[] bondOrderArray = toIntArray(multiset, maxMultisetSize);
+            int[] bondOrderArray = toIntArray(multiset, maxMultisetSize, maxDegreeForCurrent);
             if (bondOrderArray != null && isMinimal(bondOrderArray, autG)) {
 //                System.out.println(Arrays.toString(bondOrderArray));
                 children.add(makeChild(parent, bondOrderArray, currentAtomIndex));
@@ -60,7 +61,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
         }
         return children;
     }
-    
+
     public boolean isMinimal(int[] bondOrderArray, SSPermutationGroup autG) {
         String oStr = Arrays.toString(bondOrderArray);
         for (Permutation p : autG.all()) {

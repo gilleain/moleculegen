@@ -18,8 +18,17 @@ public class BaseAtomChildLister {
     
     /**
      * TODO : this is a very crude method
+     * The max BOS is the maximum sum of bond orders of the bonds 
+     * attached to an atom of this element type. eg if maxBOS = 4, 
+     * then the atom can have any of {{4}, {3, 1}, {2, 2}, {2, 1, 1}, ...} 
      */
-    private Map<String, Integer> degreeMap;
+    private Map<String, Integer> maxBondOrderSumMap;
+    
+    /**
+     * TODO : this is a very crude method
+     * The max bond order is the maximum order of any bond attached.
+     */
+    private Map<String, Integer> maxBondOrderMap;
     
     /**
      * The elements (in order) used to make this molecule.
@@ -27,13 +36,21 @@ public class BaseAtomChildLister {
     private List<String> elementSymbols;
     
     public BaseAtomChildLister() {
-        degreeMap = new HashMap<String, Integer>();
-        degreeMap.put("C", 4);
-        degreeMap.put("O", 3);
+        maxBondOrderSumMap = new HashMap<String, Integer>();
+        maxBondOrderSumMap.put("C", 4);
+        maxBondOrderSumMap.put("O", 3);
+        
+        maxBondOrderMap = new HashMap<String, Integer>();
+        maxBondOrderMap.put("C", 3);
+        maxBondOrderMap.put("O", 3);
     }
     
-    public int getMaxDegree(int index) {
-        return degreeMap.get(elementSymbols.get(index));
+    public int getMaxBondOrderSum(int index) {
+        return maxBondOrderSumMap.get(elementSymbols.get(index));
+    }
+
+    public int getMaxBondOrder(int currentAtomIndex) {
+        return maxBondOrderMap.get(elementSymbols.get(currentAtomIndex));
     }
     
     public void setElementString(String elementString) {
@@ -74,7 +91,7 @@ public class BaseAtomChildLister {
         }
     }
     
-    public List<List<Integer>> getMultisets(IAtomContainer parent, int max) {
+    public List<List<Integer>> getMultisets(IAtomContainer parent, int maxSetSize) {
         // these are the atom indices that can have bonds added
         List<Integer> baseSet = new ArrayList<Integer>();
         for (int index = 0; index < parent.getAtomCount(); index++) {
@@ -84,7 +101,7 @@ public class BaseAtomChildLister {
         }
         
         List<List<Integer>> multisets = new ArrayList<List<Integer>>();
-        for (int k = 1; k <= max; k++) {
+        for (int k = 1; k <= maxSetSize; k++) {
             MultiKSubsetLister<Integer> lister = new MultiKSubsetLister<Integer>(k, baseSet);
             for (List<Integer> multiset : lister) {
                 multisets.add(multiset);
@@ -93,7 +110,7 @@ public class BaseAtomChildLister {
         return multisets;
     }
     
-    public int[] toIntArray(List<Integer> multiset, int size) {
+    public int[] toIntArray(List<Integer> multiset, int size, int maxDegree) {
         int[] intArray = new int[size];
         for (int atomIndex : multiset) {
             if (atomIndex >= size) return null; // XXX
@@ -105,7 +122,7 @@ public class BaseAtomChildLister {
     private boolean isUndersaturated(IAtomContainer parent, int index) {
         IAtom atom = parent.getAtom(index);
         String elementSymbol = atom.getSymbol();
-        int maxDegree = degreeMap.get(elementSymbol);
+        int maxDegree = maxBondOrderSumMap.get(elementSymbol);
         int degree = 0;
         for (IBond bond : parent.getConnectedBondsList(atom)) {
             degree += bond.getOrder().ordinal();
