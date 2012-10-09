@@ -31,6 +31,10 @@ public class AtomAugmentingGenerator {
         this(handler, ListerMethod.FILTER);
     }
     
+    public AtomAugmentingGenerator(ListerMethod method) {
+        this(new PrintStreamHandler(), method);
+    }
+    
     public AtomAugmentingGenerator(GenerateHandler handler, ListerMethod method) {
         this.handler = handler;
         if (method == ListerMethod.FILTER) {

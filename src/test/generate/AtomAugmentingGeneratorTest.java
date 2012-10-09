@@ -48,6 +48,19 @@ public class AtomAugmentingGeneratorTest {
         return ac;
     }
     
+    public IAtomContainer makeCycloButane() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addBond(0, 1, IBond.Order.SINGLE);
+        ac.addBond(0, 3, IBond.Order.SINGLE);
+        ac.addBond(1, 2, IBond.Order.SINGLE);
+        ac.addBond(2, 3, IBond.Order.SINGLE);
+        return ac;
+    }
+
     public IAtomContainer makeCycloPentane() {
         IAtomContainer ac = new AtomContainer();
         ac.addAtom(new Atom("C"));
@@ -98,6 +111,18 @@ public class AtomAugmentingGeneratorTest {
         return ac;
     }
     
+    public IAtomContainer makeButane() {
+        IAtomContainer ac = new AtomContainer();
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addAtom(new Atom("C"));
+        ac.addBond(0, 1, IBond.Order.SINGLE);
+        ac.addBond(0, 2, IBond.Order.SINGLE);
+        ac.addBond(2, 3, IBond.Order.SINGLE);
+        return ac;
+    }
+    
     public IAtomContainer makePentene() {
         IAtomContainer ac = new AtomContainer();
         ac.addAtom(new Atom("C"));
@@ -118,7 +143,8 @@ public class AtomAugmentingGeneratorTest {
         IAtomContainer ccTriple = makeCCEdge(IBond.Order.TRIPLE);
         PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
 //        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler);
+//        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.FILTER);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.SYMMETRIC);
         generator.setHCount(hCount);
         generator.setElementString(elementString);
         
@@ -144,17 +170,17 @@ public class AtomAugmentingGeneratorTest {
     
     @Test
     public void testFivesFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCCC", 5, 12);
+        testNFromSingleDoubleTriple("CCCCC", 5, 10);
     }
     
     @Test
     public void testSixesFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCCCC", 6, 14);
+        testNFromSingleDoubleTriple("CCCCCC", 6, 12);
     }
     
     @Test
     public void testSevensFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCCCCC", 7, 16);
+        testNFromSingleDoubleTriple("CCCCCCC", 7, 14);
     }
     
     @Test
@@ -198,11 +224,27 @@ public class AtomAugmentingGeneratorTest {
     }
     
     @Test
+    public void extendCyclobutane() {
+        IAtomContainer cyclobutane = makeCycloButane();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCCCC");
+        generator.extend(cyclobutane, 4, 5);
+    }
+    
+    @Test
     public void extendButene() {
         IAtomContainer butene = makeButene();
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCCC");
         generator.extend(butene, 4, 5);
+    }
+    
+    @Test
+    public void extendButane() {
+        IAtomContainer butane = makeButane();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(ListerMethod.SYMMETRIC);
+        generator.setElementString("CCCCC");
+        generator.extend(butane, 4, 5);
     }
     
     @Test
