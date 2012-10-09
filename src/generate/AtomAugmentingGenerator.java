@@ -43,6 +43,10 @@ public class AtomAugmentingGenerator {
         validator = new SimpleValidator((SignatureChildLister)childLister);
     }
     
+    public void setHCount(int hCount) {
+        validator.setHCount(hCount);
+    }
+    
     public void setElementString(String elementString) {
         childLister.setElementString(elementString);
     }

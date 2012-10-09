@@ -52,7 +52,7 @@ public class PrintStreamHandler implements GenerateHandler {
 	    String psmiles = smilesGenerator.createSMILES(parent);
         String smiles = smilesGenerator.createSMILES(child);
         boolean debug = false;
-        debug = true;
+//        debug = true;
         if (debug) {
             printStream.println(count + "\t" + psmiles 
                     + "\t" + test.AtomContainerPrinter.toString(parent)
@@ -66,7 +66,7 @@ public class PrintStreamHandler implements GenerateHandler {
 	    MoleculeSignature childSignature = new MoleculeSignature(child);
 	    
 	    boolean debug = false;
-        debug = true;
+//        debug = true;
         if (debug) {
             printStream.println(count + "\t" + childSignature.toCanonicalString() + "\t" 
                                + test.AtomContainerPrinter.toString(child));

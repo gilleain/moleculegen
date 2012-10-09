@@ -112,13 +112,14 @@ public class AtomAugmentingGeneratorTest {
         return ac;
     }
 
-    public void testNFromSingleDoubleTriple(String elementString, int n) {
+    public void testNFromSingleDoubleTriple(String elementString, int n, int hCount) {
         IAtomContainer ccSingle = makeCCEdge(IBond.Order.SINGLE);
         IAtomContainer ccDouble = makeCCEdge(IBond.Order.DOUBLE);
         IAtomContainer ccTriple = makeCCEdge(IBond.Order.TRIPLE);
-//        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
-        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
+        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
+//        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler);
+        generator.setHCount(hCount);
         generator.setElementString(elementString);
         
         generator.extend(ccSingle, 2, n);
@@ -138,22 +139,22 @@ public class AtomAugmentingGeneratorTest {
     
     @Test
     public void testFoursFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCC", 4);
+        testNFromSingleDoubleTriple("CCCC", 4, 8);
     }
     
     @Test
     public void testFivesFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCCC", 5);
+        testNFromSingleDoubleTriple("CCCCC", 5, 12);
     }
     
     @Test
     public void testSixesFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCCCC", 6);
+        testNFromSingleDoubleTriple("CCCCCC", 6, 14);
     }
     
     @Test
     public void testSevensFromSingleDoubleAndTripleEdges() {
-        testNFromSingleDoubleTriple("CCCCCCC", 7);
+        testNFromSingleDoubleTriple("CCCCCCC", 7, 16);
     }
     
     @Test
