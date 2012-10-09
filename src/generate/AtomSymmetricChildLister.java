@@ -1,5 +1,6 @@
 package generate;
 
+import group.CDKDiscretePartitionRefiner;
 import group.Permutation;
 import group.SSPermutationGroup;
 
@@ -109,16 +110,17 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
     }
 
     public SSPermutationGroup getGroup(IAtomContainer parent) {
-        MoleculeSignature molSig = new MoleculeSignature(parent);
-        parentSignature = molSig.toCanonicalString();
-        
-        List<Orbit> orbits = molSig.calculateOrbits();
-        int size = parent.getAtomCount();
-        SSPermutationGroup autG = new SSPermutationGroup(size);
-        for (Orbit orbit : orbits) {
-           addOrbit(orbit, autG, size);
-        }
-        return autG;
+//        MoleculeSignature molSig = new MoleculeSignature(parent);
+//        parentSignature = molSig.toCanonicalString();
+//        
+//        List<Orbit> orbits = molSig.calculateOrbits();
+//        int size = parent.getAtomCount();
+//        SSPermutationGroup autG = new SSPermutationGroup(size);
+//        for (Orbit orbit : orbits) {
+//           addOrbit(orbit, autG, size);
+//        }
+//        return autG;
+        return new CDKDiscretePartitionRefiner().getAutomorphismGroup(parent);
     }
     
     private void addOrbit(Orbit orbit, SSPermutationGroup autG, int size) {
@@ -130,7 +132,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
             int j = atomIndices.get(1);
             pp.set(i, j);
             pp.set(j, i);
-//            System.out.println("entering " + pp);
+            System.out.println("entering " + pp + " for " + orbit);
             autG.enter(pp);
         } else if (aN >= 3) {
             int first = atomIndices.get(0);
@@ -140,7 +142,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
             Permutation pp1 = new Permutation(size);
             pp1.set(first, second);
             pp1.set(second, first);
-//            System.out.println("entering " + pp1);
+            System.out.println("entering " + pp1 + " for " + orbit);
             autG.enter(pp1);
             
             // p2 is (1, 2, ...., n, 0)
@@ -149,7 +151,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
                 pp2.set(atomIndices.get(i), atomIndices.get(i + 1));
             }
             pp2.set(atomIndices.get(aN - 1), atomIndices.get(0));
-//            System.out.println("entering " + pp2);
+            System.out.println("entering " + pp2 + " for " + orbit);
             autG.enter(pp2);
         }
     }
