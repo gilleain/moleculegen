@@ -17,14 +17,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * @author maclean
  *
  */
-public class AtomSymmetricChildLister extends BaseAtomChildLister implements SignatureChildLister {
-    
-    /**
-     * An optimisation : since the signature of the parent has to be calculated to
-     * make the group, we calculate it here to be used in the validator for the 
-     * canonical checking step 
-     */
-    private String parentSignature;
+public class AtomSymmetricChildLister extends BaseAtomChildLister implements ChildLister {
     
     public AtomSymmetricChildLister() {
         super();
@@ -38,10 +31,6 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
     public AtomSymmetricChildLister(String elementString) {
         this();
         setElementString(elementString);
-    }
-    
-    public String getParentSignature() {
-        return parentSignature;
     }
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {

@@ -13,14 +13,7 @@ import org.openscience.cdk.signature.MoleculeSignature;
  * @author maclean
  *
  */
-public class AtomFilteringChildLister extends BaseAtomChildLister implements SignatureChildLister {
-    
-    /**
-     * An optimisation : since the signature of the parent has to be calculated to
-     * make the group, we calculate it here to be used in the validator for the 
-     * canonical checking step 
-     */
-    private String parentSignature;
+public class AtomFilteringChildLister extends BaseAtomChildLister implements ChildLister {
     
     public AtomFilteringChildLister() {
         super();
@@ -36,17 +29,13 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Sig
         setElementString(elementString);
     }
     
-    public String getParentSignature() {
-        return parentSignature;
-    }
-    
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
         int maxDegreeSumForCurrent = getMaxBondOrderSum(currentAtomIndex);
         int maxDegreeForCurrent = getMaxBondOrder(currentAtomIndex);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         List<String> certs = new ArrayList<String>();
         int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeSumForCurrent);
-        parentSignature = new MoleculeSignature(parent).toCanonicalString();
+        
 //        System.out.println("listing " + test.AtomContainerPrinter.toString(parent));
         for (int[] bondOrderArray : getBondOrderArrays(parent, maxMultisetSize, maxDegreeForCurrent)) {
             IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);

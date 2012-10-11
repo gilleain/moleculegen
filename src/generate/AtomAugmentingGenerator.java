@@ -44,7 +44,7 @@ public class AtomAugmentingGenerator {
         } else {
             // XXX
         }
-        validator = new SimpleValidator((SignatureChildLister)childLister);
+        validator = new SimpleValidator();
     }
     
     public void setHCount(int hCount) {
@@ -59,9 +59,9 @@ public class AtomAugmentingGenerator {
         if (currentAtomIndex >= size) return;
         
         List<IAtomContainer> children = childLister.listChildren(parent, currentAtomIndex);
-
+        String parentCertificate = childLister.getCertificate(parent);
         for (IAtomContainer child : children) {
-            if (validator.isCanonical(parent, child)) {
+            if (validator.isCanonical(parent, child, parentCertificate)) {
                 if (validator.isValidMol(child, size)) {
                     handler.handle(parent, child);
                 }

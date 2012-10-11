@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.signature.MoleculeSignature;
 
 import combinatorics.MultiKSubsetLister;
 
@@ -42,6 +43,10 @@ public class BaseAtomChildLister {
         maxBondOrderMap = new HashMap<String, Integer>();
         maxBondOrderMap.put("C", 3);
         maxBondOrderMap.put("O", 3);
+    }
+    
+    public String getCertificate(IAtomContainer atomContainer) {
+        return new MoleculeSignature(atomContainer).toCanonicalString();
     }
     
     public int getMaxBondOrderSum(int index) {

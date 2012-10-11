@@ -1,7 +1,5 @@
 package validate;
 
-import generate.SignatureChildLister;
-
 import java.util.Arrays;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -16,17 +14,9 @@ import test.AtomContainerPrinter;
 
 public class SimpleValidator implements MoleculeValidator {
     
-    /**
-     * This was meant to be a way to get the parent signature, rather than re-calculating it
-     * each time, however DFS makes this tricky as the parent is different each time
-     * TODO : fix this...
-     */
-    private SignatureChildLister childLister;
-    
     private int hCount;
     
-    public SimpleValidator(SignatureChildLister childLister) {
-        this.childLister = childLister;
+    public SimpleValidator() {
         hCount = 0;
     }
 
@@ -59,14 +49,12 @@ public class SimpleValidator implements MoleculeValidator {
     }
 
     @Override
-    public boolean isCanonical(IAtomContainer parent, IAtomContainer child) {
+    public boolean isCanonical(IAtomContainer parent, IAtomContainer child, String parentSignature) {
         MoleculeSignature molSig = new MoleculeSignature(child);
         int[] labels = molSig.getCanonicalLabels();
         int size = labels.length - 1;
 //        int vertexToDelete = labels[size];
         int vertexToDelete = find(labels, size);
-
-        String parentSignature = new MoleculeSignature(parent).toCanonicalString();
 
         IAtomContainer canonicalParent = null;
         try { canonicalParent = (IAtomContainer) child.clone(); } catch (Exception e) {} 

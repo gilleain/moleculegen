@@ -30,10 +30,11 @@ public class SimpleValidatorTest {
         IAtomContainer parent = make3Star();
         AtomContainerPrinter.print(parent);
         AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
-        SimpleValidator validator = new SimpleValidator(lister);
+        SimpleValidator validator = new SimpleValidator();
         int len = parent.getAtomCount();
+        String parentCert = lister.getCertificate(parent);
         for (IAtomContainer child : lister.listChildren(parent, len)) {
-            boolean isCanonical = validator.isCanonical(parent, child);
+            boolean isCanonical = validator.isCanonical(parent, child, parentCert);
             String acp = AtomContainerPrinter.toString(child);
             System.out.println(isCanonical + "\t" + acp);
         }

@@ -10,4 +10,6 @@ public interface ChildLister {
     
     public void setElementString(String elementString);
 
+    public String getCertificate(IAtomContainer parent);
+
 }
