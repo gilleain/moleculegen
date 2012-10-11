@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.signature.MoleculeSignature;
-import org.openscience.cdk.signature.Orbit;
 
 /**
  * List candidate children of a parent molecule, by connecting a new atom to the existing atoms 
@@ -110,49 +108,6 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Sig
     }
 
     public SSPermutationGroup getGroup(IAtomContainer parent) {
-//        MoleculeSignature molSig = new MoleculeSignature(parent);
-//        parentSignature = molSig.toCanonicalString();
-//        
-//        List<Orbit> orbits = molSig.calculateOrbits();
-//        int size = parent.getAtomCount();
-//        SSPermutationGroup autG = new SSPermutationGroup(size);
-//        for (Orbit orbit : orbits) {
-//           addOrbit(orbit, autG, size);
-//        }
-//        return autG;
         return new CDKDiscretePartitionRefiner().getAutomorphismGroup(parent);
-    }
-    
-    private void addOrbit(Orbit orbit, SSPermutationGroup autG, int size) {
-        List<Integer> atomIndices = orbit.getAtomIndices();
-        int aN = atomIndices.size();
-        if (aN == 2) {
-            Permutation pp = new Permutation(size);
-            int i = atomIndices.get(0);
-            int j = atomIndices.get(1);
-            pp.set(i, j);
-            pp.set(j, i);
-            System.out.println("entering " + pp + " for " + orbit);
-            autG.enter(pp);
-        } else if (aN >= 3) {
-            int first = atomIndices.get(0);
-            int second = atomIndices.get(1);
-            
-            // p1 is (0, 1)
-            Permutation pp1 = new Permutation(size);
-            pp1.set(first, second);
-            pp1.set(second, first);
-            System.out.println("entering " + pp1 + " for " + orbit);
-            autG.enter(pp1);
-            
-            // p2 is (1, 2, ...., n, 0)
-            Permutation pp2 = new Permutation(size);
-            for (int i = 0; i < aN - 1; i++) {
-                pp2.set(atomIndices.get(i), atomIndices.get(i + 1));
-            }
-            pp2.set(atomIndices.get(aN - 1), atomIndices.get(0));
-            System.out.println("entering " + pp2 + " for " + orbit);
-            autG.enter(pp2);
-        }
     }
 }
