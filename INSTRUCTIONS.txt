@@ -1,0 +1,22 @@
+There are a number of ways to run AMG:
+
+WARNING : only use very small formulae to test at first.
+
+1) Just count the number of structures for a formula : "AMG -e C4H8". 
+2) Print the structures to stdout: "AMG -e C4H8 -O SMI"
+3) Augment a set of structures, from a file : "AMG -e C4H8 -O SMI -i myFile.sdf -I SDF"
+
+This last way can be used as a crude form of parallelism. First, pick a number of initial
+structures to generate, and write these to a file (SDF or signatures):
+
+  AMG -e C5 -o master_list.txt -O SIG
+
+Then, run AMG on chunks of this input list, possibly using the "-r" option:
+
+  AMG -e C7H12 -i master_list.txt -I SIG -o result_1_10.txt -O SMI -r 1:10
+  AMG -e C7H12 -i master_list.txt -I SIG -o result_10_20.txt -O SMI -r 10:20
+  AMG -e C7H12 -i master_list.txt -I SIG -o result_20_30.txt -O SMI -r 20:30
+  ...
+  
+Each run will take a different chunk of the master list, and produce a non-overlapping set of
+results in each of the results files.
