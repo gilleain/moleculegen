@@ -64,16 +64,17 @@ public class AMG {
             handler = new CountingHandler();
         } else {
             PrintStream outStream;
+            boolean shouldNumberLines = argsH.isShouldNumberLines();
             if (argsH.isStdOut()) {
                 outStream = System.out;
-                handler = new PrintStreamStringHandler(outStream, format);
+                handler = new PrintStreamStringHandler(outStream, format, shouldNumberLines);
             } else {
                 String outputFilename = argsH.getOutputFilepath();
                 if (format == DataFormat.SDF) {
                     handler = new SDFHandler(outputFilename);
                 } else {
                     outStream = new PrintStream(new FileOutputStream(outputFilename));
-                    handler = new PrintStreamStringHandler(outStream, format);
+                    handler = new PrintStreamStringHandler(outStream, format, shouldNumberLines);
                 }
             }
         }
