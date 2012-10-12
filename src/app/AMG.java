@@ -88,6 +88,17 @@ public class AMG {
         
         if (argsH.isAugmentingFile()) {
             String inputFile = argsH.getInputFilepath();
+            String rangeString = argsH.getRangeString();
+            int minIndex = -1;
+            int maxIndex = -1;
+            if (rangeString != null) {
+                int colonIndex = rangeString.indexOf(":");
+                if (colonIndex != -1) {
+                    minIndex = Integer.parseInt(rangeString.substring(0, colonIndex));
+                    maxIndex = Integer.parseInt(rangeString.substring(colonIndex + 1));
+                    System.out.println("min " + minIndex + " max " + maxIndex);
+                }
+            }
             if (inputFile == null) {
                 error("No input file specified");
                 return;
@@ -95,11 +106,15 @@ public class AMG {
                 // TODO : single-molecule file?
                 IIteratingChemObjectReader<IAtomContainer> reader = getInputReader(argsH, builder);
                 if (reader != null) {
+                    int inputCount = 0;
                     while (reader.hasNext()) {
+                        if (minIndex != -1 && inputCount < minIndex) continue;
                         IAtomContainer parent = reader.next();
 //                        test.AtomContainerPrinter.print(parent);
                         int currentAtomIndex = parent.getAtomCount();   // XXX what about Hs?
                         generator.extend(parent, currentAtomIndex, heavyAtomCount);
+                        inputCount++;
+                        if (maxIndex != -1 && inputCount == maxIndex) break;
                     }
                     reader.close();
                     handler.finish();

@@ -61,17 +61,23 @@ public class ArgumentHandler {
      */
     private String inputStringFormat;
     
+    /**
+     * A string like 10:20 that indicates a section of an input file to use.
+     */
+    private String rangeString;
+    
     private Options options;
     
     public ArgumentHandler() {
         options = new Options();
         options.addOption(opt("e", "formula", "Elemental Formula"));
+        options.addOption(opt("h", "Print help"));
         options.addOption(opt("i", "path", "Input Filepath"));
         options.addOption(opt("I", "format", "Input Format (SMI, SIG, SDF)"));
         options.addOption(opt("o", "path", "Output Filepath"));
         options.addOption(opt("O", "format", "Output Format (SMI, SIG, SDF)"));
         options.addOption(opt("n", "Number output lines"));
-        options.addOption(opt("h", "Print help"));
+        options.addOption(opt("r", "min:max", "Range of input file to use"));
     }
     
     @SuppressWarnings("static-access")
@@ -127,6 +133,10 @@ public class ArgumentHandler {
             setOutputFilepath(line.getOptionValue('o'));
         } else {
             setIsStdOut(true);
+        }
+        
+        if (line.hasOption('r')) {
+            setRangeString(line.getOptionValue('r'));
         }
         
     }
@@ -262,5 +272,13 @@ public class ArgumentHandler {
 
     public void setIsStdOut(boolean isStdOut) {
         this.isStdOut = isStdOut;
+    }
+
+    public String getRangeString() {
+        return rangeString;
+    }
+
+    public void setRangeString(String rangeString) {
+        this.rangeString = rangeString;
     }
 }
