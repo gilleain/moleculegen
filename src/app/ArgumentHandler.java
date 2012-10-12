@@ -210,6 +210,8 @@ public class ArgumentHandler {
             return DataFormat.SMILES;
         } else if (formatString.equals("SIG")) {
             return DataFormat.SIGNATURE;
+        } else if (formatString.equals("SDF")) {
+            return DataFormat.SDF;
         } else if (formatString.equals("NONE")) {
             return DataFormat.NONE;
         }
