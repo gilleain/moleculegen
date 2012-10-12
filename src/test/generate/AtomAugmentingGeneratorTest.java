@@ -6,42 +6,45 @@ import handler.DataFormat;
 import handler.PrintStreamStringHandler;
 
 import org.junit.Test;
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 public class AtomAugmentingGeneratorTest {
     
+    public IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    
     public IAtomContainer makeSingleC() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         return ac;
     }
     
     public IAtomContainer makeCCEdge(IBond.Order order) {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, order);
         return ac;
     }
     
     public IAtomContainer makePropene() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.DOUBLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         return ac;
     }
     
     public IAtomContainer makeCycloPropane() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(1, 2, IBond.Order.SINGLE);
@@ -49,11 +52,11 @@ public class AtomAugmentingGeneratorTest {
     }
     
     public IAtomContainer makeCycloButane() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 3, IBond.Order.SINGLE);
         ac.addBond(1, 2, IBond.Order.SINGLE);
@@ -62,12 +65,12 @@ public class AtomAugmentingGeneratorTest {
     }
 
     public IAtomContainer makeCycloPentane() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 4, IBond.Order.SINGLE);
         ac.addBond(1, 2, IBond.Order.SINGLE);
@@ -82,12 +85,12 @@ public class AtomAugmentingGeneratorTest {
      * @return
      */
     public IAtomContainer makeInextensibleFusedRingSystem() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(1, 2, IBond.Order.SINGLE);
@@ -100,11 +103,11 @@ public class AtomAugmentingGeneratorTest {
     }
     
     public IAtomContainer makeButene() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.DOUBLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(2, 3, IBond.Order.SINGLE);
@@ -112,11 +115,11 @@ public class AtomAugmentingGeneratorTest {
     }
     
     public IAtomContainer makeButane() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.SINGLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(2, 3, IBond.Order.SINGLE);
@@ -124,12 +127,12 @@ public class AtomAugmentingGeneratorTest {
     }
     
     public IAtomContainer makePentene() {
-        IAtomContainer ac = new AtomContainer();
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
-        ac.addAtom(new Atom("C"));
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        ac.addAtom(builder.newInstance(IAtom.class, "C"));
         ac.addBond(0, 1, IBond.Order.DOUBLE);
         ac.addBond(0, 2, IBond.Order.SINGLE);
         ac.addBond(1, 3, IBond.Order.SINGLE);

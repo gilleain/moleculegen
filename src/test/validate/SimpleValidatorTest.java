@@ -3,22 +3,25 @@ package test.validate;
 import generate.AtomSymmetricChildLister;
 
 import org.junit.Test;
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import test.AtomContainerPrinter;
 import validate.SimpleValidator;
 
 public class SimpleValidatorTest {
     
+    public IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    
     public IAtomContainer make3Star() {
-        IAtomContainer atomContainer = new AtomContainer();
-        atomContainer.addAtom(new Atom("C"));
-        atomContainer.addAtom(new Atom("C"));
-        atomContainer.addAtom(new Atom("C"));
-        atomContainer.addAtom(new Atom("C"));
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class, ("C")));
+        atomContainer.addAtom(builder.newInstance(IAtom.class, ("C")));
+        atomContainer.addAtom(builder.newInstance(IAtom.class, ("C")));
+        atomContainer.addAtom(builder.newInstance(IAtom.class, ("C")));
         atomContainer.addBond(0, 1, IBond.Order.SINGLE);
         atomContainer.addBond(0, 2, IBond.Order.SINGLE);
         atomContainer.addBond(0, 3, IBond.Order.SINGLE);

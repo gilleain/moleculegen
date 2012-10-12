@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -76,7 +75,8 @@ public class BaseAtomChildLister {
             IAtomContainer parent, int[] bondOrderArr, int lastIndex) {
         try {
             IAtomContainer child = (IAtomContainer) parent.clone();
-            child.addAtom(new Atom(elementSymbols.get(lastIndex)));
+            String atomSymbol = elementSymbols.get(lastIndex);
+            child.addAtom(child.getBuilder().newInstance(IAtom.class, atomSymbol));
             for (int index = 0; index < bondOrderArr.length; index++) {
                 int value = bondOrderArr[index];
                 if (value > 0) {
