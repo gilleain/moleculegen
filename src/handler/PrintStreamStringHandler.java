@@ -7,12 +7,13 @@ import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
 /**
- * Prints the generated molecules to a print stream, defaulting to System out. 
+ * Prints the generated molecules in a string form to a print 
+ * stream, defaulting to System out. 
  * 
  * @author maclean
  *
  */
-public class PrintStreamHandler implements GenerateHandler {
+public class PrintStreamStringHandler implements GenerateHandler {
 	
 	private PrintStream printStream;
 	
@@ -24,15 +25,15 @@ public class PrintStreamHandler implements GenerateHandler {
 	
 	private boolean shouldNumberLines;
 	
-	public PrintStreamHandler() {
+	public PrintStreamStringHandler() {
 		this(System.out, DataFormat.SMILES);
 	}
 	
-	public PrintStreamHandler(PrintStream printStream, DataFormat format) {
+	public PrintStreamStringHandler(PrintStream printStream, DataFormat format) {
 	    this(printStream, format, true);
 	}
 	
-	public PrintStreamHandler(PrintStream printStream, DataFormat format, boolean numberLines) {
+	public PrintStreamStringHandler(PrintStream printStream, DataFormat format, boolean numberLines) {
 		this.printStream = printStream;
 		this.format = format;
 		smilesGenerator = new SmilesGenerator();

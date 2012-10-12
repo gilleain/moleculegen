@@ -4,7 +4,8 @@ import generate.AtomAugmentingGenerator;
 import handler.CountingHandler;
 import handler.DataFormat;
 import handler.GenerateHandler;
-import handler.PrintStreamHandler;
+import handler.PrintStreamStringHandler;
+import handler.SDFHandler;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,6 +26,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -58,17 +60,22 @@ public class AMG {
         GenerateHandler handler;
         DataFormat format = argsH.getOutputFormat();
         
-        PrintStream outStream;
         if (format == DataFormat.NONE) {
             handler = new CountingHandler();
         } else {
+            PrintStream outStream;
             if (argsH.isStdOut()) {
                 outStream = System.out;
+                handler = new PrintStreamStringHandler(outStream, format);
             } else {
                 String outputFilename = argsH.getOutputFilepath();
-                outStream = new PrintStream(new FileOutputStream(outputFilename));
+                if (format == DataFormat.SDF) {
+                    handler = new SDFHandler(outputFilename);
+                } else {
+                    outStream = new PrintStream(new FileOutputStream(outputFilename));
+                    handler = new PrintStreamStringHandler(outStream, format);
+                }
             }
-            handler = new PrintStreamHandler(outStream, format);
         }
         generator = new AtomAugmentingGenerator(handler);
         
@@ -138,6 +145,7 @@ public class AMG {
         switch (inputFormat) {
             case SMILES: reader = new IteratingSMILESReader(in, builder); break;
             case SIGNATURE: reader = new IteratingSignatureReader(in, builder); break;
+            case SDF: reader = new IteratingSDFReader(in, builder); break; 
             default: reader = null; error("Unrecognised format"); break;
         }
         return reader;

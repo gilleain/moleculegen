@@ -1,7 +1,7 @@
 package generate;
 
 import handler.GenerateHandler;
-import handler.PrintStreamHandler;
+import handler.PrintStreamStringHandler;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class AtomAugmentingGenerator {
     };
 
     public AtomAugmentingGenerator() {
-        this(new PrintStreamHandler());
+        this(new PrintStreamStringHandler());
     }
 
     public AtomAugmentingGenerator(GenerateHandler handler) {
@@ -32,7 +32,7 @@ public class AtomAugmentingGenerator {
     }
     
     public AtomAugmentingGenerator(ListerMethod method) {
-        this(new PrintStreamHandler(), method);
+        this(new PrintStreamStringHandler(), method);
     }
     
     public AtomAugmentingGenerator(GenerateHandler handler, ListerMethod method) {
