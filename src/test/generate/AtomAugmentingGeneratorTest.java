@@ -193,8 +193,11 @@ public class AtomAugmentingGeneratorTest {
     
     @Test
     public void testFoursFromSingleAtom() {
+        ListerMethod method = ListerMethod.FILTER;
+        DataFormat outFormat = DataFormat.SIGNATURE;
+        PrintStreamHandler handler = new PrintStreamHandler(System.out, outFormat, false);
         IAtomContainer initial = makeSingleC();
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, method);
         generator.setElementString("CCCC");
         generator.extend(initial, 1, 4);
     }

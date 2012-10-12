@@ -23,52 +23,55 @@ public class PrintStreamHandler implements GenerateHandler {
 	
 	private DataFormat format;
 	
+	private boolean shouldNumberLines;
+	
 	public PrintStreamHandler() {
 		this(System.out, DataFormat.SMILES);
 	}
 	
 	public PrintStreamHandler(PrintStream printStream, DataFormat format) {
+	    this(printStream, format, true);
+	}
+	
+	public PrintStreamHandler(PrintStream printStream, DataFormat format, boolean numberLines) {
 		this.printStream = printStream;
 		this.format = format;
 		smilesGenerator = new SmilesGenerator();
 		count = 0;
+		this.shouldNumberLines = numberLines;
 	}
 
 	@Override
 	public void handle(IAtomContainer parent, IAtomContainer child) {
-	    if (format == DataFormat.SMILES) {
-	        printAsSmiles(parent, child);
-	    } else if (format == DataFormat.SIGNATURE) {
-	        printAsSignature(parent, child);
+	    String childString = getStringForm(child);
+	  
+	    boolean debug = false;
+//        debug = true;
+	    if (debug) {
+	        String parentString = getStringForm(parent);
+            printStream.println(
+                    count + "\t" + parentString
+                    + "\t" + test.AtomContainerPrinter.toString(parent)
+                    + "\t" + childString 
+                    + "\t" + test.AtomContainerPrinter.toString(child));
+	    } else {
+	        if (shouldNumberLines) { 
+                printStream.println(count + "\t" + childString);
+            } else {
+                printStream.println(childString);
+            }
 	    }
 	    count++;
 	}
 	
-	private void printAsSmiles(IAtomContainer parent, IAtomContainer child) {
-	    String psmiles = smilesGenerator.createSMILES(parent);
-        String smiles = smilesGenerator.createSMILES(child);
-        boolean debug = false;
-//        debug = true;
-        if (debug) {
-            printStream.println(count + "\t" + psmiles 
-                    + "\t" + test.AtomContainerPrinter.toString(parent)
-                    + "\t" + smiles + "\t" + test.AtomContainerPrinter.toString(child));
+	private String getStringForm(IAtomContainer atomContainer) {
+	    if (format == DataFormat.SMILES) {
+	        return smilesGenerator.createSMILES(atomContainer);
+	    } else if (format == DataFormat.SIGNATURE) {
+	        MoleculeSignature childSignature = new MoleculeSignature(atomContainer);
+	        return childSignature.toCanonicalString();
         } else {
-            printStream.println(count + "\t" + smiles);
+            return "";  // XXX
         }
 	}
-	
-	private void printAsSignature(IAtomContainer parent, IAtomContainer child) {
-	    MoleculeSignature childSignature = new MoleculeSignature(child);
-	    
-	    boolean debug = false;
-//        debug = true;
-        if (debug) {
-            printStream.println(count + "\t" + childSignature.toCanonicalString() + "\t" 
-                               + test.AtomContainerPrinter.toString(child));
-        } else {
-    	    printStream.println(count + "\t" + childSignature.toCanonicalString());
-        }
-	}
-
 }
