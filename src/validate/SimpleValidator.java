@@ -2,11 +2,11 @@ package validate;
 
 import java.util.Arrays;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -31,7 +31,7 @@ public class SimpleValidator implements MoleculeValidator {
         try {
             AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
             CDKHydrogenAdder adder = 
-                CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
+                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
             adder.addImplicitHydrogens(atomContainer);
             int actualCount = 0;
             for (IAtom atom : atomContainer.atoms()) {
