@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -31,8 +32,12 @@ public class AMG {
     
     public static void main(String[] args) throws CDKException, IOException {
         ArgumentHandler argsH = new ArgumentHandler();
-        argsH.processArguments(args);
-        run(argsH);
+        try {
+            argsH.processArguments(args);
+            run(argsH);
+        } catch (ParseException pe) {
+            // TODO
+        }
     }
     
     public static void run(ArgumentHandler argsH) throws CDKException, IOException {
@@ -76,6 +81,7 @@ public class AMG {
                 if (reader != null) {
                     while (reader.hasNext()) {
                         IAtomContainer parent = reader.next();
+//                        test.AtomContainerPrinter.print(parent);
                         int currentAtomIndex = parent.getAtomCount();   // XXX what about Hs?
                         generator.extend(parent, currentAtomIndex, heavyAtomCount);
                     }

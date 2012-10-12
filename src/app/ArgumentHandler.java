@@ -2,7 +2,10 @@ package app;
 
 import handler.DataFormat;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 
 public class ArgumentHandler {
     
@@ -25,6 +28,11 @@ public class ArgumentHandler {
      * True if printing to standard out. 
      */
     private boolean isStdOut;
+    
+    /**
+     * If true, each line of output is numbered.
+     */
+    private boolean shouldNumberLines;
     
     /**
      * The chemical formula.
@@ -51,11 +59,43 @@ public class ArgumentHandler {
      */
     private String inputStringFormat;
     
-    public void processArguments(String[] args) {
+    
+    public void processArguments(String[] args) throws ParseException {
         Options options = new Options();
         options.addOption("e", true, "Elemental Formula");
-        options.addOption("i", true, "Input Format");
-        options.addOption("o", true, "Output Format");
+        options.addOption("i", true, "Input Filepath");
+        options.addOption("I", true, "Input Format");
+        options.addOption("o", true, "Output Filepath");
+        options.addOption("O", true, "Output Format");
+        options.addOption("n", false, "Number output lines");
+        
+        PosixParser parser = new PosixParser();
+        CommandLine line = parser.parse(options, args, true);
+        
+        if (line.hasOption('n')) {
+            setShouldNumberLines(true);
+        }
+        
+        if (line.hasOption('e')) {
+            setFormula(line.getOptionValue('e'));
+        }
+        
+        if (line.hasOption('I')) {
+            setInputStringFormat(line.getOptionValue('I'));
+        }
+        
+        if (line.hasOption('O')) {
+            setOutputStringFormat(line.getOptionValue('O'));
+        }
+        
+        if (line.hasOption('i')) {
+            setInputFilepath(line.getOptionValue('i'));
+        }
+        
+        if (line.hasOption('o')) {
+            setOutputFilepath(line.getOptionValue('o'));
+        }
+        
     }
     
     public String getInputStringFormat() {
@@ -124,6 +164,14 @@ public class ArgumentHandler {
 
     public boolean isStartingFromScratch() {
         return isStartingFromScratch;
+    }
+
+    public boolean isShouldNumberLines() {
+        return shouldNumberLines;
+    }
+
+    public void setShouldNumberLines(boolean shouldNumberLines) {
+        this.shouldNumberLines = shouldNumberLines;
     }
 
     public DataFormat getOutputFormat() {
