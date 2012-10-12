@@ -45,6 +45,10 @@ public class BaseAtomChildLister {
         maxBondOrderMap.put("O", 3);
     }
     
+    public List<String> getElementSymbols() {
+        return elementSymbols;
+    }
+    
     public String getCertificate(IAtomContainer atomContainer) {
         return new MoleculeSignature(atomContainer).toCanonicalString();
     }

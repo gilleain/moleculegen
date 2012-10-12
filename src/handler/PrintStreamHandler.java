@@ -16,22 +16,18 @@ public class PrintStreamHandler implements GenerateHandler {
 	
 	private PrintStream printStream;
 	
-	public enum OutputFormat {
-	    SMILES,
-	    SIGNATURE
-	};
 	
 	private SmilesGenerator smilesGenerator;
 	
 	private int count;
 	
-	private OutputFormat format;
+	private DataFormat format;
 	
 	public PrintStreamHandler() {
-		this(System.out, OutputFormat.SMILES);
+		this(System.out, DataFormat.SMILES);
 	}
 	
-	public PrintStreamHandler(PrintStream printStream, OutputFormat format) {
+	public PrintStreamHandler(PrintStream printStream, DataFormat format) {
 		this.printStream = printStream;
 		this.format = format;
 		smilesGenerator = new SmilesGenerator();
@@ -40,9 +36,9 @@ public class PrintStreamHandler implements GenerateHandler {
 
 	@Override
 	public void handle(IAtomContainer parent, IAtomContainer child) {
-	    if (format == OutputFormat.SMILES) {
+	    if (format == DataFormat.SMILES) {
 	        printAsSmiles(parent, child);
-	    } else if (format == OutputFormat.SIGNATURE) {
+	    } else if (format == DataFormat.SIGNATURE) {
 	        printAsSignature(parent, child);
 	    }
 	    count++;

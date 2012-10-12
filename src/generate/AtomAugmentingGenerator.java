@@ -69,4 +69,8 @@ public class AtomAugmentingGenerator {
             }
         }
     }
+
+    public List<String> getElementSymbols() {
+        return childLister.getElementSymbols();
+    }
 }

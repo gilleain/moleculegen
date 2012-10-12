@@ -2,8 +2,8 @@ package test.generate;
 
 import generate.AtomAugmentingGenerator;
 import generate.AtomAugmentingGenerator.ListerMethod;
+import handler.DataFormat;
 import handler.PrintStreamHandler;
-import handler.PrintStreamHandler.OutputFormat;
 
 import org.junit.Test;
 import org.openscience.cdk.Atom;
@@ -141,7 +141,7 @@ public class AtomAugmentingGeneratorTest {
         IAtomContainer ccSingle = makeCCEdge(IBond.Order.SINGLE);
         IAtomContainer ccDouble = makeCCEdge(IBond.Order.DOUBLE);
         IAtomContainer ccTriple = makeCCEdge(IBond.Order.TRIPLE);
-        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
+        PrintStreamHandler handler = new PrintStreamHandler(System.out, DataFormat.SMILES);
 //        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
 //        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.FILTER);
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.SYMMETRIC);
@@ -258,7 +258,7 @@ public class AtomAugmentingGeneratorTest {
     @Test
     public void extendPentene() {
         IAtomContainer pentene = makePentene();
-        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
+        PrintStreamHandler handler = new PrintStreamHandler(System.out, DataFormat.SIGNATURE);
 //        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SMILES);
 //        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.SYMMETRIC);
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.FILTER);

@@ -12,4 +12,6 @@ public interface ChildLister {
 
     public String getCertificate(IAtomContainer parent);
 
+    public List<String> getElementSymbols();
+
 }
