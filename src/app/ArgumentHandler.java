@@ -3,6 +3,8 @@ package app;
 import handler.DataFormat;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
@@ -59,18 +61,42 @@ public class ArgumentHandler {
      */
     private String inputStringFormat;
     
+    private Options options;
+    
+    public ArgumentHandler() {
+        options = new Options();
+        options.addOption(opt("e", "formula", "Elemental Formula"));
+        options.addOption(opt("i", "path", "Input Filepath"));
+        options.addOption(opt("I", "format", "Input Format (SMI, SIG, SDF)"));
+        options.addOption(opt("o", "path", "Output Filepath"));
+        options.addOption(opt("O", "format", "Output Format (SMI, SIG, SDF)"));
+        options.addOption(opt("n", "Number output lines"));
+        options.addOption(opt("h", "Print help"));
+    }
+    
+    @SuppressWarnings("static-access")
+    private Option opt(String o, String desc) {
+        return OptionBuilder.withDescription(desc)
+                            .create(o);
+    }
+    
+    @SuppressWarnings("static-access")
+    private Option opt(String o, String argName, String desc) {
+        return OptionBuilder.hasArg()
+                            .withDescription(desc)
+                            .withArgName(argName)
+                            .create(o);
+    }
+    
     
     public void processArguments(String[] args) throws ParseException {
-        Options options = new Options();
-        options.addOption("e", true, "Elemental Formula");
-        options.addOption("i", true, "Input Filepath");
-        options.addOption("I", true, "Input Format");
-        options.addOption("o", true, "Output Filepath");
-        options.addOption("O", true, "Output Format");
-        options.addOption("n", false, "Number output lines");
-        
         PosixParser parser = new PosixParser();
         CommandLine line = parser.parse(options, args, true);
+        
+//        System.out.println(java.util.Arrays.toString(line.getOptions()));
+        if (line.hasOption('h') || line.getOptions().length == 0) {
+            setIsHelp(true);
+        }
         
         if (line.hasOption('n')) {
             setShouldNumberLines(true);
@@ -105,6 +131,10 @@ public class ArgumentHandler {
         
     }
     
+    public void setIsHelp(boolean isHelp) {
+        this.isHelp = isHelp;
+    }
+
     public void setIsStartingFromScratch(boolean isStartingFromScratch) {
         this.isStartingFromScratch = isStartingFromScratch;
     }
@@ -170,7 +200,19 @@ public class ArgumentHandler {
     }
 
     public void printHelp() {
-        System.out.println("Usage:");
+        System.out.println("Usage: java -jar AMG.jar -e <formula>");
+        String format = "%-12s";
+        for (Object op : options.getOptions()) {
+            Option option = (Option) op;
+            if (option.hasArg()) {
+                String head = String.format(format, 
+                        "-" + option.getOpt() + " <" + option.getArgName() + ">");
+                System.out.println(head + " = " + option.getDescription());
+            } else {
+                String head = String.format(format, "-" + option.getOpt());
+                System.out.println(head + " = " + option.getDescription());
+            }
+        }
     }
 
     public boolean isAugmentingFile() {
