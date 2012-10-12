@@ -1,6 +1,7 @@
 package app;
 
 import generate.AtomAugmentingGenerator;
+import handler.CountingHandler;
 import handler.DataFormat;
 import handler.GenerateHandler;
 import handler.PrintStreamHandler;
@@ -49,6 +50,7 @@ public class AMG {
         String formula = argsH.getFormula();
         if (formula == null) {
             error("Please supply a formula");
+            return;
         }
         
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
@@ -57,24 +59,30 @@ public class AMG {
         DataFormat format = argsH.getOutputFormat();
         
         PrintStream outStream;
-        if (argsH.isStdOut()) {
-            outStream = System.out;
+        if (format == DataFormat.NONE) {
+            handler = new CountingHandler();
         } else {
-            String outputFilename = argsH.getOutputFilepath();
-            outStream = new PrintStream(new FileOutputStream(outputFilename));
+            if (argsH.isStdOut()) {
+                outStream = System.out;
+            } else {
+                String outputFilename = argsH.getOutputFilepath();
+                outStream = new PrintStream(new FileOutputStream(outputFilename));
+            }
+            handler = new PrintStreamHandler(outStream, format);
         }
-        handler = new PrintStreamHandler(outStream, format);
         generator = new AtomAugmentingGenerator(handler);
         
         int heavyAtomCount = setParamsFromFormula(formula, generator);
         if (heavyAtomCount < 3) {
             error("Please specify more than 3 heavy atoms");
+            return;
         }
         
         if (argsH.isAugmentingFile()) {
             String inputFile = argsH.getInputFilepath();
             if (inputFile == null) {
                 error("No input file specified");
+                return;
             } else {
                 // TODO : single-molecule file?
                 IIteratingChemObjectReader<IAtomContainer> reader = getInputReader(argsH, builder);
@@ -86,6 +94,7 @@ public class AMG {
                         generator.extend(parent, currentAtomIndex, heavyAtomCount);
                     }
                     reader.close();
+                    handler.finish();
                 } else {
                     error("Problem with the input");    // XXX
                 }
@@ -107,6 +116,7 @@ public class AMG {
             // XXX - if there are less than 2 carbons, this might be inefficient?
             IAtomContainer tripleBond = makeEdge(firstE, secondE, IBond.Order.TRIPLE, builder);
             generator.extend(tripleBond, 2, heavyAtomCount);
+            handler.finish();
         }
     }
     

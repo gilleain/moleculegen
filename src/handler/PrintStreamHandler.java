@@ -16,7 +16,6 @@ public class PrintStreamHandler implements GenerateHandler {
 	
 	private PrintStream printStream;
 	
-	
 	private SmilesGenerator smilesGenerator;
 	
 	private int count;
@@ -64,7 +63,12 @@ public class PrintStreamHandler implements GenerateHandler {
 	    count++;
 	}
 	
-	private String getStringForm(IAtomContainer atomContainer) {
+	@Override
+    public void finish() {
+	    printStream.close();
+    }
+
+    private String getStringForm(IAtomContainer atomContainer) {
 	    if (format == DataFormat.SMILES) {
 	        return smilesGenerator.createSMILES(atomContainer);
 	    } else if (format == DataFormat.SIGNATURE) {

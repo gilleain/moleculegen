@@ -84,20 +84,35 @@ public class ArgumentHandler {
             setInputStringFormat(line.getOptionValue('I'));
         }
         
-        if (line.hasOption('O')) {
-            setOutputStringFormat(line.getOptionValue('O'));
-        }
-        
         if (line.hasOption('i')) {
             setInputFilepath(line.getOptionValue('i'));
+            setIsAugmentingFile(true);
+        } else {
+            setIsStartingFromScratch(true);
+        }
+        
+        if (line.hasOption('O')) {
+            setOutputStringFormat(line.getOptionValue('O'));
+        } else {
+            setOutputStringFormat("NONE");
         }
         
         if (line.hasOption('o')) {
             setOutputFilepath(line.getOptionValue('o'));
+        } else {
+            setIsStdOut(true);
         }
         
     }
     
+    public void setIsStartingFromScratch(boolean isStartingFromScratch) {
+        this.isStartingFromScratch = isStartingFromScratch;
+    }
+
+    public void setIsAugmentingFile(boolean isAugmentingFile) {
+        this.isAugmentingFile = isAugmentingFile;
+    }
+
     public String getInputStringFormat() {
         return inputStringFormat;
     }
@@ -195,9 +210,10 @@ public class ArgumentHandler {
             return DataFormat.SMILES;
         } else if (formatString.equals("SIG")) {
             return DataFormat.SIGNATURE;
+        } else if (formatString.equals("NONE")) {
+            return DataFormat.NONE;
         }
-        return null;    // TODO : raise error?
-        
+        return DataFormat.NONE; // being generous...
     }
 
     public void setIsStdOut(boolean isStdOut) {

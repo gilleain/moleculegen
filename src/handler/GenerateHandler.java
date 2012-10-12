@@ -11,5 +11,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public interface GenerateHandler {
 	
 	public void handle(IAtomContainer parent, IAtomContainer child);
+	
+	public void finish();
 
 }

@@ -10,5 +10,6 @@ public enum DataFormat {
     SMILES,
     MOL,
     SDF,
-    SIGNATURE
+    SIGNATURE,
+    NONE
 }
