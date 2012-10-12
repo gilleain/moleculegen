@@ -204,6 +204,7 @@ public class AtomAugmentingGeneratorTest {
         IAtomContainer initial = makeSingleC();
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCCC");
+        generator.setHCount(10);
         generator.extend(initial, 1, 5);
     }
     

@@ -29,6 +29,18 @@ public class AMGTests {
     }
     
     @Test
+    public void augmentFile_SMI_To_SIG_Test() throws Exception {
+        ArgumentHandler argsH = new ArgumentHandler();
+        argsH.setAugmentingFile(true);
+        argsH.setFormula(formula);
+        argsH.setInputStringFormat("SMI");
+        argsH.setOutputStringFormat("SIG");
+        argsH.setIsStdOut(true);
+        argsH.setInputFilepath(new File(testFolder, "fours_smiles.txt").toString());
+        AMG.run(argsH);
+    }
+    
+    @Test
     public void startingFromScratchTest() throws Exception {
         ArgumentHandler argsH = new ArgumentHandler();
         argsH.setStartingFromScratch(true);
