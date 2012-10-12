@@ -55,13 +55,17 @@
 			<classpath>
 				<pathelement path="build"/>
 				<pathelement path="lib/commons-cli-1.2.jar"/>
-				<pathelement path="lib/junit-4.10.jar"/>
+				<pathelement path="develjar/junit-4.10.jar"/>
 				<pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>
 			</classpath>
 		</javac>
 	</target>
-
+	
 	<target name="package" depends="compile">
+		<antcall target="package-no-compile"/>
+	</target>
+
+	<target name="package-no-compile">
 
 		<property name="store.jar.name" value="AMG"/>
 		<property name="store.dir" value="."/>
@@ -93,7 +97,6 @@
 
 		<zip destfile="${store.jar.name}${TODAY}.zip">
 			<filelist files="${store.jar.path},AMG,AMG.bat"/>
-			<fileset dir="docs"/>
 		</zip>
 	</target>
 	<target name="clean" description="remove build dir">
