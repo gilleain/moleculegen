@@ -24,9 +24,9 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
      * 
      * @param elementString
      */
-    public AtomFilteringChildLister(String elementString) {
+    public AtomFilteringChildLister(List<String> elementSymbols) {
         this();
-        setElementString(elementString);
+        setElementSymbols(elementSymbols);
     }
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {

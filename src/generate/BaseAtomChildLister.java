@@ -60,13 +60,6 @@ public class BaseAtomChildLister {
         return maxBondOrderMap.get(elementSymbols.get(currentAtomIndex));
     }
     
-    public void setElementString(String elementString) {
-        elementSymbols = new ArrayList<String>();
-        for (int i = 0; i < elementString.length(); i++) {
-            elementSymbols.add(String.valueOf(elementString.charAt(i)));
-        }
-    }
-    
     public void setElementSymbols(List<String> elementSymbols) {
         this.elementSymbols = elementSymbols;
     }

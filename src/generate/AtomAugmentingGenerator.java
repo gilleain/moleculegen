@@ -51,8 +51,8 @@ public class AtomAugmentingGenerator {
         validator.setHCount(hCount);
     }
     
-    public void setElementString(String elementString) {
-        childLister.setElementString(elementString);
+    public void setElementSymbols(List<String> elementSymbols) {
+        childLister.setElementSymbols(elementSymbols);
     }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {

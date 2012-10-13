@@ -10,9 +10,10 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import test.AtomContainerPrinter;
+import test.generate.BaseTest;
 import validate.SimpleValidator;
 
-public class SimpleValidatorTest {
+public class SimpleValidatorTest extends BaseTest {
     
     public IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
@@ -32,7 +33,7 @@ public class SimpleValidatorTest {
     public void canonicalChecking() {
         IAtomContainer parent = make3Star();
         AtomContainerPrinter.print(parent);
-        AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister(elementSymbols("CCCCC"));
         SimpleValidator validator = new SimpleValidator();
         int len = parent.getAtomCount();
         String parentCert = lister.getCertificate(parent);

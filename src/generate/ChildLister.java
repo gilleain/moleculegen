@@ -8,7 +8,7 @@ public interface ChildLister {
     
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex);
     
-    public void setElementString(String elementString);
+    public void setElementSymbols(List<String> elementSymbols);
 
     public String getCertificate(IAtomContainer parent);
 

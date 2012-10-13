@@ -197,14 +197,9 @@ public class AMG {
             }
         }
         generator.setHCount(hCount);
-        
-        // could just pass in the list of strings...
         Collections.sort(elementSymbols);
-        StringBuffer buffer = new StringBuffer();
-        for (String e : elementSymbols) {
-            buffer.append(e);
-        }
-        generator.setElementString(buffer.toString());
+        generator.setElementSymbols(elementSymbols);
+        
         return elementSymbols.size();
     }
     

@@ -18,7 +18,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import test.AtomContainerPrinter;
 
-public class AtomSymmetricChildListerTest {
+public class AtomSymmetricChildListerTest extends BaseTest {
     
     public IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
@@ -72,7 +72,7 @@ public class AtomSymmetricChildListerTest {
     public void listChildren() {
         IAtomContainer parent = make3Star();
         AtomContainerPrinter.print(parent);
-        AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister(elementSymbols("CCCCC"));
         int len = parent.getAtomCount();
         for (IAtomContainer child : lister.listChildren(parent, len)) {
             AtomContainerPrinter.print(child);
@@ -83,7 +83,7 @@ public class AtomSymmetricChildListerTest {
     public void nonRedundantChildren() {
         IAtomContainer parent = make3Star();
         AtomContainerPrinter.print(parent);
-        AtomSymmetricChildLister lister = new AtomSymmetricChildLister("CCCCC");
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister(elementSymbols("CCCCC"));
         int len = parent.getAtomCount();
         List<String> certs = new ArrayList<String>();
         for (IAtomContainer child : lister.listChildren(parent, len)) {
