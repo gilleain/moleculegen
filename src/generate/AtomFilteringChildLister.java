@@ -34,18 +34,15 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
         int maxDegreeForCurrent = getMaxBondOrder(currentAtomIndex);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         List<String> certs = new ArrayList<String>();
-        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeSumForCurrent);
         
-//        System.out.println("listing " + test.AtomContainerPrinter.toString(parent));
-        for (int[] bondOrderArray : getBondOrderArrays(parent, maxMultisetSize, maxDegreeForCurrent)) {
+        for (int[] bondOrderArray : getBondOrderArrays(
+                parent, currentAtomIndex, maxDegreeSumForCurrent, maxDegreeForCurrent)) {
             IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
             MoleculeSignature molSig = new MoleculeSignature(child);
             String molSigString = molSig.toCanonicalString();
             if (certs.contains(molSigString)) {
-//                System.out.println("seen " + molSigString);
                 continue;
             } else {
-//                System.out.println("new " + molSigString);
                 children.add(child);
                 certs.add(molSigString);
             }

@@ -38,9 +38,8 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
         int maxDegreeForCurrent = getMaxBondOrder(currentAtomIndex);
         SSPermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
-        int maxMultisetSize = Math.min(currentAtomIndex, maxDegreeSumForCurrent);
-//        System.out.println("mms " + maxMultisetSize);
-        for (int[] bondOrderArray : getBondOrderArrays(parent, maxMultisetSize, maxDegreeForCurrent)) {
+        for (int[] bondOrderArray : getBondOrderArrays(
+                parent, currentAtomIndex, maxDegreeSumForCurrent, maxDegreeForCurrent)) {
             if (isMinimal(bondOrderArray, autG)) {
 //                System.out.println(Arrays.toString(bondOrderArray));
                 children.add(makeChild(parent, bondOrderArray, currentAtomIndex));

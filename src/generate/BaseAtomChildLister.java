@@ -99,7 +99,8 @@ public class BaseAtomChildLister {
         }
     }
     
-    public List<int[]> getBondOrderArrays(IAtomContainer parent, int maxSetSize, int maxDegree) {
+    public List<int[]> getBondOrderArrays(
+            IAtomContainer parent, int currentAtomIndex, int maxDegreeSumForCurrent, int maxDegree) {
         // these are the atom indices that can have bonds added
         List<Integer> baseSet = new ArrayList<Integer>();
         
@@ -119,7 +120,7 @@ public class BaseAtomChildLister {
             return bondOrderArrays;
         }
         
-        for (int k = 1; k <= maxSetSize; k++) {
+        for (int k = 1; k <= maxDegreeSumForCurrent; k++) {
             MultiKSubsetLister<Integer> lister = new MultiKSubsetLister<Integer>(k, baseSet);
             for (List<Integer> multiset : lister) {
                 int[] bondOrderArray = 

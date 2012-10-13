@@ -159,11 +159,32 @@ public class AtomAugmentingGeneratorTest {
     }
     
     @Test
+    public void testThreesFromSingleEdge() {
+        IAtomContainer initial = makeCCEdge(IBond.Order.SINGLE);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCC");
+        generator.extend(initial, 2, 3);
+    }
+    
+    @Test
+    public void testThreesFromDoubleEdge() {
+        IAtomContainer initial = makeCCEdge(IBond.Order.DOUBLE);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
+        generator.setElementString("CCC");
+        generator.extend(initial, 2, 3);
+    }
+    
+    @Test
     public void testFoursFromSingleEdge() {
         IAtomContainer initial = makeCCEdge(IBond.Order.SINGLE);
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator();
         generator.setElementString("CCCC");
         generator.extend(initial, 2, 4);
+    }
+    
+    @Test
+    public void testThreesFromSingleDoubleAndTripleEdges() {
+        testNFromSingleDoubleTriple("CCC", 3, 0);
     }
     
     @Test
