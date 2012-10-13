@@ -3,6 +3,7 @@ package test.generate;
 import generate.AtomAugmentingGenerator;
 import generate.AtomAugmentingGenerator.ListerMethod;
 import handler.CountingHandler;
+import handler.GenerateHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,12 @@ public class BaseTest {
     }
     
     public int countNFromAtom(String formulaString, ListerMethod listerMethod) {
+        CountingHandler handler = new CountingHandler();
+        generateNFromAtom(formulaString, listerMethod, handler);
+        return handler.getCount();
+    }
+        
+    public void generateNFromAtom(String formulaString, ListerMethod listerMethod, GenerateHandler handler) {
         IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
         List<String> elementSymbols = new ArrayList<String>();
         int hCount = 0;
@@ -60,13 +67,12 @@ public class BaseTest {
         int n = elementSymbols.size();
         IAtomContainer singleAtom = makeSingleAtom(elementSymbols.get(0));
         
-        CountingHandler handler = new CountingHandler();
+        
         AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod);
         generator.setHCount(hCount);
         generator.setElementSymbols(elementSymbols);
         
         generator.extend(singleAtom, 1, n);
-        return handler.getCount();
     }
     
     public int countNFromSingleDoubleTriple(String formulaString, ListerMethod listerMethod) {
