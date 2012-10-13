@@ -36,6 +36,39 @@ public class BaseTest {
         return elementSymbols;
     }
     
+    public IAtomContainer makeSingleAtom(String elementSymbol) {
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, elementSymbol));
+        return ac;
+    }
+    
+    public int countNFromAtom(String formulaString, ListerMethod listerMethod) {
+        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
+        List<String> elementSymbols = new ArrayList<String>();
+        int hCount = 0;
+        for (IIsotope element : formula.isotopes()) {   // isotopes are not elements, I know...
+            String elementSymbol = element.getSymbol();
+            int count = formula.getIsotopeCount(element);
+            if (elementSymbol.equals("H")) {
+                hCount = count;
+            } else {
+                for (int i = 0; i < count; i++) {
+                    elementSymbols.add(elementSymbol);
+                }
+            }
+        }
+        int n = elementSymbols.size();
+        IAtomContainer singleAtom = makeSingleAtom(elementSymbols.get(0));
+        
+        CountingHandler handler = new CountingHandler();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod);
+        generator.setHCount(hCount);
+        generator.setElementSymbols(elementSymbols);
+        
+        generator.extend(singleAtom, 1, n);
+        return handler.getCount();
+    }
+    
     public int countNFromSingleDoubleTriple(String formulaString, ListerMethod listerMethod) {
         IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
         List<String> elementSymbols = new ArrayList<String>();
