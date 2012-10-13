@@ -29,7 +29,7 @@
 		<!-- Copy the CDK classes -->
 		<script language="groovy">
 		   <classpath>
-		     <fileset dir="lib" includes="*.jar"/>
+		     <fileset dir="develjar" includes="*.jar"/>
 		   </classpath>
 			dir = project.getProperty("cdk_bin_dir");
             for (m in module_list.split(",")) { 
@@ -82,7 +82,7 @@
 			<zipgroupfileset file="${CDK_dir}/jar/signatures-1.0.jar"/>
 			<zipgroupfileset file="${CDK_dir}/jar/cmlxom-*.jar"/>
 			<zipgroupfileset file="${CDK_dir}/jar/jgrapht-*.jar"/>
-			<!-- <zipgroupfileset file="${CDK_dir}/jar/vecmath*.jar"/> --> 
+			<zipgroupfileset file="${CDK_dir}/jar/vecmath*.jar"/> 
 
 			<manifest>
 				<attribute name="Main-Class" value="app.AMG"/>
@@ -96,7 +96,7 @@
 		<chmod perm="a+x" file="AMG.bat"/>
 
 		<zip destfile="${store.jar.name}${TODAY}.zip">
-			<filelist files="${store.jar.path},AMG,AMG.bat"/>
+			<filelist files="${store.jar.path},AMG,AMG.bat,INSTRUCTIONS.txt"/>
 		</zip>
 	</target>
 	<target name="clean" description="remove build dir">
