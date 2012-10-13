@@ -1,39 +1,34 @@
 package test.generate.filter;
 
-import generate.AtomAugmentingGenerator.ListerMethod;
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import test.generate.BaseTest;
-
-public class AlkyneTests extends BaseTest {
-    
-    public static final ListerMethod METHOD = ListerMethod.FILTER;
+public class AlkyneTests extends FilterTest {
     
     @Test
     public void c2H2Test() {
-        Assert.assertEquals(1, countNFromAtom("C2H2", METHOD));
+        Assert.assertEquals(1, countNFromAtom("C2H2"));
     }
     
     @Test
     public void c3H4Test() {
-        Assert.assertEquals(3, countNFromAtom("C3H4", METHOD));
+        Assert.assertEquals(3, countNFromAtom("C3H4"));
     }
     
     @Test
     public void c4H6Test() {
-        Assert.assertEquals(9, countNFromAtom("C4H6", METHOD));
+        Assert.assertEquals(9, countNFromAtom("C4H6"));
     }
     
     @Test
     public void c5H8Test() {
-        Assert.assertEquals(26, countNFromAtom("C5H8", METHOD));
+        Assert.assertEquals(26, countNFromAtom("C5H8"));
     }
     
     @Test
     public void c6H10Test() {
-        Assert.assertEquals(77, countNFromAtom("C6H10", METHOD));
+        Assert.assertEquals(77, countNFromAtom("C6H10"));
     }
 
 }
