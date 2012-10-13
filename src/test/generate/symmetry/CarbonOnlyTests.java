@@ -1,4 +1,4 @@
-package test.generate.filter;
+package test.generate.symmetry;
 
 import generate.AtomAugmentingGenerator.ListerMethod;
 import junit.framework.Assert;
@@ -9,7 +9,7 @@ import test.generate.BaseTest;
 
 public class CarbonOnlyTests extends BaseTest {
     
-    public static final ListerMethod METHOD = ListerMethod.FILTER;
+    public static final ListerMethod METHOD = ListerMethod.SYMMETRIC;
     
     @Test
     public void c2Test() {
