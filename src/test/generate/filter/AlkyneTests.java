@@ -9,7 +9,7 @@ import test.generate.BaseTest;
 
 public class AlkyneTests extends BaseTest {
     
-    public static final ListerMethod METHOD = ListerMethod.SYMMETRIC;
+    public static final ListerMethod METHOD = ListerMethod.FILTER;
     
     @Test
     public void c2H2Test() {
