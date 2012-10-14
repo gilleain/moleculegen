@@ -43,7 +43,7 @@ public class SimpleValidator implements MoleculeValidator {
             return actualCount == hCount;
         } catch (CDKException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
     }

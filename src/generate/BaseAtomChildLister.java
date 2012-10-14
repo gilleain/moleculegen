@@ -37,11 +37,23 @@ public class BaseAtomChildLister {
     public BaseAtomChildLister() {
         maxBondOrderSumMap = new HashMap<String, Integer>();
         maxBondOrderSumMap.put("C", 4);
-        maxBondOrderSumMap.put("O", 3);
+        maxBondOrderSumMap.put("O", 2);
+        maxBondOrderSumMap.put("N", 5);
+        maxBondOrderSumMap.put("S", 6);
+        maxBondOrderSumMap.put("P", 5);
+        maxBondOrderSumMap.put("F", 1);
+        maxBondOrderSumMap.put("I", 1);
+        maxBondOrderSumMap.put("Cl", 1);
         
         maxBondOrderMap = new HashMap<String, Integer>();
         maxBondOrderMap.put("C", 3);
         maxBondOrderMap.put("O", 3);
+        maxBondOrderMap.put("N", 3);
+        maxBondOrderMap.put("S", 2);
+        maxBondOrderMap.put("P", 2);
+        maxBondOrderMap.put("F", 1);
+        maxBondOrderMap.put("I", 1);
+        maxBondOrderMap.put("Cl", 1);
     }
     
     public List<String> getElementSymbols() {
