@@ -23,7 +23,7 @@
 		</ant>
 	</target>
 
-	<target name="compile" depends="cdk-ant">
+	<target name="compile" depends="cdk-ant" description="compile both the CDK and the AMG classes">
 		<mkdir dir="build"/>
 
 		<!-- Copy the CDK classes -->
@@ -49,7 +49,12 @@
 		<copy todir="build/org/openscience/cdk/dict/data">
 		    <fileset dir="${cdk_src_dir}/org/openscience/cdk/dict/data" includes="**"/>
 		</copy>
+
+		<antcall target="compile-no-cdk"/>
 		
+	</target>
+
+    <target name="compile-no-cdk" description="compile the AMG classes, without calling the CDK compile">
 		<!-- Compile the AMG classes -->
 		<javac srcdir="src" destdir="build" includeantruntime="false">
 			<classpath>
@@ -59,13 +64,13 @@
 				<pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>
 			</classpath>
 		</javac>
-	</target>
+    </target>
 	
-	<target name="package" depends="compile">
+	<target name="package" depends="compile" description="compile and package into a jar, then a zip">
 		<antcall target="package-no-compile"/>
 	</target>
 
-	<target name="package-no-compile">
+	<target name="package-no-compile" description="package without compiling">
 
 		<property name="store.jar.name" value="AMG"/>
 		<property name="store.dir" value="."/>
