@@ -79,9 +79,9 @@ public class ArgumentHandler {
         options.addOption(opt("e", "formula", "Elemental Formula"));
         options.addOption(opt("h", "Print help"));
         options.addOption(opt("i", "path", "Input Filepath"));
-        options.addOption(opt("I", "format", "Input Format (SMI, SIG, SDF)"));
+        options.addOption(opt("I", "format", "Input Format (SMI, SIG, SDF, MOL)"));
         options.addOption(opt("o", "path", "Output Filepath"));
-        options.addOption(opt("O", "format", "Output Format (SMI, SIG, SDF)"));
+        options.addOption(opt("O", "format", "Output Format (SMI, SIG, SDF, MOL)"));
         options.addOption(opt("n", "Number output lines"));
         options.addOption(opt("r", "min:max", "Range of input file to use"));
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
@@ -295,6 +295,8 @@ public class ArgumentHandler {
             return DataFormat.SIGNATURE;
         } else if (formatString.equals("SDF")) {
             return DataFormat.SDF;
+        } else if (formatString.equals("MOL")) {
+            return DataFormat.MOL;
         } else if (formatString.equals("NONE")) {
             return DataFormat.NONE;
         }

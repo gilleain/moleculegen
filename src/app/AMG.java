@@ -25,6 +25,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
@@ -32,6 +34,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 public class AMG {
+    
+    private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     public static void main(String[] args) throws CDKException, IOException {
         ArgumentHandler argsH = new ArgumentHandler();
@@ -55,8 +59,6 @@ public class AMG {
             return;
         }
         
-        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-        AtomAugmentingGenerator generator;
         GenerateHandler handler;
         DataFormat format = argsH.getOutputFormat();
         
@@ -85,7 +87,7 @@ public class AMG {
         
         // create the generator, with the appropriate handler and lister method
         ListerMethod listerMethod = (argsH.getListerMethod() == null)? ListerMethod.FILTER : argsH.getListerMethod();
-        generator = new AtomAugmentingGenerator(handler, listerMethod);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod);
         
         int heavyAtomCount = setParamsFromFormula(formula, generator);
         if (heavyAtomCount < 2) {
@@ -95,48 +97,109 @@ public class AMG {
         
         if (argsH.isAugmentingFile()) {
             String inputFile = argsH.getInputFilepath();
-            String rangeString = argsH.getRangeString();
-            int minIndex = -1;
-            int maxIndex = -1;
-            if (rangeString != null) {
-                int colonIndex = rangeString.indexOf(":");
-                if (colonIndex != -1) {
-                    minIndex = Integer.parseInt(rangeString.substring(0, colonIndex));
-                    maxIndex = Integer.parseInt(rangeString.substring(colonIndex + 1));
-                    System.out.println("min " + minIndex + " max " + maxIndex);
-                }
-            }
             if (inputFile == null) {
                 error("No input file specified");
                 return;
             } else {
-                // TODO : single-molecule file?
-                IIteratingChemObjectReader<IAtomContainer> reader = getInputReader(argsH, builder);
-                if (reader != null) {
-                    int inputCount = 0;
-                    while (reader.hasNext()) {
-                        if (minIndex != -1 && inputCount < minIndex) continue;
-                        IAtomContainer parent = reader.next();
-//                        test.AtomContainerPrinter.print(parent);
-                        int currentAtomIndex = parent.getAtomCount();   // XXX what about Hs?
-                        generator.extend(parent, currentAtomIndex, heavyAtomCount);
-                        inputCount++;
-                        if (maxIndex != -1 && inputCount == maxIndex) break;
-                    }
-                    reader.close();
-                    handler.finish();
+                DataFormat inputFormat = argsH.getInputFormat();
+                if (inputFormat == DataFormat.MOL) {
+                    augmentSingleInputStructure(argsH, inputFile, generator, heavyAtomCount);
                 } else {
-                    error("Problem with the input");    // XXX
+                    augmentMultipleInputStructures(argsH, inputFile, generator, heavyAtomCount);
                 }
-                
             }
         } else if (argsH.isStartingFromScratch()) {
             List<String> symbols = generator.getElementSymbols();
             
             String firstSymbol  = symbols.get(0);
-            generator.extend(makeAtomInAtomContainer(firstSymbol, builder), 1, heavyAtomCount);
+            IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
+            generator.extend(startingAtom, 1, heavyAtomCount);
+        }
+        handler.finish();
+    }
+    
+    /**
+     * For a single structure in an input file, augment up to the number of atoms remaining 
+     * in the difference between the input and the heavyAtomCount.
+     * 
+     * @param argsH the argument handler
+     * @param inputFile the input file path
+     * @param generator the augmenting generator
+     * @param heavyAtomCount the number of heavy (non-hydrogen) atoms in the formula
+     * @throws CDKException 
+     * @throws IOException if the chemobject reader has an error
+     */
+    private static void augmentSingleInputStructure(
+            ArgumentHandler argsH,
+            String inputFile, 
+            AtomAugmentingGenerator generator,
+            int heavyAtomCount) throws CDKException, IOException {
+        DataFormat inputFormat = argsH.getInputFormat();
+        String filepath = argsH.getInputFilepath();
+        InputStream in = new FileInputStream(filepath);
+        IAtomContainer parent;
+        if (inputFormat == DataFormat.MOL) {
+            MDLV2000Reader reader = new MDLV2000Reader(in);
+            parent = reader.read(builder.newInstance(IAtomContainer.class));
+            reader.close();
+        } else {
+            // XXX - other single file formats?
+            return;
+        }
+//        test.AtomContainerPrinter.print(parent);
+        if (parent == null) {
+            error("Molecule null");
+        } else {
+            generator.extend(parent, parent.getAtomCount(), heavyAtomCount);
+        }
+    }
+
+    /**
+     * For each structure in an input file, augment up to the number of atoms remaining 
+     * in the difference between the input and the heavyAtomCount.
+     * 
+     * @param argsH the argument handler
+     * @param inputFile the input file path
+     * @param generator the augmenting generator
+     * @param heavyAtomCount the number of heavy (non-hydrogen) atoms in the formula
+     * @throws IOException if the iterating chemobject reader has an error
+     */
+    private static void augmentMultipleInputStructures(
+            ArgumentHandler argsH, 
+            String inputFile, 
+            AtomAugmentingGenerator generator, 
+            int heavyAtomCount) throws IOException {
+        
+        // allow for selecting a range of input from the input file
+        String rangeString = argsH.getRangeString();
+        int minIndex = -1;
+        int maxIndex = -1;
+        if (rangeString != null) {
+            int colonIndex = rangeString.indexOf(":");
+            if (colonIndex != -1) {
+                minIndex = Integer.parseInt(rangeString.substring(0, colonIndex));
+                maxIndex = Integer.parseInt(rangeString.substring(colonIndex + 1));
+//                System.out.println("min " + minIndex + " max " + maxIndex);
+            }
+        }
+        
+        // get an iterating reader, and augment each structure in the file
+        IIteratingChemObjectReader<IAtomContainer> reader = getInputReader(argsH, builder);
+        if (reader != null) {
+            int inputCount = 0;
+            while (reader.hasNext()) {
+                if (minIndex != -1 && inputCount < minIndex) continue;
+                IAtomContainer parent = reader.next();
+//                test.AtomContainerPrinter.print(parent);
+                int currentAtomIndex = parent.getAtomCount();   // XXX what about explicit Hs?
+                generator.extend(parent, currentAtomIndex, heavyAtomCount);
+                inputCount++;
+                if (maxIndex != -1 && inputCount == maxIndex) break;
+            }
+            reader.close();
             
-            handler.finish();
+        } else {
+            error("Problem with the input");    // XXX
         }
     }
     

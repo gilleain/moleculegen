@@ -23,6 +23,7 @@ public class SimpleValidator implements MoleculeValidator {
     @Override
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
         // TODO!
+//        System.out.println("validating " + test.AtomContainerPrinter.toString(atomContainer));
         return atomContainer.getAtomCount() == size && hydrogensCorrect(atomContainer);
     }
 
