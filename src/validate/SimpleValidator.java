@@ -27,7 +27,7 @@ public class SimpleValidator implements MoleculeValidator {
     }
 
     private boolean hydrogensCorrect(IAtomContainer atomContainer) {
-        if (hCount < 1) return true;    // XXX
+//        if (hCount < 1) return true;    // XXX
         try {
             AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
             CDKHydrogenAdder adder = 
