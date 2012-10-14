@@ -18,11 +18,6 @@ public class AtomAugmentingGenerator {
     
     private ChildLister childLister;
     
-    public enum ListerMethod {
-        FILTER,
-        SYMMETRIC
-    };
-
     public AtomAugmentingGenerator() {
         this(new PrintStreamStringHandler());
     }

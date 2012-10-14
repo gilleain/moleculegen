@@ -1,5 +1,6 @@
 package app;
 
+import generate.ListerMethod;
 import handler.DataFormat;
 
 import org.apache.commons.cli.CommandLine;
@@ -65,6 +66,8 @@ public class ArgumentHandler {
      * A string like 10:20 that indicates a section of an input file to use.
      */
     private String rangeString;
+    
+    private ListerMethod listerMethod;
     
     private Options options;
     

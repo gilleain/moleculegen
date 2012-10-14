@@ -1,6 +1,6 @@
 package test.generate.filter;
 
-import generate.AtomAugmentingGenerator.ListerMethod;
+import generate.ListerMethod;
 import test.generate.BaseTest;
 
 public class FilterTest extends BaseTest {

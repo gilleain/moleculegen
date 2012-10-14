@@ -1,6 +1,6 @@
 package test.generate.symmetry;
 
-import generate.AtomAugmentingGenerator.ListerMethod;
+import generate.ListerMethod;
 import handler.DuplicateCountingHandler;
 
 import java.util.List;

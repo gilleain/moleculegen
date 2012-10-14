@@ -1,7 +1,7 @@
 package test.generate;
 
 import generate.AtomAugmentingGenerator;
-import generate.AtomAugmentingGenerator.ListerMethod;
+import generate.ListerMethod;
 import handler.DataFormat;
 import handler.PrintStreamStringHandler;
 
