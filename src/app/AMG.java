@@ -22,7 +22,6 @@ import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
@@ -89,8 +88,8 @@ public class AMG {
         generator = new AtomAugmentingGenerator(handler, listerMethod);
         
         int heavyAtomCount = setParamsFromFormula(formula, generator);
-        if (heavyAtomCount < 3) {
-            error("Please specify more than 3 heavy atoms");
+        if (heavyAtomCount < 2) {
+            error("Please specify more than 1 heavy atom");
             return;
         }
         
@@ -134,19 +133,9 @@ public class AMG {
         } else if (argsH.isStartingFromScratch()) {
             List<String> symbols = generator.getElementSymbols();
             
-            // XXX until generation from a single atom is fixed, have to do this...
-            String firstE  = symbols.get(0);
-            String secondE = symbols.get(1);
+            String firstSymbol  = symbols.get(0);
+            generator.extend(makeAtomInAtomContainer(firstSymbol, builder), 1, heavyAtomCount);
             
-            IAtomContainer singleBond = makeEdge(firstE, secondE, IBond.Order.SINGLE, builder);
-            generator.extend(singleBond, 2, heavyAtomCount);
-            
-            IAtomContainer doubleBond = makeEdge(firstE, secondE, IBond.Order.DOUBLE, builder);
-            generator.extend(doubleBond, 2, heavyAtomCount);
-            
-            // XXX - if there are less than 2 carbons, this might be inefficient?
-            IAtomContainer tripleBond = makeEdge(firstE, secondE, IBond.Order.TRIPLE, builder);
-            generator.extend(tripleBond, 2, heavyAtomCount);
             handler.finish();
         }
     }
@@ -215,13 +204,9 @@ public class AMG {
         System.out.println(text);
     }
     
-    private static IAtomContainer makeEdge(
-            String elementA, String elementB, IBond.Order order, IChemObjectBuilder builder) {
+    private static IAtomContainer makeAtomInAtomContainer(String elementSymbol, IChemObjectBuilder builder) {
         IAtomContainer ac = builder.newInstance(IAtomContainer.class);
-        ac.addAtom(builder.newInstance(IAtom.class,(elementA)));
-        ac.addAtom(builder.newInstance(IAtom.class,(elementA)));
-        ac.addBond(0, 1, order);
+        ac.addAtom(builder.newInstance(IAtom.class,(elementSymbol)));
         return ac;
     }
-
 }
