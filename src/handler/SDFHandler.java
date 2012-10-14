@@ -17,11 +17,12 @@ public class SDFHandler implements GenerateHandler {
 	
 	private SDFWriter writer;
 	
-	private int count;
+	public SDFHandler() {
+        writer = new SDFWriter(System.out);
+    }
 	
 	public SDFHandler(String outfile) throws IOException {
 	    writer = new SDFWriter(new FileWriter(outfile));
-		count = 0;
 	}
 
 	@Override
@@ -32,7 +33,6 @@ public class SDFHandler implements GenerateHandler {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-	    count++;
 	}
 	
 	@Override

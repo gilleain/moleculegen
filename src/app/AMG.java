@@ -66,8 +66,12 @@ public class AMG {
             PrintStream outStream;
             boolean shouldNumberLines = argsH.isShouldNumberLines();
             if (argsH.isStdOut()) {
-                outStream = System.out;
-                handler = new PrintStreamStringHandler(outStream, format, shouldNumberLines);
+                if (format == DataFormat.SDF) {
+                    handler = new SDFHandler();
+                } else {
+                    outStream = System.out;
+                    handler = new PrintStreamStringHandler(outStream, format, shouldNumberLines);
+                }
             } else {
                 String outputFilename = argsH.getOutputFilepath();
                 if (format == DataFormat.SDF) {

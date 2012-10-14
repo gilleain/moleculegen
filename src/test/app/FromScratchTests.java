@@ -31,5 +31,9 @@ public class FromScratchTests {
         fromScratchTest("SIG");
     }
 
+    @Test
+    public void sdfFromScratchTest() throws Exception {
+        fromScratchTest("SDF");
+    }
 
 }
