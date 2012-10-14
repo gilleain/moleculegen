@@ -6,6 +6,7 @@ import handler.CountingHandler;
 import handler.GenerateHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -65,6 +66,7 @@ public class BaseTest {
             }
         }
         int n = elementSymbols.size();
+        Collections.sort(elementSymbols);
         IAtomContainer singleAtom = makeSingleAtom(elementSymbols.get(0));
         
         
