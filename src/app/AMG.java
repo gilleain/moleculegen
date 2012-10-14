@@ -25,7 +25,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
