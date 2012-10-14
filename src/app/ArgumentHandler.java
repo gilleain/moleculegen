@@ -67,6 +67,9 @@ public class ArgumentHandler {
      */
     private String rangeString;
     
+    /**
+     * The child listing method to use.
+     */
     private ListerMethod listerMethod;
     
     private Options options;
@@ -81,6 +84,7 @@ public class ArgumentHandler {
         options.addOption(opt("O", "format", "Output Format (SMI, SIG, SDF)"));
         options.addOption(opt("n", "Number output lines"));
         options.addOption(opt("r", "min:max", "Range of input file to use"));
+        options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
     }
     
     @SuppressWarnings("static-access")
@@ -97,6 +101,14 @@ public class ArgumentHandler {
                             .create(o);
     }
     
+    @SuppressWarnings("static-access")
+    private Option lopt(String lo, String argName, String desc) {
+        return OptionBuilder.hasArg()
+                            .withDescription(desc)
+                            .withArgName(argName)
+                            .withLongOpt(lo)
+                            .create();
+    }
     
     public void processArguments(String[] args) throws ParseException {
         PosixParser parser = new PosixParser();
@@ -142,6 +154,11 @@ public class ArgumentHandler {
             setRangeString(line.getOptionValue('r'));
         }
         
+        if (line.hasOption("lister")) {
+            ListerMethod chosenLister = 
+                ListerMethod.valueOf(line.getOptionValue("lister"));
+            setListerMethod(chosenLister);
+        }
     }
     
     public void setIsHelp(boolean isHelp) {
@@ -214,16 +231,27 @@ public class ArgumentHandler {
 
     public void printHelp() {
         System.out.println("Usage: java -jar AMG.jar -e <formula>");
-        String format = "%-12s";
+        String format = "%-17s";
         for (Object op : options.getOptions()) {
             Option option = (Option) op;
-            if (option.hasArg()) {
-                String head = String.format(format, 
-                        "-" + option.getOpt() + " <" + option.getArgName() + ">");
-                System.out.println(head + " = " + option.getDescription());
+            if (option.hasLongOpt()) {
+                if (option.hasArg()) {
+                    String head = String.format(format, 
+                            "--" + option.getLongOpt() + "=<" + option.getArgName() + ">");
+                    System.out.println(head + " = " + option.getDescription());
+                } else {
+                    String head = String.format(format, "-" + option.getLongOpt());
+                    System.out.println(head + " = " + option.getDescription());
+                }
             } else {
-                String head = String.format(format, "-" + option.getOpt());
-                System.out.println(head + " = " + option.getDescription());
+                if (option.hasArg()) {
+                    String head = String.format(format, 
+                            "-" + option.getOpt() + " <" + option.getArgName() + ">");
+                    System.out.println(head + " = " + option.getDescription());
+                } else {
+                    String head = String.format(format, "-" + option.getOpt());
+                    System.out.println(head + " = " + option.getDescription());
+                }
             }
         }
     }
@@ -283,5 +311,13 @@ public class ArgumentHandler {
 
     public void setRangeString(String rangeString) {
         this.rangeString = rangeString;
+    }
+
+    public ListerMethod getListerMethod() {
+        return listerMethod;
+    }
+
+    public void setListerMethod(ListerMethod listerMethod) {
+        this.listerMethod = listerMethod;
     }
 }
