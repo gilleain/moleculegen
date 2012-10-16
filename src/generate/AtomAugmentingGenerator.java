@@ -8,7 +8,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import validate.MoleculeValidator;
-import validate.SimpleValidator;
+import validate.SignatureValidator;
 
 public class AtomAugmentingGenerator {
 
@@ -39,7 +39,7 @@ public class AtomAugmentingGenerator {
         } else {
             // XXX
         }
-        validator = new SimpleValidator();
+        validator = new SignatureValidator();
     }
     
     public void setHCount(int hCount) {

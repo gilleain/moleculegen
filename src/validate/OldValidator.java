@@ -12,11 +12,20 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import test.AtomContainerPrinter;
 
-public class SimpleValidator implements MoleculeValidator {
+/**
+ * BROKEN : This validator used a (possibly) incorrect canonicalization routine.
+ * Instead of checking the canonical deletion object (H, w) for isomorphism to the 
+ * inverse of the augmentation (G, v) it checked isomorphism of the parent to the
+ * canonically deleted child. 
+ * 
+ * @author maclean
+ *
+ */
+public class OldValidator implements MoleculeValidator {
     
     private int hCount;
     
-    public SimpleValidator() {
+    public OldValidator() {
         hCount = 0;
     }
 
@@ -48,17 +57,20 @@ public class SimpleValidator implements MoleculeValidator {
             return false;
         }
     }
-
-    @Override
+    
     public boolean isCanonical(IAtomContainer parent, IAtomContainer child, String parentSignature) {
         MoleculeSignature molSig = new MoleculeSignature(child);
         int[] labels = molSig.getCanonicalLabels();
         int size = labels.length - 1;
 //        int vertexToDelete = labels[size];
         int vertexToDelete = find(labels, size);
+        
+//        System.out.println(java.util.Arrays.toString(labels));
 
         IAtomContainer canonicalParent = null;
-        try { canonicalParent = (IAtomContainer) child.clone(); } catch (Exception e) {} 
+        
+        try { canonicalParent = (IAtomContainer) child.clone(); } catch (Exception e) {}
+//        canonicalParent = reconstruct(molSig.toCanonicalString());
 
         IAtom atomToDelete = canonicalParent.getAtom(vertexToDelete);
         canonicalParent.removeAtomAndConnectedElectronContainers(atomToDelete);
@@ -93,6 +105,11 @@ public class SimpleValidator implements MoleculeValidator {
         }
         return -1;
     }
+    
+//    private IAtomContainer reconstruct(String signature) {
+//        return MoleculeSignature.fromSignatureString(
+//                signature, SilentChemObjectBuilder.getInstance());
+//    }
 
     @Override
     public void setHCount(int hCount) {
