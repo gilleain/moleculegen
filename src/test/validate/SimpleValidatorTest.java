@@ -11,7 +11,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import test.AtomContainerPrinter;
 import test.generate.BaseTest;
-import validate.SignatureValidator;
+import validate.SignatureCanonicalValidator;
 
 public class SimpleValidatorTest extends BaseTest {
     
@@ -34,11 +34,10 @@ public class SimpleValidatorTest extends BaseTest {
         IAtomContainer parent = make3Star();
         AtomContainerPrinter.print(parent);
         AtomSymmetricChildLister lister = new AtomSymmetricChildLister(elementSymbols("CCCCC"));
-        SignatureValidator validator = new SignatureValidator();
+        SignatureCanonicalValidator validator = new SignatureCanonicalValidator();
         int len = parent.getAtomCount();
-        String parentCert = lister.getCertificate(parent);
         for (IAtomContainer child : lister.listChildren(parent, len)) {
-            boolean isCanonical = validator.isCanonical(parent, child, parentCert);
+            boolean isCanonical = validator.isCanonical(child);
             String acp = AtomContainerPrinter.toString(child);
             System.out.println(isCanonical + "\t" + acp);
         }

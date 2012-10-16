@@ -7,14 +7,18 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import validate.CanonicalValidator;
 import validate.MoleculeValidator;
-import validate.SignatureValidator;
+import validate.SignatureCanonicalValidator;
+import validate.HCountValidator;
 
 public class AtomAugmentingGenerator {
 
     private GenerateHandler handler;
 
-    private MoleculeValidator validator;
+    private MoleculeValidator hCountValidator;
+    
+    private CanonicalValidator canonicalValidator;
     
     private ChildLister childLister;
     
@@ -39,11 +43,12 @@ public class AtomAugmentingGenerator {
         } else {
             // XXX
         }
-        validator = new SignatureValidator();
+        hCountValidator = new HCountValidator();
+        canonicalValidator = new SignatureCanonicalValidator();
     }
     
     public void setHCount(int hCount) {
-        validator.setHCount(hCount);
+        hCountValidator.setHCount(hCount);
     }
     
     public void setElementSymbols(List<String> elementSymbols) {
@@ -54,10 +59,9 @@ public class AtomAugmentingGenerator {
         if (currentAtomIndex >= size) return;
         
         List<IAtomContainer> children = childLister.listChildren(parent, currentAtomIndex);
-        String parentCertificate = childLister.getCertificate(parent);
         for (IAtomContainer child : children) {
-            if (validator.isCanonical(parent, child, parentCertificate)) {
-                if (validator.isValidMol(child, size)) {
+            if (canonicalValidator.isCanonical(child)) {
+                if (hCountValidator.isValidMol(child, size)) {
                     handler.handle(parent, child);
                 }
                 extend(child, currentAtomIndex + 1, size);

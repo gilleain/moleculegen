@@ -56,6 +56,14 @@ public class BaseAtomChildLister {
         maxBondOrderMap.put("Cl", 1);
     }
     
+    public BaseAtomChildLister(String elementString) {
+        this();
+        elementSymbols = new ArrayList<String>();
+        for (int i = 0; i < elementString.length(); i++) {
+            elementSymbols.add(String.valueOf(elementString.charAt(i)));
+        }
+    }
+    
     public List<String> getElementSymbols() {
         return elementSymbols;
     }

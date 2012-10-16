@@ -6,62 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeSignature;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
- * Validate a candidate molecule as a) canonical and b) having the correct number of
- * hydrogens.
- * 
- * With regard to the canonicalization check : this version should  
- * 
+ *  Validate a molecule as a canonical augmentation.
+ *   
  * @author maclean
  *
  */
-public class SignatureValidator implements MoleculeValidator {
+public class SignatureCanonicalValidator implements CanonicalValidator {
     
-    private int hCount;
-    
-    public SignatureValidator() {
-        hCount = 0;
-    }
-
-    @Override
-    public boolean isValidMol(IAtomContainer atomContainer, int size) {
-        // TODO!
-//        System.out.println("validating " + test.AtomContainerPrinter.toString(atomContainer));
-        return atomContainer.getAtomCount() == size && hydrogensCorrect(atomContainer);
-    }
-
-    private boolean hydrogensCorrect(IAtomContainer atomContainer) {
-//        if (hCount < 1) return true;    // XXX
-        try {
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
-            CDKHydrogenAdder adder = 
-                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
-            adder.addImplicitHydrogens(atomContainer);
-            int actualCount = 0;
-            for (IAtom atom : atomContainer.atoms()) {
-                actualCount += AtomContainerManipulator.countHydrogens(atomContainer, atom);
-                if (actualCount > hCount) {
-                    return false;
-                }
-            }
-            return actualCount == hCount;
-        } catch (CDKException e) {
-            // TODO Auto-generated catch block
-//            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean isCanonical(IAtomContainer parent, IAtomContainer child, String parentSignature) {
+    public boolean isCanonical(IAtomContainer child) {
         MoleculeSignature molSig = new MoleculeSignature(child);
         
         // for speed reasons, find both the labels and the orbits at the same time
@@ -106,11 +63,6 @@ public class SignatureValidator implements MoleculeValidator {
             if (labels[i] == j) return i;
         }
         return -1;
-    }
-    
-    @Override
-    public void setHCount(int hCount) {
-        this.hCount = hCount;
     }
 
 }

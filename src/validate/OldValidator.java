@@ -19,9 +19,10 @@ import test.AtomContainerPrinter;
  * canonically deleted child. 
  * 
  * @author maclean
+ * @deprecated
  *
  */
-public class OldValidator implements MoleculeValidator {
+public class OldValidator  {
     
     private int hCount;
     
@@ -29,7 +30,6 @@ public class OldValidator implements MoleculeValidator {
         hCount = 0;
     }
 
-    @Override
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
         // TODO!
 //        System.out.println("validating " + test.AtomContainerPrinter.toString(atomContainer));
@@ -111,7 +111,6 @@ public class OldValidator implements MoleculeValidator {
 //                signature, SilentChemObjectBuilder.getInstance());
 //    }
 
-    @Override
     public void setHCount(int hCount) {
         this.hCount = hCount;
     }

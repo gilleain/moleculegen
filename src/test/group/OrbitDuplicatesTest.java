@@ -7,11 +7,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import test.AtomContainerPrinter;
-import validate.SignatureValidator;
+import validate.SignatureCanonicalValidator;
 
 public class OrbitDuplicatesTest {
     
@@ -38,11 +37,10 @@ public class OrbitDuplicatesTest {
         IAtomContainer childB = lister.makeChild(parent, new int[] {1, 0, 2, 1, 0}, 5);
         AtomContainerPrinter.print(childA);
         AtomContainerPrinter.print(childB);
-        SignatureValidator validator = new SignatureValidator();
-        String parentSignature = new MoleculeSignature(parent).toCanonicalString();
-        boolean canA = validator.isCanonical(parent, childA, parentSignature);
+        SignatureCanonicalValidator validator = new SignatureCanonicalValidator();
+        boolean canA = validator.isCanonical(childA);
         System.out.println(canA);
-        boolean canB = validator.isCanonical(parent, childB, parentSignature);
+        boolean canB = validator.isCanonical(childB);
         System.out.println(canB);
     }
 

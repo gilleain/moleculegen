@@ -96,6 +96,8 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
     }
 
     public SSPermutationGroup getGroup(IAtomContainer parent) {
-        return new CDKDiscretePartitionRefiner().getAutomorphismGroup(parent);
+        CDKDiscretePartitionRefiner refiner = 
+            new CDKDiscretePartitionRefiner(false, true, false, false);
+        return refiner.getAutomorphismGroup(parent);
     }
 }
