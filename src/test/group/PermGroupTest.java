@@ -23,7 +23,7 @@ public class PermGroupTest {
         }
         for (int[] bond : bonds) {
             int o = bond[2];
-            ac.addBond(bond[0], bond[1], IBond.Order.values()[o]);
+            ac.addBond(bond[0], bond[1], IBond.Order.values()[o - 1]);
         }
         return ac;
     }
@@ -32,8 +32,11 @@ public class PermGroupTest {
     public void pent_1_3_diene() {
         int[][] b = new int[][] { { 0, 1, 2 }, { 0, 2, 1 }, { 1, 4, 1 }, { 2, 3, 2 } };
         IAtomContainer pent12diene = getAtomContainer("CCCCC", b);
-        CDKDiscretePartitionRefiner refiner = new CDKDiscretePartitionRefiner();
+        CDKDiscretePartitionRefiner refiner = 
+            new CDKDiscretePartitionRefiner(false, true, false, false);
         SSPermutationGroup group = refiner.getAutomorphismGroup(pent12diene);
+        String bhms = refiner.getBestHalfMatrixString();
+        System.out.println(bhms);
         for (Permutation p : group.all()) {
             System.out.println(p);
         }

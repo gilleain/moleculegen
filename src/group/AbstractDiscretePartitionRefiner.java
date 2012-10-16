@@ -39,7 +39,7 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     public abstract int getVertexCount();
     
-    public abstract boolean isConnected(int i, int j);
+    public abstract int isConnected(int i, int j);
     
     public abstract boolean sameColor(int i, int j);
     
@@ -64,7 +64,7 @@ public abstract class AbstractDiscretePartitionRefiner {
         int n = getVertexCount();
         for (int j = n - 1; j > 0; j--) {
         	for (int i = j - 1; i >= 0; i--) {
-        		if (isConnected(p.get(i), p.get(j))) {
+        		if (isConnected(p.get(i), p.get(j)) > 0) {    // XXX!!
         			certificate += (int)Math.pow(2, k);
         		}
         		k++;
@@ -86,11 +86,8 @@ public abstract class AbstractDiscretePartitionRefiner {
         int n = p.size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
-                if (isConnected(p.get(i), p.get(j))) {
-                    hms += "1";
-                } else {
-                    hms += "0";
-                }
+                int connectivity = isConnected(p.get(i), p.get(j)); 
+                hms += String.valueOf(connectivity);    // XXX what if < 0 ?
             }
         }
         return hms;
@@ -261,11 +258,12 @@ public abstract class AbstractDiscretePartitionRefiner {
     }
 
     private int isAdjacent(int i, int j) {
-        if (isConnected(i, j)) { 
-            return 1; 
-        } else {
-            return 0;
-        }
+        return isConnected(i, j);
+//        if (isConnected(i, j)) { 
+//            return 1; 
+//        } else {
+//            return 0;
+//        }
     }
 
 }

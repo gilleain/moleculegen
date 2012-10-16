@@ -262,8 +262,12 @@ public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefine
      * @see org.openscience.cdk.group.AbstractDiscretePartitionRefiner#isConnected(int, int)
      */
     @Override
-    public boolean isConnected(int i, int j) {
-        return connectionTable.get(i).containsKey(j);
+    public int isConnected(int i, int j) {
+        if (connectionTable.get(i).containsKey(j)) {
+            return connectionTable.get(i).get(j);
+        } else {
+            return 0;
+        }
     }
     
     public boolean sameColor(int i, int j) {
