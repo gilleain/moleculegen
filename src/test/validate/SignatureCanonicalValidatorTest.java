@@ -13,7 +13,7 @@ import test.AtomContainerPrinter;
 import test.generate.BaseTest;
 import validate.SignatureCanonicalValidator;
 
-public class SimpleValidatorTest extends BaseTest {
+public class SignatureCanonicalValidatorTest extends BaseTest {
     
     public IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
