@@ -55,5 +55,14 @@ public class SubAlkyneTests extends FilterTest {
     public void c6H8Test() {
         Assert.assertEquals(159, countNFromAtom("C6H8"));
     }
-
+    
+    @Test
+    public void c7H2Test() {
+        Assert.assertEquals(356, countNFromAtom("C7H2"));
+    }
+    
+    @Test
+    public void c7H8Test() {
+        Assert.assertEquals(1031, countNFromAtom("C7H8"));
+    }
 }

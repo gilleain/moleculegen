@@ -31,5 +31,15 @@ public class DuplicateTests extends BaseTest {
     public void testC6H4() {
         testForDuplicates("C6H4");
     }
+    
+    @Test
+    public void testC7H8() {
+        testForDuplicates("C7H8");
+    }
+    
+    @Test
+    public void testC7H2() {
+        testForDuplicates("C7H2");
+    }
 
 }
