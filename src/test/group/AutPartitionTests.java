@@ -128,6 +128,7 @@ public class AutPartitionTests {
         for (int[] set : forest.getSets()) {
             partition.addCell(set);
         }
+        partition.order();  // necessary for comparison by string
         return partition;
     }
     
@@ -139,6 +140,11 @@ public class AutPartitionTests {
     @Test
     public void testC6H8() throws IOException {
         testFile("output/C6H8.smi");
+    }
+    
+    @Test
+    public void testC3H4O4() throws IOException {
+        testFile("output/C3H4O4.smi");
     }
 
 }
