@@ -8,10 +8,7 @@ import group.PermutationGroup;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
@@ -50,10 +47,9 @@ public class AutPartitionTests {
             sort(ac);
             MoleculeSignature molSig = new MoleculeSignature(ac);
             List<Orbit> signatureOrbits = molSig.calculateOrbits();
-            AtomDiscretePartitionRefiner refiner = 
-                new AtomDiscretePartitionRefiner(false, true, false);
+            AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
             int n = ac.getAtomCount();
-            PermutationGroup group = refiner.getAutomorphismGroup(ac, getElementPartition(ac));
+            PermutationGroup group = refiner.getAutomorphismGroup(ac);
             Partition autPartition = getAutPartition(n, group);
             String pS = simplify(signatureOrbits).toString();
             String aS = autPartition.toString();
@@ -63,27 +59,6 @@ public class AutPartitionTests {
             }
         }
         reader.close();
-    }
-    
-    private Partition getElementPartition(IAtomContainer atomContainer) {
-        Map<String, List<Integer>> elementMap = new HashMap<String, List<Integer>>();
-        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
-            String elementSymbol = atomContainer.getAtom(i).getSymbol();
-            List<Integer> cell;
-            if (elementMap.containsKey(elementSymbol)) {
-                cell = elementMap.get(elementSymbol);
-            } else {
-                cell = new ArrayList<Integer>();
-                elementMap.put(elementSymbol, cell);
-            }
-            cell.add(i);
-        }
-        Partition p = new Partition();
-        for (String e : elementMap.keySet()) {
-            p.addCell(elementMap.get(e));
-        }
-        p.order();
-        return p;
     }
     
     private Partition simplify(List<Orbit> orbits) {

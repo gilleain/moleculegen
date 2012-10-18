@@ -227,8 +227,10 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             if (cellIndex == -1) {
                 cellIndex = elementList.size();
                 elementList.add(elementSymbol);
+                elementPartition.addSingletonCell(atomIndex);
+            } else {
+                elementPartition.addToCell(cellIndex, atomIndex);
             }
-            elementPartition.addToCell(cellIndex, atomIndex);
         }
         
         return elementPartition;
