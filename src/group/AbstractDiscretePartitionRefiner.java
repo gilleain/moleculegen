@@ -45,33 +45,6 @@ public abstract class AbstractDiscretePartitionRefiner {
         return this.first.isIdentity();
     }
     
-    public long getCertificate() {
-        return calculateCertificate(this.getBest());
-    }
-    
-    public long calculateCertificate(Permutation p) {
-        int k = 0;
-        long certificate = 0;
-        int n = getVertexCount();
-        for (int j = n - 1; j > 0; j--) {
-        	for (int i = j - 1; i >= 0; i--) {
-        		if (isConnected(p.get(i), p.get(j)) > 0) {    // XXX!!
-        			certificate += (int)Math.pow(2, k);
-        		}
-        		k++;
-        	}
-        }
-//        for (int i = 0; i < n - 1; i++) {
-//            for (int j = i + 1; j < n; j++) {
-//                if (isConnected(p.get(i), p.get(j))) {
-//                    certificate += (int)Math.pow(2, k);
-//                }
-//                k++;
-//            }
-//        }
-        return certificate;
-    }
-    
     public String getHalfMatrixString(Permutation p) {
         String hms = "";
         int n = p.size();
@@ -209,39 +182,16 @@ public abstract class AbstractDiscretePartitionRefiner {
      * @param perm the permutation to check
      * @return BETTER, EQUAL, or WORSE
      */
-    public Result compareColumnwise(Permutation perm) {
-        int m = perm.size();
-        for (int i = 1; i < m; i++) {
-            for (int j = 0; j < i; j++) {
-                int x = isAdjacent(best.get(i), best.get(j));
-                int y = isAdjacent(perm.get(i), perm.get(j));
-                if (x > y) return Result.WORSE;
-                if (x < y) return Result.BETTER;
-            }
-        }
-        return Result.EQUAL;
-    }
-    
     public Result compareRowwise(Permutation perm) {
         int m = perm.size();
         for (int i = 0; i < m - 1; i++) {
             for (int j = i + 1; j < m; j++) {
-                int x = isAdjacent(best.get(i), best.get(j));
-                int y = isAdjacent(perm.get(i), perm.get(j));
+                int x = isConnected(best.get(i), best.get(j));
+                int y = isConnected(perm.get(i), perm.get(j));
                 if (x > y) return Result.WORSE;
                 if (x < y) return Result.BETTER;
             }
         }
         return Result.EQUAL;
     }
-
-    private int isAdjacent(int i, int j) {
-        return isConnected(i, j);
-//        if (isConnected(i, j)) { 
-//            return 1; 
-//        } else {
-//            return 0;
-//        }
-    }
-
 }
