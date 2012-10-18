@@ -30,14 +30,14 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     private boolean checkForDisconnectedAtoms;
     
     /**
-     * Specialised option to allow generating automorphisms that ignore the bond order.
-     */
-    private boolean ignoreBondOrders;
-    
-    /**
      * Specialised option to allow generating automorphisms that ignore the element symbols.
      */
     private boolean ignoreElements;
+    
+    /**
+     * Specialised option to allow generating automorphisms that ignore the bond order.
+     */
+    private boolean ignoreBondOrders;
     
     /**
      * Default constructor - does not check for disconnected atoms, ignore elements
@@ -60,16 +60,16 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      * Make a refiner with various advanced options.
      * 
      * @param checkForDisconnectedAtoms if true, check for disconnected atoms
-     * @param ignoreBondOrders if true, ignore bond order when making automorphisms
      * @param ignoreElements if true, ignore element symbols when making automorphisms
+     * @param ignoreBondOrders if true, ignore bond order when making automorphisms
      */
     public AtomDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, 
-            boolean ignoreBondOrders,
-            boolean ignoreElements) {
+            boolean ignoreElements,
+            boolean ignoreBondOrders) {
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
-        this.ignoreBondOrders = ignoreBondOrders;
         this.ignoreElements = ignoreElements;
+        this.ignoreBondOrders = ignoreBondOrders;
     }
     
     /**
