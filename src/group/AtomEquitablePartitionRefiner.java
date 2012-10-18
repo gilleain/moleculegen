@@ -12,7 +12,7 @@ import java.util.Set;
  * @cdk.module group
  *
  */
-public class CDKEquitablePartitionRefiner extends
+public class AtomEquitablePartitionRefiner extends
         AbstractEquitablePartitionRefiner implements IEquitablePartitionRefiner {
     
     /**
@@ -22,41 +22,19 @@ public class CDKEquitablePartitionRefiner extends
      */
     private List<Map<Integer, Integer>> connectionTable;
     
-    private boolean useBondOrder = true;
-    
-    private boolean useAtomSymbol = true;
-    
-    public CDKEquitablePartitionRefiner(List<Map<Integer, Integer>> connectionTable) {
-        this(connectionTable, true);
-    }
-    
-    public CDKEquitablePartitionRefiner(
-            List<Map<Integer, Integer>> connectionTable, boolean useBondOrder) {
+    public AtomEquitablePartitionRefiner(List<Map<Integer, Integer>> connectionTable) {
         this.connectionTable = connectionTable;
-        this.useBondOrder = useBondOrder;
     }
 
     public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
         int neighbours = 0;
         Map<Integer, Integer> connectedOrders = connectionTable.get(vertexIndex); 
         for (int connected : connectedOrders.keySet()) {
-            if (block.contains(connected) && (atomSymbolOk(vertexIndex, connected))) {
-                if (useBondOrder) {
-                    neighbours += connectedOrders.get(connected);
-                } else {
-                    neighbours += 1;
-                }
+            if (block.contains(connected)) {
+                neighbours++;
             }
         }
         return neighbours;
-    }
-    
-    private boolean atomSymbolOk(int vertexIndex, int connected) {
-        if (useAtomSymbol) {
-            return true;   // TODO
-        } else {
-            return true;
-        }
     }
     
     @Override

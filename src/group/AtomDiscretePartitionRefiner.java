@@ -155,26 +155,28 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     }
     
     private void setup(IAtomContainer atomContainer) {
+        // have to setup the connection table before making the group 
+        // otherwise the size may be wrong 
         setupConnectionTable(atomContainer);
-       
-        int n = getVertexCount();
-        PermutationGroup group = new PermutationGroup(new Permutation(n));
-        IEquitablePartitionRefiner refiner = 
-            new CDKEquitablePartitionRefiner(connectionTable, ignoreBondOrders);
-        setup(group, refiner);
+        int size = getVertexCount();
+        PermutationGroup group = new PermutationGroup(new Permutation(size));
+        setup(group, new AtomEquitablePartitionRefiner(connectionTable));
     }
     
     private void setup(IAtomContainer atomContainer, PermutationGroup group) {
         setupConnectionTable(atomContainer);
-        IEquitablePartitionRefiner refiner = 
-            new CDKEquitablePartitionRefiner(connectionTable);
-        setup(group, refiner);
+        setup(group, new AtomEquitablePartitionRefiner(connectionTable));
     }
     
-    public void refine(Partition p, IAtomContainer container) {
+    /**
+     * Refine an atom partition based on the connectivity in the atom container.
+     * 
+     * @param partition the initial partition of the atoms
+     * @param container the atom container to use
+     */
+    public void refine(Partition partition, IAtomContainer container) {
         setup(container);
-//        System.out.println("refining " + p);
-        refine(p);
+        refine(partition);
     }
 
     /**

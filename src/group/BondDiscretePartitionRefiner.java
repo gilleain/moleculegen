@@ -25,7 +25,7 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      * The connectivity between bonds; two bonds are connected 
      * if they share an atom.
      */
-    private Map<Integer, Integer> connectionTable;
+    private Map<Integer, List<Integer>> connectionTable;
     
     /**
      * Specialised option to allow generating automorphisms that ignore the bond order.
@@ -157,22 +157,22 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     }
 
     private void setup(IAtomContainer atomContainer) {
+        // have to setup the connection table before making the group 
+        // otherwise the size may be wrong
         setupConnectionTable(atomContainer);
+        
         int n = getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(n));
-        IEquitablePartitionRefiner refiner = null;  // TODO
-//            new CDKEquitablePartitionRefiner(connectionTable, ignoreBondOrders);
-        setup(group, refiner);
+        setup(group, new BondEquitablePartitionRefiner(connectionTable));
     }
     
     private void setup(IAtomContainer atomContainer, PermutationGroup group) {
         setupConnectionTable(atomContainer);
-        IEquitablePartitionRefiner refiner = null;  // TODO
-        setup(group, refiner);
+        setup(group, new BondEquitablePartitionRefiner(connectionTable));
     }
     
     private void setupConnectionTable(IAtomContainer atomContainer) {
-        connectionTable = new HashMap<Integer, Integer>();
+        connectionTable = new HashMap<Integer, List<Integer>>();
         int bondCount = atomContainer.getBondCount();
         for (int bondIndexI = 0; bondIndexI < bondCount; bondIndexI++) {
             IBond bondI = atomContainer.getBond(bondIndexI);
@@ -180,7 +180,14 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 if (bondIndexI == bondIndexJ) continue;
                 IBond bondJ = atomContainer.getBond(bondIndexJ);
                 if (bondI.isConnectedTo(bondJ)) {
-                    connectionTable.put(bondIndexI, bondIndexJ);
+                    List<Integer> connections;
+                    if (connectionTable.containsKey(bondI)) {
+                        connections = connectionTable.get(bondI);
+                    } else {
+                        connections = new ArrayList<Integer>();
+                        connectionTable.put(bondIndexI, connections);
+                    }
+                    connections.add(bondIndexJ);
                 }
             }
         }
@@ -194,7 +201,7 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     @Override
     public int getConnectivity(int i, int j) {
         if (connectionTable.containsKey(i) &&
-            connectionTable.get(i) == j) {
+            connectionTable.get(i).contains(j)) {
             return 1;
         } else {
             return 0;
