@@ -24,14 +24,7 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     private PermutationGroup group;
     
-    private boolean checkVertexColors;
-    
     public AbstractDiscretePartitionRefiner() {
-        this(false);
-    }
-    
-    public AbstractDiscretePartitionRefiner(boolean checkVertexColors) {
-        this.checkVertexColors = checkVertexColors;
         this.bestExist = false;
         this.best = null;
         this.equitableRefiner = null;
@@ -40,8 +33,6 @@ public abstract class AbstractDiscretePartitionRefiner {
     public abstract int getVertexCount();
     
     public abstract int isConnected(int i, int j);
-    
-    public abstract boolean sameColor(int i, int j);
     
     public void setup(PermutationGroup group, IEquitablePartitionRefiner refiner) {
         this.bestExist = false;
@@ -175,9 +166,7 @@ public abstract class AbstractDiscretePartitionRefiner {
                     best = new Permutation(pi1);
                 } else if (result == Result.EQUAL) {
                     pi2 = pi1.multiply(best.invert());
-                    if (!checkVertexColors || colorsAutomorphic(pi2)) {
-                        group.enter(pi2);
-                    }
+                    group.enter(pi2);
                 }
             }
         } else {
@@ -213,17 +202,6 @@ public abstract class AbstractDiscretePartitionRefiner {
         }
     }
     
-    private boolean colorsAutomorphic(Permutation p) {
-        for (int i = 0; i < p.size(); i++) {
-            if (sameColor(i, p.get(i))) {
-                continue;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /**
      * Check a permutation to see if it is better, equal, or worse than the 
      * current best.

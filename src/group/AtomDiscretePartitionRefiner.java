@@ -29,32 +29,47 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      */
     private boolean checkForDisconnectedAtoms;
     
-    private boolean useBondOrders;
+    /**
+     * Specialised option to allow generating automorphisms that ignore the bond order.
+     */
+    private boolean ignoreBondOrders;
     
-    private boolean useElementColors;
+    /**
+     * Specialised option to allow generating automorphisms that ignore the element symbols.
+     */
+    private boolean ignoreElements;
     
-    private String[] elementColors;
-    
+    /**
+     * Default constructor - does not check for disconnected atoms, ignore elements
+     * or bond orders.
+     */
     public AtomDiscretePartitionRefiner() {
-        this(false, true);
+        this(false, false, false);
     }
     
+    /**
+     * Make a refiner that checks for atoms without bonds.
+     * 
+     * @param checkForDisconnectedAtoms if true, check for disconnected atoms
+     */
     public AtomDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
         this(checkForDisconnectedAtoms, false, false);
     }
     
-    public AtomDiscretePartitionRefiner(
-            boolean checkForDisconnectedAtoms, boolean useBondOrders) {
-        this(checkForDisconnectedAtoms, useBondOrders, false);
-    }
-    
+    /**
+     * Make a refiner with various advanced options.
+     * 
+     * @param checkForDisconnectedAtoms if true, check for disconnected atoms
+     * @param ignoreBondOrders if true, ignore bond order when making automorphisms
+     * @param ignoreElements if true, ignore element symbols when making automorphisms
+     */
     public AtomDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, 
-            boolean useBondOrders,
-            boolean useElementColors) {
+            boolean ignoreBondOrders,
+            boolean ignoreElements) {
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
-        this.useBondOrders = useBondOrders;
-        this.useElementColors = useElementColors;
+        this.ignoreBondOrders = ignoreBondOrders;
+        this.ignoreElements = ignoreElements;
     }
     
     /**
@@ -71,10 +86,10 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             for (IAtom connected : atomContainer.getConnectedAtomsList(a)) {
                 int index = atomContainer.getAtomNumber(connected);
                 IBond bond = atomContainer.getBond(a, connected);
-                if (useBondOrders) {
-                    connectedIndices.put(index, bondOrder(bond.getOrder()));
-                } else {
+                if (ignoreBondOrders) {
                     connectedIndices.put(index, 1);
+                } else {
+                    connectedIndices.put(index, bondOrder(bond.getOrder()));
                 }
             }
             table.add(connectedIndices);
@@ -127,29 +142,26 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         return shortTable;
     }
     
-    private void setup(IAtomContainer atomContainer) {
+    private void setupConnectionTable(IAtomContainer atomContainer) {
         if (checkForDisconnectedAtoms) {
             this.connectionTable = makeCompactConnectionTable(atomContainer);
         } else {
             this.connectionTable = makeConnectionTable(atomContainer);
         }
-        if (useElementColors) {
-            // TODO : do this at the same time as creating adj matrix..
-            elementColors = new String[atomContainer.getAtomCount()];
-            for (int i = 0; i < atomContainer.getAtomCount(); i++) {
-                elementColors[i] = atomContainer.getAtom(i).getSymbol();
-            }
-        }
+    }
+    
+    private void setup(IAtomContainer atomContainer) {
+        setupConnectionTable(atomContainer);
        
         int n = getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(n));
         IEquitablePartitionRefiner refiner = 
-            new CDKEquitablePartitionRefiner(connectionTable, useBondOrders);
+            new CDKEquitablePartitionRefiner(connectionTable, ignoreBondOrders);
         setup(group, refiner);
     }
     
     private void setup(IAtomContainer atomContainer, PermutationGroup group) {
-        // TODO : error XXX! connectionTable will be null FIXME
+        setupConnectionTable(atomContainer);
         IEquitablePartitionRefiner refiner = 
             new CDKEquitablePartitionRefiner(connectionTable);
         setup(group, refiner);
@@ -169,23 +181,57 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      */
     public boolean isCanonical(IAtomContainer atomContainer) {
         setup(atomContainer);
-//        refine(Partition.unit(getVertexCount()));
-//        return firstIsIdentity();
         return isCanonical();
     }
     
     /**
-     * Gets the automorphism group of the atom container.
+     * Gets the automorphism group of the atom container. By default it uses an
+     * initial partition based on the element symbols (so all the carbons are in
+     * one cell, all the nitrogens in another, etc). If this behaviour is not 
+     * desired, then use the {@link ignoreElements} flag in the constructor.
      * 
      * @param atomContainer the atom container to use
      * @return the automorphism group of the atom container
      */
     public PermutationGroup getAutomorphismGroup(IAtomContainer atomContainer) {
         setup(atomContainer);
-        int n = getVertexCount();
-        Partition unit = Partition.unit(n);
-        refine(unit);
+        Partition initial;
+        if (ignoreElements) {
+            int n = getVertexCount();
+            initial = Partition.unit(n);
+        } else {
+            initial = getElementPartition(atomContainer);
+        }
+        refine(initial);
         return getGroup();
+    }
+    
+    /**
+     * Get the element partition from an atom container, which is simply a list
+     * of sets of atom indices where all atoms in one set have the same element
+     * symbol.
+     * 
+     * So for atoms C0,N1,C2,P3,C4,N5 the partition would be [{0, 2, 4}, {1, 5}, {3}]
+     * with cells for elements C, N, and P.
+     *  
+     * @param atomContainer the atom container to get element symbols from
+     * @return a partition of the atom indices based on the element symbols
+     */
+    public Partition getElementPartition(IAtomContainer atomContainer) {
+        Partition elementPartition = new Partition();
+        // the element symbols in order of discovery, for 
+        List<String> elementList = new ArrayList<String>();
+        for (int atomIndex = 0; atomIndex < atomContainer.getAtomCount(); atomIndex++) {
+            String elementSymbol = atomContainer.getAtom(atomIndex).getSymbol();
+            int cellIndex = elementList.indexOf(elementSymbol);
+            if (cellIndex == -1) {
+                cellIndex = elementList.size();
+                elementList.add(elementSymbol);
+            }
+            elementPartition.addToCell(cellIndex, atomIndex);
+        }
+        
+        return elementPartition;
     }
     
     /**
@@ -237,21 +283,5 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             return 0;
         }
     }
-    
-    public boolean sameColor(int i, int j) {
-        return elementColors[i] == elementColors[j];
-    }
-
-//    @Override
-//    public boolean sameVertexColor(int i, int j) {
-//        return elementColors[i] == elementColors[j];
-//    }
-//
-//    @Override
-//    public boolean sameEdgeColor(int iOld, int jOld, int iNew, int jNew) {
-//        int oldBondColor = bondColorTable.get(iOld).get(jOld);
-//        int newBondColor = bondColorTable.get(iNew).get(jNew);
-//        return oldBondColor == newBondColor;
-//    }
 
 }
