@@ -32,7 +32,7 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     public abstract int getVertexCount();
     
-    public abstract int isConnected(int i, int j);
+    public abstract int getConnectivity(int i, int j);
     
     public void setup(PermutationGroup group, IEquitablePartitionRefiner refiner) {
         this.bestExist = false;
@@ -50,7 +50,7 @@ public abstract class AbstractDiscretePartitionRefiner {
         int n = p.size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
-                int connectivity = isConnected(p.get(i), p.get(j)); 
+                int connectivity = getConnectivity(p.get(i), p.get(j)); 
                 hms += String.valueOf(connectivity);    // XXX what if < 0 ?
             }
         }
@@ -186,8 +186,8 @@ public abstract class AbstractDiscretePartitionRefiner {
         int m = perm.size();
         for (int i = 0; i < m - 1; i++) {
             for (int j = i + 1; j < m; j++) {
-                int x = isConnected(best.get(i), best.get(j));
-                int y = isConnected(perm.get(i), perm.get(j));
+                int x = getConnectivity(best.get(i), best.get(j));
+                int y = getConnectivity(perm.get(i), perm.get(j));
                 if (x > y) return Result.WORSE;
                 if (x < y) return Result.BETTER;
             }

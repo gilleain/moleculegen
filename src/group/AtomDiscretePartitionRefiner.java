@@ -278,7 +278,7 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      * @see org.openscience.cdk.group.AbstractDiscretePartitionRefiner#isConnected(int, int)
      */
     @Override
-    public int isConnected(int i, int j) {
+    public int getConnectivity(int i, int j) {
         if (connectionTable.get(i).containsKey(j)) {
             return connectionTable.get(i).get(j);
         } else {
