@@ -1,6 +1,6 @@
 package test.group;
 
-import group.CDKDiscretePartitionRefiner;
+import group.AtomDiscretePartitionRefiner;
 import group.DisjointSetForest;
 import group.Partition;
 import group.Permutation;
@@ -50,8 +50,8 @@ public class AutPartitionTests {
             sort(ac);
             MoleculeSignature molSig = new MoleculeSignature(ac);
             List<Orbit> signatureOrbits = molSig.calculateOrbits();
-            CDKDiscretePartitionRefiner refiner = 
-                new CDKDiscretePartitionRefiner(false, true, false, false);
+            AtomDiscretePartitionRefiner refiner = 
+                new AtomDiscretePartitionRefiner(false, true, false, false);
             int n = ac.getAtomCount();
             PermutationGroup group = refiner.getAutomorphismGroup(ac, getElementPartition(ac));
             Partition autPartition = getAutPartition(n, group);

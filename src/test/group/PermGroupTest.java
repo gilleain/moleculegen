@@ -1,6 +1,6 @@
 package test.group;
 
-import group.CDKDiscretePartitionRefiner;
+import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
@@ -32,8 +32,8 @@ public class PermGroupTest {
     public void pent_1_3_diene() {
         int[][] b = new int[][] { { 0, 1, 2 }, { 0, 2, 1 }, { 1, 4, 1 }, { 2, 3, 2 } };
         IAtomContainer pent12diene = getAtomContainer("CCCCC", b);
-        CDKDiscretePartitionRefiner refiner = 
-            new CDKDiscretePartitionRefiner(false, true, false, false);
+        AtomDiscretePartitionRefiner refiner = 
+            new AtomDiscretePartitionRefiner(false, true, false, false);
         PermutationGroup group = refiner.getAutomorphismGroup(pent12diene);
         String bhms = refiner.getBestHalfMatrixString();
         System.out.println(bhms);

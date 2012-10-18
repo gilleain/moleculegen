@@ -1,6 +1,6 @@
 package test.group;
 
-import group.CDKDiscretePartitionRefiner;
+import group.AtomDiscretePartitionRefiner;
 import group.DisjointSetForest;
 import group.OrbitLister;
 import group.Partition;
@@ -113,8 +113,8 @@ public class DisjointSetForestTest {
                 SilentChemObjectBuilder.getInstance()).parseSmiles("C1=CCCC1");
         sort(ac);
         AtomContainerPrinter.print(ac);
-        CDKDiscretePartitionRefiner refiner = 
-            new CDKDiscretePartitionRefiner(false, true, true, false);
+        AtomDiscretePartitionRefiner refiner = 
+            new AtomDiscretePartitionRefiner(false, true, true, false);
         PermutationGroup group = refiner.getAutomorphismGroup(ac);
         System.out.println("Group order = " + group.order());
         

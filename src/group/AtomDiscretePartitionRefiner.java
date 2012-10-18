@@ -16,7 +16,7 @@ import org.openscience.cdk.interfaces.IBond;
  * @author maclean
  * @cdk.module group
  */
-public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefiner {
+public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefiner {
     
     /**
      * A convenience lookup table for atom-atom connections
@@ -42,20 +42,20 @@ public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefine
      */
     private Map<Integer, List<Integer>> bondColorTable;
     
-    public CDKDiscretePartitionRefiner() {
+    public AtomDiscretePartitionRefiner() {
         this(false, true);
     }
     
-    public CDKDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
+    public AtomDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
         this(checkForDisconnectedAtoms, false, false, false);
     }
     
-    public CDKDiscretePartitionRefiner(
+    public AtomDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, boolean useBondOrders) {
         this(checkForDisconnectedAtoms, useBondOrders, false, false);
     }
     
-    public CDKDiscretePartitionRefiner(
+    public AtomDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, 
             boolean useBondOrders,
             boolean useElementColors,

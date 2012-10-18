@@ -1,6 +1,6 @@
 package generate;
 
-import group.CDKDiscretePartitionRefiner;
+import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
@@ -96,8 +96,8 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
     }
 
     public PermutationGroup getGroup(IAtomContainer parent) {
-        CDKDiscretePartitionRefiner refiner = 
-            new CDKDiscretePartitionRefiner(false, true, false, false);
+        AtomDiscretePartitionRefiner refiner = 
+            new AtomDiscretePartitionRefiner(false, true, false, false);
         return refiner.getAutomorphismGroup(parent);
     }
 }

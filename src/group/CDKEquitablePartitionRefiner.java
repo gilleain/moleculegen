@@ -6,7 +6,7 @@ import java.util.Set;
 
 /**
  * Refiner for atom containers, which refines partitions of the atoms to
- * equitable partitions. Used by the {@link CDKDiscretePartitionRefiner}.
+ * equitable partitions. Used by the {@link AtomDiscretePartitionRefiner}.
  * 
  * @author maclean
  * @cdk.module group
