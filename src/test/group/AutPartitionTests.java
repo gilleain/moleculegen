@@ -1,9 +1,7 @@
 package test.group;
 
 import group.AtomDiscretePartitionRefiner;
-import group.DisjointSetForest;
 import group.Partition;
-import group.Permutation;
 import group.PermutationGroup;
 
 import java.io.FileReader;
@@ -48,9 +46,8 @@ public class AutPartitionTests {
             MoleculeSignature molSig = new MoleculeSignature(ac);
             List<Orbit> signatureOrbits = molSig.calculateOrbits();
             AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
-            int n = ac.getAtomCount();
             PermutationGroup group = refiner.getAutomorphismGroup(ac);
-            Partition autPartition = getAutPartition(n, group);
+            Partition autPartition = refiner.getAutomorphismPartition();
             String pS = simplify(signatureOrbits).toString();
             String aS = autPartition.toString();
             if (!pS.equals(aS)) {
@@ -67,44 +64,6 @@ public class AutPartitionTests {
             p.addCell(o.getAtomIndices());
         }
         return p;
-    }
-    
-    public Partition getAutPartition(int n, PermutationGroup group) {
-        boolean[] inOrbit = new boolean[n];
-        List<Permutation> permutations = group.all();
-        int cellIndex = 0;
-        DisjointSetForest forest = new DisjointSetForest(n);
-        int inOrbitCount = 0;
-        for (Permutation p : permutations) {
-            for (int i = 0; i < n; i++) {
-                if (inOrbit[i]) {
-                    continue;
-                } else {
-                    int x = p.get(i);
-                    while (x != i) {
-                        if (!inOrbit[x]) {
-                            inOrbitCount++;
-                            inOrbit[x] = true;
-                            forest.makeUnion(i, x);
-                        }
-                        x = p.get(x);
-                    }
-                    cellIndex++;
-                }
-            }
-//            System.out.println(p + "\t" + set);
-            if (inOrbitCount == n) {
-                break;
-            }
-        }
-        
-        // convert to a partition
-        Partition partition = new Partition();
-        for (int[] set : forest.getSets()) {
-            partition.addCell(set);
-        }
-        partition.order();  // necessary for comparison by string
-        return partition;
     }
     
     @Test

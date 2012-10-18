@@ -383,4 +383,8 @@ public class PermutationGroup {
         return sb.toString(); 
     }
 
+    public int getSize() {
+        return n;
+    }
+
 }
