@@ -33,7 +33,7 @@ public class PermGroupTest {
         int[][] b = new int[][] { { 0, 1, 2 }, { 0, 2, 1 }, { 1, 4, 1 }, { 2, 3, 2 } };
         IAtomContainer pent12diene = getAtomContainer("CCCCC", b);
         AtomDiscretePartitionRefiner refiner = 
-            new AtomDiscretePartitionRefiner(false, true, false, false);
+            new AtomDiscretePartitionRefiner(false, true, false);
         PermutationGroup group = refiner.getAutomorphismGroup(pent12diene);
         String bhms = refiner.getBestHalfMatrixString();
         System.out.println(bhms);

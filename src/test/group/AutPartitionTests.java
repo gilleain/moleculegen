@@ -51,7 +51,7 @@ public class AutPartitionTests {
             MoleculeSignature molSig = new MoleculeSignature(ac);
             List<Orbit> signatureOrbits = molSig.calculateOrbits();
             AtomDiscretePartitionRefiner refiner = 
-                new AtomDiscretePartitionRefiner(false, true, false, false);
+                new AtomDiscretePartitionRefiner(false, true, false);
             int n = ac.getAtomCount();
             PermutationGroup group = refiner.getAutomorphismGroup(ac, getElementPartition(ac));
             Partition autPartition = getAutPartition(n, group);

@@ -97,7 +97,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
 
     public PermutationGroup getGroup(IAtomContainer parent) {
         AtomDiscretePartitionRefiner refiner = 
-            new AtomDiscretePartitionRefiner(false, true, false, false);
+            new AtomDiscretePartitionRefiner(false, true, false);
         return refiner.getAutomorphismGroup(parent);
     }
 }

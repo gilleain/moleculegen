@@ -114,7 +114,7 @@ public class DisjointSetForestTest {
         sort(ac);
         AtomContainerPrinter.print(ac);
         AtomDiscretePartitionRefiner refiner = 
-            new AtomDiscretePartitionRefiner(false, true, true, false);
+            new AtomDiscretePartitionRefiner(false, true, false);
         PermutationGroup group = refiner.getAutomorphismGroup(ac);
         System.out.println("Group order = " + group.order());
         

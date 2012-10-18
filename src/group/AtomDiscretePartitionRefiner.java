@@ -33,38 +33,28 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     
     private boolean useElementColors;
     
-    private boolean useBondColors;
-    
     private String[] elementColors;
-    
-    /**
-     * 
-     */
-    private Map<Integer, List<Integer>> bondColorTable;
     
     public AtomDiscretePartitionRefiner() {
         this(false, true);
     }
     
     public AtomDiscretePartitionRefiner(boolean checkForDisconnectedAtoms) {
-        this(checkForDisconnectedAtoms, false, false, false);
+        this(checkForDisconnectedAtoms, false, false);
     }
     
     public AtomDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, boolean useBondOrders) {
-        this(checkForDisconnectedAtoms, useBondOrders, false, false);
+        this(checkForDisconnectedAtoms, useBondOrders, false);
     }
     
     public AtomDiscretePartitionRefiner(
             boolean checkForDisconnectedAtoms, 
             boolean useBondOrders,
-            boolean useElementColors,
-            boolean useBondColors) {
-//        super(useElementColors, useBondColors);
+            boolean useElementColors) {
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
         this.useBondOrders = useBondOrders;
         this.useElementColors = useElementColors;
-        this.useBondColors = useBondColors;
     }
     
     /**
@@ -137,25 +127,6 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         return shortTable;
     }
     
-    // TODO : compact bond color table?
-    private Map<Integer, List<Integer>> makeBondColorTable(IAtomContainer atomContainer) {
-        Map<Integer, List<Integer>> table = new HashMap<Integer, List<Integer>>();
-        for (int index = 0; index < atomContainer.getAtomCount(); index++) {
-            IAtom atom = atomContainer.getAtom(index);
-            List<Integer> bondColors = new ArrayList<Integer>();
-            for (IBond bond : atomContainer.getConnectedBondsList(atom)) {
-                bondColors.add(convertBondOrder(bond.getOrder()));
-            }
-            table.put(index, bondColors);
-        }
-        
-        return table;
-    }
-    
-    private int convertBondOrder(IBond.Order o) {
-        return o.ordinal();
-    }
-    
     private void setup(IAtomContainer atomContainer) {
         if (checkForDisconnectedAtoms) {
             this.connectionTable = makeCompactConnectionTable(atomContainer);
@@ -169,10 +140,7 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 elementColors[i] = atomContainer.getAtom(i).getSymbol();
             }
         }
-        if (useBondColors) {
-            // TODO : do this at the same time as creating adj matrix..
-            bondColorTable = makeBondColorTable(atomContainer);
-        }
+       
         int n = getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(n));
         IEquitablePartitionRefiner refiner = 
