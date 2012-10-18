@@ -143,6 +143,7 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 bondPartition.addToCell(cellIndex, bondIndex);
             }
         }
+//        System.out.println(bondStrings);
         
         return bondPartition;
     }
@@ -181,8 +182,8 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 IBond bondJ = atomContainer.getBond(bondIndexJ);
                 if (bondI.isConnectedTo(bondJ)) {
                     List<Integer> connections;
-                    if (connectionTable.containsKey(bondI)) {
-                        connections = connectionTable.get(bondI);
+                    if (connectionTable.containsKey(bondIndexI)) {
+                        connections = connectionTable.get(bondIndexI);
                     } else {
                         connections = new ArrayList<Integer>();
                         connectionTable.put(bondIndexI, connections);
