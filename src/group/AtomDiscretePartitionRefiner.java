@@ -206,8 +206,8 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         } else {
             initial = getElementPartition(atomContainer);
         }
-        refine(initial);
-        return getGroup();
+        super.refine(initial);
+        return super.getGroup();
     }
     
     /**
@@ -259,9 +259,9 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     /**
      * Get the automorphism group of the molecule given an initial partition.
      * 
-     * @param atomContainer
-     * @param initialPartiton
-     * @return
+     * @param atomContainer the atom container to use
+     * @param initialPartiton an initial partition of the atoms
+     * @return the automorphism group starting with this partition
      */
     public PermutationGroup getAutomorphismGroup(
             IAtomContainer atomContainer, Partition initialPartiton) {
