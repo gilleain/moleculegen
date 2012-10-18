@@ -2,7 +2,7 @@ package generate;
 
 import group.CDKDiscretePartitionRefiner;
 import group.Permutation;
-import group.SSPermutationGroup;
+import group.PermutationGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
     public List<IAtomContainer> listChildren(IAtomContainer parent, int currentAtomIndex) {
         int maxDegreeSumForCurrent = getMaxBondOrderSum(currentAtomIndex);
         int maxDegreeForCurrent = getMaxBondOrder(currentAtomIndex);
-        SSPermutationGroup autG = getGroup(parent);
+        PermutationGroup autG = getGroup(parent);
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         for (int[] bondOrderArray : getBondOrderArrays(
                 parent, currentAtomIndex, maxDegreeSumForCurrent, maxDegreeForCurrent)) {
@@ -48,7 +48,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
         return children;
     }
 
-    public boolean isMinimal(int[] bondOrderArray, SSPermutationGroup autG) {
+    public boolean isMinimal(int[] bondOrderArray, PermutationGroup autG) {
         String oStr = Arrays.toString(bondOrderArray);
         for (Permutation p : autG.all()) {
 //            System.out.println("comparing " + oStr + " and " + p + " of " + Arrays.toString(bondOrderArray));
@@ -70,7 +70,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
 
     // XXX - alternative test for minimality that tests without stringifying the
     // bondOrderArrays, but tests them in-place - doesn't work!
-    public boolean isMinimal_(int[] bondOrderArray, SSPermutationGroup autG) {
+    public boolean isMinimal_(int[] bondOrderArray, PermutationGroup autG) {
         boolean isMin = true;
         for (Permutation p : autG.all()) {
             for (int index = 0; index < bondOrderArray.length; index++) {
@@ -95,7 +95,7 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
         return isMin;
     }
 
-    public SSPermutationGroup getGroup(IAtomContainer parent) {
+    public PermutationGroup getGroup(IAtomContainer parent) {
         CDKDiscretePartitionRefiner refiner = 
             new CDKDiscretePartitionRefiner(false, true, false, false);
         return refiner.getAutomorphismGroup(parent);

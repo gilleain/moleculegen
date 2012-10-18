@@ -51,7 +51,7 @@ import java.util.List;
  * @cdk.module group
  * 
  */
-public class SSPermutationGroup {
+public class PermutationGroup {
     
     /**
      * An interface for use with the apply method, which runs through all the
@@ -84,7 +84,7 @@ public class SSPermutationGroup {
      */
     private Permutation base;
     
-    public SSPermutationGroup(int n) {
+    public PermutationGroup(int n) {
         this(new Permutation(n));
     }
     
@@ -93,7 +93,7 @@ public class SSPermutationGroup {
      * 
      * @param base the permutation that the group is based on
      */
-    public SSPermutationGroup(Permutation base) {
+    public PermutationGroup(Permutation base) {
         this.n = base.size();
         this.base = new Permutation(base);
         this.permutations = new Permutation[n][n];
@@ -110,7 +110,7 @@ public class SSPermutationGroup {
      * @param n the size of the group
      * @param generators the generators to use to make the group
      */
-    public SSPermutationGroup(int n, List<Permutation> generators) {
+    public PermutationGroup(int n, List<Permutation> generators) {
         this(new Permutation(n));
         for (Permutation generator : generators) {
             this.enter(generator);
@@ -124,7 +124,7 @@ public class SSPermutationGroup {
      * @param n the size of the permutation
      * @return a group for all permutations of N
      */
-    public static SSPermutationGroup makeSymN(int n) {
+    public static PermutationGroup makeSymN(int n) {
         List<Permutation> generators = new ArrayList<Permutation>();
         
         // p1 is (0, 1)
@@ -146,7 +146,7 @@ public class SSPermutationGroup {
         generators.add(new Permutation(p1));
         generators.add(new Permutation(p2));
         
-        return new SSPermutationGroup(n, generators);
+        return new PermutationGroup(n, generators);
     }
     
     /**
@@ -219,7 +219,7 @@ public class SSPermutationGroup {
      * @param subgroup the subgroup to use for the transversal
      * @return a list of permutations
      */
-    public List<Permutation> transversal(final SSPermutationGroup subgroup) {
+    public List<Permutation> transversal(final PermutationGroup subgroup) {
         final int size = n;
         final int m = this.order() / subgroup.order();
         final List<Permutation> results = new ArrayList<Permutation>();
@@ -294,8 +294,8 @@ public class SSPermutationGroup {
      * @param newBase the new base for the group
      */
     public void changeBase(Permutation newBase) {
-        SSPermutationGroup H = 
-            new SSPermutationGroup(newBase);
+        PermutationGroup H = 
+            new PermutationGroup(newBase);
         
         int r = this.base.firstIndexOfDifference(newBase);
         

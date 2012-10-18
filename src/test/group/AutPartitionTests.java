@@ -4,7 +4,7 @@ import group.CDKDiscretePartitionRefiner;
 import group.DisjointSetForest;
 import group.Partition;
 import group.Permutation;
-import group.SSPermutationGroup;
+import group.PermutationGroup;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class AutPartitionTests {
             CDKDiscretePartitionRefiner refiner = 
                 new CDKDiscretePartitionRefiner(false, true, false, false);
             int n = ac.getAtomCount();
-            SSPermutationGroup group = refiner.getAutomorphismGroup(ac, getElementPartition(ac));
+            PermutationGroup group = refiner.getAutomorphismGroup(ac, getElementPartition(ac));
             Partition autPartition = getAutPartition(n, group);
             String pS = simplify(signatureOrbits).toString();
             String aS = autPartition.toString();
@@ -94,7 +94,7 @@ public class AutPartitionTests {
         return p;
     }
     
-    public Partition getAutPartition(int n, SSPermutationGroup group) {
+    public Partition getAutPartition(int n, PermutationGroup group) {
         boolean[] inOrbit = new boolean[n];
         List<Permutation> permutations = group.all();
         int cellIndex = 0;

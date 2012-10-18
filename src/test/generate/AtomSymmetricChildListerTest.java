@@ -2,7 +2,7 @@ package test.generate;
 
 import generate.AtomSymmetricChildLister;
 import group.Permutation;
-import group.SSPermutationGroup;
+import group.PermutationGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +47,7 @@ public class AtomSymmetricChildListerTest extends BaseTest {
     public void getAutG() {
         IAtomContainer parent = make3Star();
         AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
-        SSPermutationGroup autG = lister.getGroup(parent);
+        PermutationGroup autG = lister.getGroup(parent);
         for (Permutation p : autG.all()) {
             System.out.println(p);
         }
@@ -58,7 +58,7 @@ public class AtomSymmetricChildListerTest extends BaseTest {
         IAtomContainer parent = make3Star();
         int len = parent.getAtomCount();
         AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
-        SSPermutationGroup autG = lister.getGroup(parent);
+        PermutationGroup autG = lister.getGroup(parent);
         for (int[] bondOrderArray : lister.getBondOrderArrays(parent, 3, len, 3)) {
             if (lister.isMinimal(bondOrderArray, autG)) {
                 System.out.println("YES " + Arrays.toString(bondOrderArray));

@@ -30,7 +30,7 @@ public class OrbitLister {
         return reconstructOrbits(orbitList, kvalue);
     }
     
-    public int[][] getOrbits(int kvalue, int size, SSPermutationGroup group) {
+    public int[][] getOrbits(int kvalue, int size, PermutationGroup group) {
         return getOrbits(kvalue, size, group.all());
     }
     

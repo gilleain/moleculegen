@@ -22,7 +22,7 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     private IEquitablePartitionRefiner equitableRefiner;
     
-    private SSPermutationGroup group;
+    private PermutationGroup group;
     
     private boolean checkVertexColors;
     
@@ -43,7 +43,7 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     public abstract boolean sameColor(int i, int j);
     
-    public void setup(SSPermutationGroup group, IEquitablePartitionRefiner refiner) {
+    public void setup(PermutationGroup group, IEquitablePartitionRefiner refiner) {
         this.bestExist = false;
         this.best = null;
         this.group = group;
@@ -105,7 +105,7 @@ public abstract class AbstractDiscretePartitionRefiner {
         return getHalfMatrixString(new Permutation(getVertexCount()));
     }
     
-    public SSPermutationGroup getGroup() {
+    public PermutationGroup getGroup() {
         return this.group;
     }
     
@@ -144,7 +144,7 @@ public abstract class AbstractDiscretePartitionRefiner {
         refine(this.group, p);
     }
     
-    public void refine(SSPermutationGroup group, Partition coarser) {
+    public void refine(PermutationGroup group, Partition coarser) {
 //    	System.out.println(coarser);
         int vertexCount = getVertexCount();
         

@@ -174,13 +174,13 @@ public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefine
             bondColorTable = makeBondColorTable(atomContainer);
         }
         int n = getVertexCount();
-        SSPermutationGroup group = new SSPermutationGroup(new Permutation(n));
+        PermutationGroup group = new PermutationGroup(new Permutation(n));
         IEquitablePartitionRefiner refiner = 
             new CDKEquitablePartitionRefiner(connectionTable, useBondOrders);
         setup(group, refiner);
     }
     
-    private void setup(IAtomContainer atomContainer, SSPermutationGroup group) {
+    private void setup(IAtomContainer atomContainer, PermutationGroup group) {
         // TODO : error XXX! connectionTable will be null FIXME
         IEquitablePartitionRefiner refiner = 
             new CDKEquitablePartitionRefiner(connectionTable);
@@ -212,7 +212,7 @@ public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefine
      * @param atomContainer the atom container to use
      * @return the automorphism group of the atom container
      */
-    public SSPermutationGroup getAutomorphismGroup(IAtomContainer atomContainer) {
+    public PermutationGroup getAutomorphismGroup(IAtomContainer atomContainer) {
         setup(atomContainer);
         int n = getVertexCount();
         Partition unit = Partition.unit(n);
@@ -229,8 +229,8 @@ public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefine
      * @param group the group of known automorphisms
      * @return the full automorphism group
      */
-    public SSPermutationGroup getAutomorphismGroup(
-            IAtomContainer atomContainer, SSPermutationGroup group) {
+    public PermutationGroup getAutomorphismGroup(
+            IAtomContainer atomContainer, PermutationGroup group) {
         setup(atomContainer, group);
         refine(Partition.unit(getVertexCount()));
         return getGroup();
@@ -243,7 +243,7 @@ public class CDKDiscretePartitionRefiner extends AbstractDiscretePartitionRefine
      * @param initialPartiton
      * @return
      */
-    public SSPermutationGroup getAutomorphismGroup(
+    public PermutationGroup getAutomorphismGroup(
             IAtomContainer atomContainer, Partition initialPartiton) {
         setup(atomContainer);
         refine(initialPartiton);

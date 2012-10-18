@@ -2,7 +2,7 @@ package test.group;
 
 import group.CDKDiscretePartitionRefiner;
 import group.Permutation;
-import group.SSPermutationGroup;
+import group.PermutationGroup;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
@@ -34,7 +34,7 @@ public class PermGroupTest {
         IAtomContainer pent12diene = getAtomContainer("CCCCC", b);
         CDKDiscretePartitionRefiner refiner = 
             new CDKDiscretePartitionRefiner(false, true, false, false);
-        SSPermutationGroup group = refiner.getAutomorphismGroup(pent12diene);
+        PermutationGroup group = refiner.getAutomorphismGroup(pent12diene);
         String bhms = refiner.getBestHalfMatrixString();
         System.out.println(bhms);
         for (Permutation p : group.all()) {

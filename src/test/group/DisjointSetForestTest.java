@@ -5,7 +5,7 @@ import group.DisjointSetForest;
 import group.OrbitLister;
 import group.Partition;
 import group.Permutation;
-import group.SSPermutationGroup;
+import group.PermutationGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class DisjointSetForestTest {
         }
     }
     
-    public Partition getAutPartitionOld(int n, SSPermutationGroup group) {
+    public Partition getAutPartitionOld(int n, PermutationGroup group) {
         Partition partition = new Partition();
         boolean[] inOrbit = new boolean[n];
         List<Permutation> permutations = group.all();
@@ -59,7 +59,7 @@ public class DisjointSetForestTest {
         return partition;
     }
     
-    public Partition getAutPartition(int n, SSPermutationGroup group) {
+    public Partition getAutPartition(int n, PermutationGroup group) {
         boolean[] inOrbit = new boolean[n];
         List<Permutation> permutations = group.all();
         int cellIndex = 0;
@@ -99,7 +99,7 @@ public class DisjointSetForestTest {
     @Test
     public void symNTest() {
         int size = 4;
-        SSPermutationGroup sym4 = SSPermutationGroup.makeSymN(size);
+        PermutationGroup sym4 = PermutationGroup.makeSymN(size);
         System.out.println(getAutPartition(size, sym4));
         int kvalue = 2;
         OrbitLister lister = new OrbitLister();
@@ -115,7 +115,7 @@ public class DisjointSetForestTest {
         AtomContainerPrinter.print(ac);
         CDKDiscretePartitionRefiner refiner = 
             new CDKDiscretePartitionRefiner(false, true, true, false);
-        SSPermutationGroup group = refiner.getAutomorphismGroup(ac);
+        PermutationGroup group = refiner.getAutomorphismGroup(ac);
         System.out.println("Group order = " + group.order());
         
         Partition p = getAutPartition(ac.getAtomCount(), group);
@@ -146,7 +146,7 @@ public class DisjointSetForestTest {
         int kvalue = 2;
         int[][] orbitList = lister.getOrbits(kvalue, 7, generators);
         System.out.println(Arrays.deepToString(orbitList));
-        int[][] orbitList2 = lister.getOrbits(kvalue, 7, new SSPermutationGroup(7, generators));
+        int[][] orbitList2 = lister.getOrbits(kvalue, 7, new PermutationGroup(7, generators));
         System.out.println(Arrays.deepToString(orbitList2));
     }
 
