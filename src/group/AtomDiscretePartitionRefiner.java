@@ -85,10 +85,10 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             Map<Integer, Integer> connectedIndices = new HashMap<Integer, Integer>();
             for (IAtom connected : atomContainer.getConnectedAtomsList(a)) {
                 int index = atomContainer.getAtomNumber(connected);
-                IBond bond = atomContainer.getBond(a, connected);
                 if (ignoreBondOrders) {
                     connectedIndices.put(index, 1);
                 } else {
+                    IBond bond = atomContainer.getBond(a, connected);
                     connectedIndices.put(index, bondOrder(bond.getOrder()));
                 }
             }
@@ -122,8 +122,12 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 Map<Integer, Integer> connectedIndices = new HashMap<Integer, Integer>();
                 for (IAtom connectedAtom : connected) {
                     int index = atomContainer.getAtomNumber(connectedAtom);
-                    IBond bond = atomContainer.getBond(atom, connectedAtom);
-                    connectedIndices.put(index, bondOrder(bond.getOrder()));
+                    if (ignoreBondOrders) {
+                        connectedIndices.put(index, 1);
+                    } else {
+                        IBond bond = atomContainer.getBond(atom, connectedAtom);
+                        connectedIndices.put(index, bondOrder(bond.getOrder()));
+                    }
                 }
                 table.add(connectedIndices);
                 indexMap[i] = tableIndex;
