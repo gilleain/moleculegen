@@ -2,6 +2,7 @@ package test.generate;
 
 import generate.AtomAugmentingGenerator;
 import generate.ListerMethod;
+import generate.ValidatorMethod;
 import handler.DataFormat;
 import handler.PrintStreamStringHandler;
 
@@ -142,7 +143,8 @@ public class AtomAugmentingGeneratorTest extends BaseTest {
         PrintStreamStringHandler handler = new PrintStreamStringHandler(System.out, DataFormat.SMILES);
 //        PrintStreamHandler handler = new PrintStreamHandler(System.out, OutputFormat.SIGNATURE);
 //        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.FILTER);
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, ListerMethod.SYMMETRIC);
+        AtomAugmentingGenerator generator = 
+            new AtomAugmentingGenerator(handler, ListerMethod.SYMMETRIC, ValidatorMethod.SIGNATURE);
         generator.setHCount(hCount);
         List<String> elementSymbols = new ArrayList<String>();
         for (int i = 0; i < elementString.length(); i++) {

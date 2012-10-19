@@ -2,6 +2,7 @@ package test.generate;
 
 import generate.AtomAugmentingGenerator;
 import generate.ListerMethod;
+import generate.ValidatorMethod;
 import handler.CountingHandler;
 import handler.GenerateHandler;
 
@@ -44,13 +45,16 @@ public class BaseTest {
         return ac;
     }
     
-    public int countNFromAtom(String formulaString, ListerMethod listerMethod) {
+    public int countNFromAtom(String formulaString, ListerMethod listerMethod, ValidatorMethod validatorMethod) {
         CountingHandler handler = new CountingHandler();
-        generateNFromAtom(formulaString, listerMethod, handler);
+        generateNFromAtom(formulaString, listerMethod, validatorMethod, handler);
         return handler.getCount();
     }
         
-    public void generateNFromAtom(String formulaString, ListerMethod listerMethod, GenerateHandler handler) {
+    public void generateNFromAtom(String formulaString, 
+                                  ListerMethod listerMethod,
+                                  ValidatorMethod validatorMethod,
+                                  GenerateHandler handler) {
         IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
         List<String> elementSymbols = new ArrayList<String>();
         int hCount = 0;
@@ -69,15 +73,14 @@ public class BaseTest {
         Collections.sort(elementSymbols);
         IAtomContainer singleAtom = makeSingleAtom(elementSymbols.get(0));
         
-        
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod);
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
         generator.setHCount(hCount);
         generator.setElementSymbols(elementSymbols);
         
         generator.extend(singleAtom, 1, n);
     }
     
-    public int countNFromSingleDoubleTriple(String formulaString, ListerMethod listerMethod) {
+    public int countNFromSingleDoubleTriple(String formulaString, ListerMethod listerMethod, ValidatorMethod validatorMethod) {
         IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
         List<String> elementSymbols = new ArrayList<String>();
         int hCount = 0;
@@ -99,7 +102,8 @@ public class BaseTest {
         IAtomContainer ccTriple = makeCCEdge(IBond.Order.TRIPLE);
         CountingHandler handler = new CountingHandler();
         
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod);
+        AtomAugmentingGenerator generator = 
+            new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
         generator.setHCount(hCount);
         generator.setElementSymbols(elementSymbols);
         

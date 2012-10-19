@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import validate.CanonicalValidator;
 import validate.MoleculeValidator;
+import validate.RefinementCanonicalValidator;
 import validate.SignatureCanonicalValidator;
 import validate.HCountValidator;
 
@@ -27,24 +28,37 @@ public class AtomAugmentingGenerator {
     }
 
     public AtomAugmentingGenerator(GenerateHandler handler) {
-        this(handler, ListerMethod.FILTER);
+        this(handler, ListerMethod.FILTER, ValidatorMethod.REFINER);
     }
     
-    public AtomAugmentingGenerator(ListerMethod method) {
-        this(new PrintStreamStringHandler(), method);
+    public AtomAugmentingGenerator(ListerMethod listerMethod) {
+        this(new PrintStreamStringHandler(), listerMethod, ValidatorMethod.REFINER);
     }
     
-    public AtomAugmentingGenerator(GenerateHandler handler, ListerMethod method) {
+    public AtomAugmentingGenerator(ValidatorMethod validatorMethod) {
+        this(new PrintStreamStringHandler(), ListerMethod.FILTER, validatorMethod);
+    }
+    
+    public AtomAugmentingGenerator(GenerateHandler handler, 
+                                   ListerMethod listerMethod, 
+                                   ValidatorMethod validatorMethod) {
         this.handler = handler;
-        if (method == ListerMethod.FILTER) {
+        if (listerMethod == ListerMethod.FILTER) {
             childLister = new AtomFilteringChildLister();
-        } else if (method == ListerMethod.SYMMETRIC) {
+        } else if (listerMethod == ListerMethod.SYMMETRIC) {
             childLister = new AtomSymmetricChildLister();
         } else {
             // XXX
         }
+        
         hCountValidator = new HCountValidator();
-        canonicalValidator = new SignatureCanonicalValidator();
+        if (validatorMethod == ValidatorMethod.REFINER) {
+            canonicalValidator = new RefinementCanonicalValidator();
+        } else if (validatorMethod == ValidatorMethod.SIGNATURE) {
+            canonicalValidator = new SignatureCanonicalValidator();
+        } else {
+            // XXX
+        }
     }
     
     public void setHCount(int hCount) {

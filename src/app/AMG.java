@@ -2,6 +2,7 @@ package app;
 
 import generate.AtomAugmentingGenerator;
 import generate.ListerMethod;
+import generate.ValidatorMethod;
 import handler.CountingHandler;
 import handler.DataFormat;
 import handler.GenerateHandler;
@@ -86,7 +87,8 @@ public class AMG {
         
         // create the generator, with the appropriate handler and lister method
         ListerMethod listerMethod = (argsH.getListerMethod() == null)? ListerMethod.FILTER : argsH.getListerMethod();
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod);
+        ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? ValidatorMethod.REFINER : argsH.getValidatorMethod();
+        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
         
         int heavyAtomCount = setParamsFromFormula(formula, generator);
         if (heavyAtomCount < 2) {

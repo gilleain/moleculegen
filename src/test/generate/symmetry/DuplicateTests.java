@@ -1,6 +1,7 @@
 package test.generate.symmetry;
 
 import generate.ListerMethod;
+import generate.ValidatorMethod;
 import handler.DuplicateCountingHandler;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class DuplicateTests extends BaseTest {
     
     public void testForDuplicates(String formula) {
         DuplicateCountingHandler handler = new DuplicateCountingHandler();
-        generateNFromAtom(formula, ListerMethod.SYMMETRIC, handler);
+        generateNFromAtom(formula, ListerMethod.SYMMETRIC, ValidatorMethod.SIGNATURE, handler);
         Map<String, List<IAtomContainer>> dupMap = handler.getDupMap();
         for (String sig : dupMap.keySet()) {
             List<IAtomContainer> dups = dupMap.get(sig);

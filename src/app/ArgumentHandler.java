@@ -1,6 +1,7 @@
 package app;
 
 import generate.ListerMethod;
+import generate.ValidatorMethod;
 import handler.DataFormat;
 
 import org.apache.commons.cli.CommandLine;
@@ -72,6 +73,11 @@ public class ArgumentHandler {
      */
     private ListerMethod listerMethod;
     
+    /**
+     * The canonical validation method to use.
+     */
+    private ValidatorMethod validatorMethod;
+    
     private Options options;
     
     public ArgumentHandler() {
@@ -85,6 +91,7 @@ public class ArgumentHandler {
         options.addOption(opt("n", "Number output lines"));
         options.addOption(opt("r", "min:max", "Range of input file to use"));
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
+        options.addOption(lopt("validator", "method", "Validator method for canonical checking (REFINER, SIGNATURE)"));
     }
     
     @SuppressWarnings("static-access")
@@ -158,6 +165,12 @@ public class ArgumentHandler {
             ListerMethod chosenLister = 
                 ListerMethod.valueOf(line.getOptionValue("lister"));
             setListerMethod(chosenLister);
+        }
+        
+        if (line.hasOption("validator")) {
+            ValidatorMethod chosenValidator = 
+                ValidatorMethod.valueOf(line.getOptionValue("validator"));
+            setValidatorMethod(chosenValidator);
         }
     }
     
@@ -321,5 +334,13 @@ public class ArgumentHandler {
 
     public void setListerMethod(ListerMethod listerMethod) {
         this.listerMethod = listerMethod;
+    }
+
+    public ValidatorMethod getValidatorMethod() {
+        return this.validatorMethod;
+    }
+
+    public void setValidatorMethod(ValidatorMethod validatorMethod) {
+        this.validatorMethod = validatorMethod;
     }
 }
