@@ -10,8 +10,6 @@ public interface ChildLister {
     
     public void setElementSymbols(List<String> elementSymbols);
 
-    public String getCertificate(IAtomContainer parent);
-
     public List<String> getElementSymbols();
 
 }
