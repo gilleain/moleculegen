@@ -29,6 +29,7 @@ public class BondAugmentingGenerator implements AugmentingGenerator {
         this.handler = handler;
         hCountValidator = new HCountValidator();
         childLister = new BondChildLister();
+        canonicalValidator = new BondCanonicalValidator();
     }
     
     public void setHCount(int hCount) {

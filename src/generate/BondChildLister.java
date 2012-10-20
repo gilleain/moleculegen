@@ -11,8 +11,6 @@ import org.openscience.cdk.signature.MoleculeSignature;
 
 public class BondChildLister extends BaseChildLister {
     
-    private List<String> elementSymbols;
-    
     private static final IBond.Order[] orders = { 
         IBond.Order.SINGLE,
         IBond.Order.DOUBLE,
@@ -28,13 +26,15 @@ public class BondChildLister extends BaseChildLister {
             for (int i = 0; i < n; i++) {
                 if (satCap[i] <= 0) continue;
                 for (int j = i + 1; j <= n; j++) {
-                    if (satCap[j] <= 0) continue;
+                    if (j < n && satCap[j] <= 0) continue;
+                    if (parent.getBond(parent.getAtom(i), parent.getAtom(j)) != null) continue;
                     IAtomContainer child = makeChild(parent, i, j, order);
                     MoleculeSignature molSig = new MoleculeSignature(child);
                     String cert = molSig.toCanonicalString();
                     if (!certificates.contains(cert)) {
                         certificates.add(cert);
                         children.add(child);
+//                        System.out.println(test.AtomContainerPrinter.toString(child));
                     }
                 }
             }
@@ -47,7 +47,7 @@ public class BondChildLister extends BaseChildLister {
         try {
             IAtomContainer child = (IAtomContainer) parent.clone();
             if (atomIndexJ >= parent.getAtomCount()) {
-                String atomSymbol = elementSymbols.get(atomIndexJ);
+                String atomSymbol = getElementSymbols().get(atomIndexJ);
                 child.addAtom(child.getBuilder().newInstance(IAtom.class, atomSymbol));
             }
             
@@ -62,13 +62,14 @@ public class BondChildLister extends BaseChildLister {
     }
     
     public boolean isFinished(IAtomContainer atomContainer, int size) {
-        if (atomContainer.getAtomCount() < size) return true;
-        int[] satCap = getSaturationCapacity(atomContainer);
-        int freeCount = 0;
-        for (int i = 0; i < satCap.length; i++) {
-            if (satCap[i] > 0) freeCount++;
-        }
-        return freeCount > 2;
+        if (atomContainer.getAtomCount() < size) return false;
+        return true;
+//        int[] satCap = getSaturationCapacity(atomContainer);
+//        int freeCount = 0;
+//        for (int i = 0; i < satCap.length; i++) {
+//            if (satCap[i] > 0) freeCount++;
+//        }
+//        return freeCount > 2;
     }
 
 }
