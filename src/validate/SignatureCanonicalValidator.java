@@ -40,6 +40,7 @@ public class SignatureCanonicalValidator implements CanonicalValidator {
                 orbit.add(i);
             }
         }
+        // TODO : implement a method in AbstVertSig to get the inverse labeling
         int[] labels = maxAtomSig.getCanonicalLabelling(child.getAtomCount());
         
 //        for (Orbit o : orbits) { System.out.println(o); }
