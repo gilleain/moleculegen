@@ -1,9 +1,12 @@
 package group;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -74,7 +77,15 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     public PermutationGroup getAutomorphismGroup(
             IAtomContainer atomContainer, PermutationGroup group) {
         setup(atomContainer, group);
-        refine(Partition.unit(getVertexCount()));
+        
+        Partition initial;
+        if (ignoreBondOrders) {
+            initial = Partition.unit(getVertexCount());
+        } else {
+            initial = getBondPartition(atomContainer);
+        }
+        
+        super.refine(initial);
         return getGroup();
     }
     
@@ -116,13 +127,10 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      * @return a partition of the bonds based on the element types and bond order
      */
     public Partition getBondPartition(IAtomContainer atomContainer) {
-        // mini-'descriptors' for bonds like "C=O" or "C#N" etc
-        List<String> bondStrings = new ArrayList<String>();
-        
-        // the partition of the bonds by these 'descriptors'
-        Partition bondPartition = new Partition();
-        
         int bondCount = atomContainer.getBondCount();
+        Map<String, SortedSet<Integer>> cellMap = new HashMap<String, SortedSet<Integer>>();
+        
+        // make mini-'descriptors' for bonds like "C=O" or "C#N" etc
         for (int bondIndex = 0; bondIndex < bondCount; bondIndex++) {
             IBond bond = atomContainer.getBond(bondIndex);
             String el0 = bond.getAtom(0).getSymbol();
@@ -134,26 +142,37 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             } else {
                 bondString = el1 + boS + el0;                
             }
-            int cellIndex = bondStrings.indexOf(bondString);
-            if (cellIndex == -1) {
-                cellIndex = bondStrings.size();
-                bondStrings.add(bondString);
-                bondPartition.addSingletonCell(bondIndex);
+            SortedSet<Integer> cell;
+            if (cellMap.containsKey(bondString)) {
+                cell = cellMap.get(bondString);
             } else {
-                bondPartition.addToCell(cellIndex, bondIndex);
+                cell = new TreeSet<Integer>();
+                cellMap.put(bondString, cell);
             }
+            cell.add(bondIndex);
+        }
+        
+        // sorting is necessary to get cells in order
+        List<String> bondStrings = new ArrayList<String>(cellMap.keySet());
+        Collections.sort(bondStrings);
+        
+        // the partition of the bonds by these 'descriptors'
+        Partition bondPartition = new Partition();
+        for (String key : bondStrings) {
+            SortedSet<Integer> cell = cellMap.get(key);
+            bondPartition.addCell(cell);
         }
 //        System.out.println(bondStrings);
-        
+//        bondPartition.order();
         return bondPartition;
     }
     
     private String bondOrderString(IBond.Order order) {
         switch (order) {
-            case SINGLE: return "-";
-            case DOUBLE: return "=";
-            case TRIPLE: return "#";
-            default: return "-";    // XXX? 4
+            case SINGLE: return "1";
+            case DOUBLE: return "2";
+            case TRIPLE: return "3";
+            default: return "4";    // XXX? 4
         }
     }
 

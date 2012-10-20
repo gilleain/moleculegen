@@ -19,31 +19,33 @@ public class BondDiscretePartitionRefinerTest {
     @Test
     public void testAlleneA() {
         String acpString = "C0C1C2C3 0:1(1),0:2(2),2:3(2)";
+        System.out.println(acpString);
         IAtomContainer alleneA = AtomContainerPrinter.fromString(acpString, builder);
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initial = refiner.getBondPartition(alleneA);
-        System.out.println(initial);
-        PermutationGroup group = refiner.getAutomorphismGroup(alleneA, initial);
+//        PermutationGroup group = refiner.getAutomorphismGroup(alleneA, initial);
+        PermutationGroup group = refiner.getAutomorphismGroup(alleneA);
         for (Permutation p : group.all()) {
-            System.out.println(p);
+//            System.out.println(p);
         }
         Permutation best = refiner.getBest();
-        System.out.println(best);
+        System.out.println(initial + "\t" + best);
     }
     
     @Test
     public void testAlleneB() {
         String acpString = "C0C1C2C3 0:1(2),0:2(2),1:3(1)";
+        System.out.println(acpString);
         IAtomContainer alleneB = AtomContainerPrinter.fromString(acpString, builder);
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initial = refiner.getBondPartition(alleneB);
-        System.out.println(initial);
-        PermutationGroup group = refiner.getAutomorphismGroup(alleneB, initial);
+//        PermutationGroup group = refiner.getAutomorphismGroup(alleneB, initial);
+        PermutationGroup group = refiner.getAutomorphismGroup(alleneB);
         for (Permutation p : group.all()) {
-            System.out.println(p);
+//            System.out.println(p);
         }
         Permutation best = refiner.getBest();
-        System.out.println(best);
+        System.out.println(initial + "\t" + best);
     }
 
 }
