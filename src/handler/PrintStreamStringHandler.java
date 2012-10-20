@@ -6,6 +6,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
+import test.AtomContainerPrinter;
+
 /**
  * Prints the generated molecules in a string form to a print 
  * stream, defaulting to System out. 
@@ -25,35 +27,37 @@ public class PrintStreamStringHandler implements GenerateHandler {
 	
 	private boolean shouldNumberLines;
 	
+	private boolean showParent;
+	
 	public PrintStreamStringHandler() {
 		this(System.out, DataFormat.SMILES);
 	}
 	
 	public PrintStreamStringHandler(PrintStream printStream, DataFormat format) {
-	    this(printStream, format, true);
+	    this(printStream, format, false, false);
 	}
 	
-	public PrintStreamStringHandler(PrintStream printStream, DataFormat format, boolean numberLines) {
+	public PrintStreamStringHandler(PrintStream printStream, 
+	                                DataFormat format, 
+	                                boolean numberLines,
+	                                boolean showParent) {
 		this.printStream = printStream;
 		this.format = format;
-		smilesGenerator = new SmilesGenerator();
+		if (format == DataFormat.SMILES) {
+		    smilesGenerator = new SmilesGenerator();
+		}
 		count = 0;
 		this.shouldNumberLines = numberLines;
+		this.showParent = showParent;
 	}
 
 	@Override
 	public void handle(IAtomContainer parent, IAtomContainer child) {
 	    String childString = getStringForm(child);
 	  
-	    boolean debug = false;
-//        debug = true;
-	    if (debug) {
+	    if (showParent) {
 	        String parentString = getStringForm(parent);
-            printStream.println(
-                    count + "\t" + parentString
-                    + "\t" + test.AtomContainerPrinter.toString(parent)
-                    + "\t" + childString 
-                    + "\t" + test.AtomContainerPrinter.toString(child));
+            printStream.println(count + "\t" + parentString + "\t" + childString); 
 	    } else {
 	        if (shouldNumberLines) { 
                 printStream.println(count + "\t" + childString);
@@ -75,6 +79,8 @@ public class PrintStreamStringHandler implements GenerateHandler {
 	    } else if (format == DataFormat.SIGNATURE) {
 	        MoleculeSignature childSignature = new MoleculeSignature(atomContainer);
 	        return childSignature.toCanonicalString();
+	    } else if (format == DataFormat.ACP) {
+	        return AtomContainerPrinter.toString(atomContainer);
         } else {
             return "";  // XXX
         }

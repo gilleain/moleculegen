@@ -71,12 +71,14 @@ public class AMG {
         } else {
             PrintStream outStream;
             boolean shouldNumberLines = argsH.isShouldNumberLines();
+            boolean shouldShowParent = argsH.isShowParent();
             if (argsH.isStdOut()) {
                 if (format == DataFormat.SDF) {
                     handler = new SDFHandler();
                 } else {
                     outStream = System.out;
-                    handler = new PrintStreamStringHandler(outStream, format, shouldNumberLines);
+                    handler = new PrintStreamStringHandler(
+                            outStream, format, shouldNumberLines, shouldShowParent);
                 }
             } else {
                 String outputFilename = argsH.getOutputFilepath();
@@ -84,7 +86,8 @@ public class AMG {
                     handler = new SDFHandler(outputFilename);
                 } else {
                     outStream = new PrintStream(new FileOutputStream(outputFilename));
-                    handler = new PrintStreamStringHandler(outStream, format, shouldNumberLines);
+                    handler = new PrintStreamStringHandler(
+                            outStream, format, shouldNumberLines, shouldShowParent);
                 }
             }
         }

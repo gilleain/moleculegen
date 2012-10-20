@@ -11,5 +11,6 @@ public enum DataFormat {
     MOL,
     SDF,
     SIGNATURE,
+    ACP,
     NONE
 }

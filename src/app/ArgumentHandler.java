@@ -40,6 +40,11 @@ public class ArgumentHandler {
     private boolean shouldNumberLines;
     
     /**
+     * If true, print out the parent of each molecule.
+     */
+    private boolean showParent;
+    
+    /**
      * The chemical formula.
      */
     private String formula;
@@ -95,6 +100,7 @@ public class ArgumentHandler {
         options.addOption(opt("o", "path", "Output Filepath"));
         options.addOption(opt("O", "format", "Output Format (SMI, SIG, SDF, MOL)"));
         options.addOption(opt("n", "Number output lines"));
+        options.addOption(opt("p", "Show parent of each molecule"));
         options.addOption(opt("r", "min:max", "Range of input file to use"));
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
         options.addOption(lopt("validator", "method", "Validator method for canonical checking (REFINER, SIGNATURE)"));
@@ -135,6 +141,10 @@ public class ArgumentHandler {
         
         if (line.hasOption('n')) {
             setShouldNumberLines(true);
+        }
+        
+        if (line.hasOption('p')) {
+            setShowParent(true);
         }
         
         if (line.hasOption('e')) {
@@ -213,6 +223,14 @@ public class ArgumentHandler {
 
     public void setStdOut(boolean isStdOut) {
         this.isStdOut = isStdOut;
+    }
+
+    public boolean isShowParent() {
+        return showParent;
+    }
+
+    public void setShowParent(boolean showParent) {
+        this.showParent = showParent;
     }
 
     public String getInputFilepath() {
@@ -323,6 +341,8 @@ public class ArgumentHandler {
             return DataFormat.SDF;
         } else if (formatString.equals("MOL")) {
             return DataFormat.MOL;
+        } else if (formatString.equals("ACP")) {
+            return DataFormat.ACP;
         } else if (formatString.equals("NONE")) {
             return DataFormat.NONE;
         }
