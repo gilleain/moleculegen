@@ -1,5 +1,6 @@
 package app;
 
+import generate.AugmentationMethod;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.DataFormat;
@@ -78,6 +79,11 @@ public class ArgumentHandler {
      */
     private ValidatorMethod validatorMethod;
     
+    /**
+     * Atom or Bond augmentation
+     */
+    private AugmentationMethod augmentationMethod;
+    
     private Options options;
     
     public ArgumentHandler() {
@@ -92,6 +98,7 @@ public class ArgumentHandler {
         options.addOption(opt("r", "min:max", "Range of input file to use"));
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
         options.addOption(lopt("validator", "method", "Validator method for canonical checking (REFINER, SIGNATURE)"));
+        options.addOption(lopt("augmentation", "method", "Augmentation method (ATOM, BOND)"));
     }
     
     @SuppressWarnings("static-access")
@@ -171,6 +178,12 @@ public class ArgumentHandler {
             ValidatorMethod chosenValidator = 
                 ValidatorMethod.valueOf(line.getOptionValue("validator"));
             setValidatorMethod(chosenValidator);
+        }
+        
+        if (line.hasOption("augmentation")) {
+            AugmentationMethod chosenAugmentation = 
+                AugmentationMethod.valueOf(line.getOptionValue("augmentation"));
+            setAugmentationMethod(chosenAugmentation);
         }
     }
     
@@ -342,5 +355,13 @@ public class ArgumentHandler {
 
     public void setValidatorMethod(ValidatorMethod validatorMethod) {
         this.validatorMethod = validatorMethod;
+    }
+
+    public AugmentationMethod getAugmentationMethod() {
+        return augmentationMethod;
+    }
+
+    public void setAugmentationMethod(AugmentationMethod augmentationMethod) {
+        this.augmentationMethod = augmentationMethod;
     }
 }

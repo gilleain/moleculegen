@@ -1,6 +1,6 @@
 package generate;
 
-public enum AugmentMethod {
+public enum AugmentationMethod {
     ATOM,
     BOND
 }

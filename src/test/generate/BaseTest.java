@@ -1,7 +1,7 @@
 package test.generate;
 
 import generate.AtomAugmentingGenerator;
-import generate.AugmentMethod;
+import generate.AugmentationMethod;
 import generate.AugmentingGenerator;
 import generate.BondAugmentingGenerator;
 import generate.ListerMethod;
@@ -95,13 +95,13 @@ public class BaseTest {
                                             ListerMethod listerMethod, 
                                             ValidatorMethod validatorMethod) {
         return countNFromSingleDoubleTriple(
-                formulaString, listerMethod, validatorMethod, AugmentMethod.ATOM);
+                formulaString, listerMethod, validatorMethod, AugmentationMethod.ATOM);
     }
     
     public int countNFromSingleDoubleTriple(String formulaString, 
                                             ListerMethod listerMethod, 
                                             ValidatorMethod validatorMethod,
-                                            AugmentMethod augmentMethod) {
+                                            AugmentationMethod augmentMethod) {
         
         IAtomContainer ccSingle = makeCCEdge(IBond.Order.SINGLE);
         IAtomContainer ccDouble = makeCCEdge(IBond.Order.DOUBLE);
@@ -109,7 +109,7 @@ public class BaseTest {
         CountingHandler handler = new CountingHandler();
         
         AugmentingGenerator generator;
-        if (augmentMethod == AugmentMethod.ATOM) {
+        if (augmentMethod == AugmentationMethod.ATOM) {
             generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
         } else {
             generator = new BondAugmentingGenerator(handler);

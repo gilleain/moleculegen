@@ -1,6 +1,9 @@
 package app;
 
 import generate.AtomAugmentingGenerator;
+import generate.AugmentationMethod;
+import generate.AugmentingGenerator;
+import generate.BondAugmentingGenerator;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.CountingHandler;
@@ -23,6 +26,7 @@ import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
@@ -88,7 +92,13 @@ public class AMG {
         // create the generator, with the appropriate handler and lister method
         ListerMethod listerMethod = (argsH.getListerMethod() == null)? ListerMethod.FILTER : argsH.getListerMethod();
         ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? ValidatorMethod.REFINER : argsH.getValidatorMethod();
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+        AugmentingGenerator generator;
+        AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
+        if (augmentationMethod == AugmentationMethod.ATOM) {
+            generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+        } else {
+            generator = new BondAugmentingGenerator(handler);
+        }
         
         int heavyAtomCount = setParamsFromFormula(formula, generator);
         if (heavyAtomCount < 2) {
@@ -112,9 +122,17 @@ public class AMG {
         } else if (argsH.isStartingFromScratch()) {
             List<String> symbols = generator.getElementSymbols();
             
-            String firstSymbol  = symbols.get(0);
-            IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
-            generator.extend(startingAtom, 1, heavyAtomCount);
+            if (augmentationMethod == AugmentationMethod.ATOM) {
+                String firstSymbol = symbols.get(0);
+                IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
+                generator.extend(startingAtom, heavyAtomCount);
+            } else {
+                String firstSymbol = symbols.get(0);
+                String secondSymbol = symbols.get(1);
+                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.SINGLE), heavyAtomCount);
+                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.DOUBLE), heavyAtomCount);
+                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.DOUBLE), heavyAtomCount);
+            }
         }
         handler.finish();
     }
@@ -133,7 +151,7 @@ public class AMG {
     private static void augmentSingleInputStructure(
             ArgumentHandler argsH,
             String inputFile, 
-            AtomAugmentingGenerator generator,
+            AugmentingGenerator generator,
             int heavyAtomCount) throws CDKException, IOException {
         DataFormat inputFormat = argsH.getInputFormat();
         String filepath = argsH.getInputFilepath();
@@ -151,7 +169,7 @@ public class AMG {
         if (parent == null) {
             error("Molecule null");
         } else {
-            generator.extend(parent, parent.getAtomCount(), heavyAtomCount);
+            generator.extend(parent, heavyAtomCount);
         }
     }
 
@@ -168,7 +186,7 @@ public class AMG {
     private static void augmentMultipleInputStructures(
             ArgumentHandler argsH, 
             String inputFile, 
-            AtomAugmentingGenerator generator, 
+            AugmentingGenerator generator, 
             int heavyAtomCount) throws IOException {
         
         // allow for selecting a range of input from the input file
@@ -192,8 +210,8 @@ public class AMG {
                 if (minIndex != -1 && inputCount < minIndex) continue;
                 IAtomContainer parent = reader.next();
 //                test.AtomContainerPrinter.print(parent);
-                int currentAtomIndex = parent.getAtomCount();   // XXX what about explicit Hs?
-                generator.extend(parent, currentAtomIndex, heavyAtomCount);
+                // XXX what about explicit Hs for the atom count?
+                generator.extend(parent, heavyAtomCount);
                 inputCount++;
                 if (maxIndex != -1 && inputCount == maxIndex) break;
             }
@@ -237,7 +255,7 @@ public class AMG {
      * @return
      */
     private static int setParamsFromFormula(
-            String formulaString, AtomAugmentingGenerator generator) {
+            String formulaString, AugmentingGenerator generator) {
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         IMolecularFormula formula = 
             MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
@@ -271,6 +289,14 @@ public class AMG {
     private static IAtomContainer makeAtomInAtomContainer(String elementSymbol, IChemObjectBuilder builder) {
         IAtomContainer ac = builder.newInstance(IAtomContainer.class);
         ac.addAtom(builder.newInstance(IAtom.class,(elementSymbol)));
+        return ac;
+    }
+    
+    private static IAtomContainer makeEdge(String elementA, String elementB, IBond.Order order) {
+        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
+        ac.addAtom(builder.newInstance(IAtom.class, elementA));
+        ac.addAtom(builder.newInstance(IAtom.class, elementB));
+        ac.addBond(0, 1, order);
         return ac;
     }
 }
