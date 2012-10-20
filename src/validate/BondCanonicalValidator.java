@@ -17,9 +17,11 @@ public class BondCanonicalValidator {
         Partition autPartition = refiner.getAutomorphismPartition();
         int size = atomContainer.getBondCount() - 1;
         int del = labelling.get(size);
+        boolean canonical = (del == size || inSameCell(autPartition, del, size));
 //        System.out.println(test.AtomContainerPrinter.toString(atomContainer)
-//                            +"\t" + labelling + "\t" + autPartition + "\t" + size+ "\t" + del);
-        return del == size || inSameCell(autPartition, del, size);
+//                +"\t" + labelling + "\t" + autPartition 
+//                + "\t" + size+ "\t" + del + "\t" + canonical);
+        return canonical;
     }
     
     private boolean inSameCell(Partition partition, int i, int j) {

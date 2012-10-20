@@ -163,7 +163,7 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             bondPartition.addCell(cell);
         }
 //        System.out.println(bondStrings);
-//        bondPartition.order();
+        bondPartition.order();
         return bondPartition;
     }
     
@@ -172,7 +172,7 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             case SINGLE: return "1";
             case DOUBLE: return "2";
             case TRIPLE: return "3";
-            default: return "4";    // XXX? 4
+            default:     return "4";    // XXX? 4
         }
     }
 

@@ -134,7 +134,7 @@ public class AMG {
                 String secondSymbol = symbols.get(1);
                 generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.SINGLE), heavyAtomCount);
                 generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.DOUBLE), heavyAtomCount);
-                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.DOUBLE), heavyAtomCount);
+                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.TRIPLE), heavyAtomCount);
             }
         }
         handler.finish();
