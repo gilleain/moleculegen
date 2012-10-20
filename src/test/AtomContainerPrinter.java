@@ -3,6 +3,7 @@ package test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 
 public class AtomContainerPrinter {
 
@@ -23,7 +24,7 @@ public class AtomContainerPrinter {
         for (IBond bond : atomContainer.bonds()) {
             int a0 = atomContainer.getAtomNumber(bond.getAtom(0));
             int a1 = atomContainer.getAtomNumber(bond.getAtom(1));
-            int o = bond.getOrder().ordinal() + 1;
+            char o = bondOrderToChar(bond.getOrder());
             sb.append(a0 + ":" + a1 + "(" + o + ")");
             if (i < atomContainer.getBondCount() - 1) {
                 sb.append(",");
@@ -31,5 +32,52 @@ public class AtomContainerPrinter {
             i++;
         }
         return sb.toString();
+    }
+    
+    private static char bondOrderToChar(IBond.Order order) {
+        switch (order) {
+            case SINGLE:     return '1';
+            case DOUBLE:     return '2';
+            case TRIPLE:     return '3';
+            case QUADRUPLE : return '4';
+            case UNSET:      return '?';
+            default:         return '?';
+        }
+    }
+    
+    private static IBond.Order charToBondOrder(char orderChar) {
+        switch (orderChar) {
+            case '1' :     return IBond.Order.SINGLE;
+            case '2' :     return IBond.Order.DOUBLE;
+            case '3' :     return IBond.Order.TRIPLE;
+            case '4' :     return IBond.Order.QUADRUPLE;
+            case '?' :     return IBond.Order.UNSET;
+            default:       return IBond.Order.UNSET;
+        }
+    }
+    
+    public static IAtomContainer fromString(String acpString, IChemObjectBuilder builder) {
+        int gapIndex = acpString.indexOf(' ');
+        if (gapIndex == -1) return null;    // TODO : raise error
+        
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        String elementString = acpString.substring(0, gapIndex);
+        // skip the atom number, as this is just a visual convenience
+        for (int index = 0; index < elementString.length(); index += 2) {
+            String elementSymbol = String.valueOf(elementString.charAt(index));
+            atomContainer.addAtom(builder.newInstance(IAtom.class, elementSymbol));
+        }
+        
+        String bondString = acpString.substring(gapIndex + 1);
+        for (String bondPart : bondString.split(",")) {
+            int colonIndex = bondPart.indexOf(':');
+            int openBracketIndex = bondPart.indexOf('(');
+            int closeBracketIndex = bondPart.indexOf(')');
+            int a0 = Integer.parseInt(bondPart.substring(0, colonIndex));
+            int a1 = Integer.parseInt(bondPart.substring(colonIndex + 1, openBracketIndex));
+            char o = bondPart.substring(openBracketIndex + 1, closeBracketIndex).charAt(0);
+            atomContainer.addBond(a0, a1, charToBondOrder(o));
+        }
+        return atomContainer;
     }
 }
