@@ -17,15 +17,16 @@ public class BondChildLister extends BaseChildLister {
         IBond.Order.TRIPLE
     };
    
-    public List<IAtomContainer> listChildren(IAtomContainer parent) {
+    public List<IAtomContainer> listChildren(IAtomContainer parent, int size) {
         int n = parent.getAtomCount();
         List<IAtomContainer> children = new ArrayList<IAtomContainer>();
         List<String> certificates = new ArrayList<String>();
         int[] satCap = getSaturationCapacity(parent);
+        int max = Math.min(n + 1, size);
         for (IBond.Order order : orders) {
             for (int i = 0; i < n; i++) {
                 if (satCap[i] <= 0) continue;
-                for (int j = i + 1; j <= n; j++) {
+                for (int j = i + 1; j < max; j++) {
                     if (j < n && satCap[j] <= 0) continue;
                     if (parent.getBond(parent.getAtom(i), parent.getAtom(j)) != null) continue;
                     IAtomContainer child = makeChild(parent, i, j, order);
@@ -62,14 +63,16 @@ public class BondChildLister extends BaseChildLister {
     }
     
     public boolean isFinished(IAtomContainer atomContainer, int size) {
-        if (atomContainer.getAtomCount() < size) return false;
-        return true;
-//        int[] satCap = getSaturationCapacity(atomContainer);
-//        int freeCount = 0;
-//        for (int i = 0; i < satCap.length; i++) {
-//            if (satCap[i] > 0) freeCount++;
-//        }
-//        return freeCount > 2;
+        if (atomContainer.getAtomCount() < size) {
+            return false;
+        } else {
+            int[] satCap = getSaturationCapacity(atomContainer);
+            int freeCount = 0;
+            for (int i = 0; i < satCap.length; i++) {
+                if (satCap[i] > 0) freeCount++;
+            }
+            return freeCount < 2;
+        }
     }
 
 }

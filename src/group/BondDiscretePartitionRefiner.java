@@ -163,7 +163,7 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             bondPartition.addCell(cell);
         }
 //        System.out.println(bondStrings);
-        bondPartition.order();
+//        bondPartition.order();
         return bondPartition;
     }
     

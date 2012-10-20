@@ -44,7 +44,7 @@ public class BondAugmentingGenerator implements AugmentingGenerator {
         if (childLister.isFinished(parent, size)) {
             return;
         } else {
-            for (IAtomContainer child : childLister.listChildren(parent)) {
+            for (IAtomContainer child : childLister.listChildren(parent, size)) {
                 if (canonicalValidator.isCanonical(child)) {
                     if (hCountValidator.isValidMol(child, size)) {
                         handler.handle(parent, child);

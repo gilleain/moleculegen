@@ -1,11 +1,10 @@
 package validate;
 
+import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.interfaces.IAtomType;
 
 /**
  * Validate a molecule as having the correct number of hydrogens.
@@ -29,19 +28,22 @@ public class HCountValidator implements MoleculeValidator {
     }
 
     private boolean hydrogensCorrect(IAtomContainer atomContainer) {
-//        if (hCount < 1) return true;    // XXX
         try {
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
-            CDKHydrogenAdder adder = 
-                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
-            adder.addImplicitHydrogens(atomContainer);
+            CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(atomContainer.getBuilder());
             int actualCount = 0;
             for (IAtom atom : atomContainer.atoms()) {
-                actualCount += AtomContainerManipulator.countHydrogens(atomContainer, atom);
+                IAtomType atomType = matcher.findMatchingAtomType(atomContainer, atom);
+                if (atomType != null) {
+                    actualCount += 
+                            atomType.getFormalNeighbourCount() - 
+                            atomContainer.getConnectedAtomsCount(atom);
+                }
                 if (actualCount > hCount) {
                     return false;
                 }
             }
+
+//            System.out.println("count for " + AtomContainerPrinter.toString(atomContainer) + " = " + actualCount);
             return actualCount == hCount;
         } catch (CDKException e) {
             // TODO Auto-generated catch block
