@@ -1,6 +1,9 @@
 package test.generate;
 
 import generate.AtomAugmentingGenerator;
+import generate.AugmentMethod;
+import generate.AugmentingGenerator;
+import generate.BondAugmentingGenerator;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.CountingHandler;
@@ -50,66 +53,74 @@ public class BaseTest {
         generateNFromAtom(formulaString, listerMethod, validatorMethod, handler);
         return handler.getCount();
     }
+    
+    public void parseFormula(String formulaString, AugmentingGenerator generator) {
+        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
+        List<String> elementSymbols = new ArrayList<String>();
+        int hCount = 0;
+        for (IIsotope element : formula.isotopes()) {   // isotopes are not elements, I know...
+            String elementSymbol = element.getSymbol();
+            int count = formula.getIsotopeCount(element);
+            if (elementSymbol.equals("H")) {
+                hCount = count;
+            } else {
+                for (int i = 0; i < count; i++) {
+                    elementSymbols.add(elementSymbol);
+                }
+            }
+        }
+        Collections.sort(elementSymbols);
+        generator.setHCount(hCount);
+        generator.setElementSymbols(elementSymbols);
+    }
         
     public void generateNFromAtom(String formulaString, 
                                   ListerMethod listerMethod,
                                   ValidatorMethod validatorMethod,
                                   GenerateHandler handler) {
-        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
-        List<String> elementSymbols = new ArrayList<String>();
-        int hCount = 0;
-        for (IIsotope element : formula.isotopes()) {   // isotopes are not elements, I know...
-            String elementSymbol = element.getSymbol();
-            int count = formula.getIsotopeCount(element);
-            if (elementSymbol.equals("H")) {
-                hCount = count;
-            } else {
-                for (int i = 0; i < count; i++) {
-                    elementSymbols.add(elementSymbol);
-                }
-            }
-        }
+       
+        AugmentingGenerator generator = 
+            new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+        parseFormula(formulaString, (AugmentingGenerator) generator);
+        List<String> elementSymbols = generator.getElementSymbols();
+        
+        String firstSymbol = elementSymbols.get(0);
+        IAtomContainer singleAtom = makeSingleAtom(firstSymbol);
+        
         int n = elementSymbols.size();
-        Collections.sort(elementSymbols);
-        IAtomContainer singleAtom = makeSingleAtom(elementSymbols.get(0));
-        
-        AtomAugmentingGenerator generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
-        generator.setHCount(hCount);
-        generator.setElementSymbols(elementSymbols);
-        
-        generator.extend(singleAtom, 1, n);
+        generator.extend(singleAtom, n);
     }
     
-    public int countNFromSingleDoubleTriple(String formulaString, ListerMethod listerMethod, ValidatorMethod validatorMethod) {
-        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
-        List<String> elementSymbols = new ArrayList<String>();
-        int hCount = 0;
-        for (IIsotope element : formula.isotopes()) {   // isotopes are not elements, I know...
-            String elementSymbol = element.getSymbol();
-            int count = formula.getIsotopeCount(element);
-            if (elementSymbol.equals("H")) {
-                hCount = count;
-            } else {
-                for (int i = 0; i < count; i++) {
-                    elementSymbols.add(elementSymbol);
-                }
-            }
-        }
-        int n = elementSymbols.size();
+    public int countNFromSingleDoubleTriple(String formulaString, 
+                                            ListerMethod listerMethod, 
+                                            ValidatorMethod validatorMethod) {
+        return countNFromSingleDoubleTriple(
+                formulaString, listerMethod, validatorMethod, AugmentMethod.ATOM);
+    }
+    
+    public int countNFromSingleDoubleTriple(String formulaString, 
+                                            ListerMethod listerMethod, 
+                                            ValidatorMethod validatorMethod,
+                                            AugmentMethod augmentMethod) {
         
         IAtomContainer ccSingle = makeCCEdge(IBond.Order.SINGLE);
         IAtomContainer ccDouble = makeCCEdge(IBond.Order.DOUBLE);
         IAtomContainer ccTriple = makeCCEdge(IBond.Order.TRIPLE);
         CountingHandler handler = new CountingHandler();
         
-        AtomAugmentingGenerator generator = 
-            new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
-        generator.setHCount(hCount);
-        generator.setElementSymbols(elementSymbols);
+        AugmentingGenerator generator;
+        if (augmentMethod == AugmentMethod.ATOM) {
+            generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+        } else {
+            generator = new BondAugmentingGenerator(handler);
+        }
+        parseFormula(formulaString, generator);
+        List<String> elementSymbols = generator.getElementSymbols();
+        int n = elementSymbols.size();
         
-        generator.extend(ccSingle, 2, n);
-        generator.extend(ccDouble, 2, n);
-        generator.extend(ccTriple, 2, n);
+        generator.extend(ccSingle, n);
+        generator.extend(ccDouble, n);
+        generator.extend(ccTriple, n);
         
         return handler.getCount();
     }

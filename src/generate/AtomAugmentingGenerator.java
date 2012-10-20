@@ -13,7 +13,7 @@ import validate.RefinementCanonicalValidator;
 import validate.SignatureCanonicalValidator;
 import validate.HCountValidator;
 
-public class AtomAugmentingGenerator {
+public class AtomAugmentingGenerator implements AugmentingGenerator {
 
     private GenerateHandler handler;
 
@@ -67,6 +67,10 @@ public class AtomAugmentingGenerator {
     
     public void setElementSymbols(List<String> elementSymbols) {
         childLister.setElementSymbols(elementSymbols);
+    }
+    
+    public void extend(IAtomContainer parent, int size) {
+        extend(parent, parent.getAtomCount(), size);
     }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
