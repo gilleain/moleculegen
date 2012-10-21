@@ -47,5 +47,21 @@ public class BondDiscretePartitionRefinerTest {
         Permutation best = refiner.getBest();
         System.out.println(initial + "\t" + best);
     }
+    
+    @Test
+    public void star3VsTriangleTest() {
+        String star3String = "C0C1C2C3 0:1(1),0:2(1),0:3(1)";
+        String triangleString = "C0C1C2 0:1(1),0:2(1),1:2(1)";
+        IAtomContainer star3 = AtomContainerPrinter.fromString(star3String, builder);
+        IAtomContainer triangle = AtomContainerPrinter.fromString(triangleString, builder);
+        BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
+        Partition initialStar3 = refiner.getBondPartition(star3);
+        Partition initialTri = refiner.getBondPartition(triangle);
+        System.out.println(initialStar3 + "\t" + initialTri);
+        refiner.getAutomorphismGroup(star3);
+        System.out.println(refiner.getBest());
+        refiner.getAutomorphismGroup(triangle);
+        System.out.println(refiner.getBest());
+    }
 
 }
