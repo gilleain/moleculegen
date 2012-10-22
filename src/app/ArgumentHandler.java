@@ -5,6 +5,9 @@ import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.DataFormat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -275,28 +278,49 @@ public class ArgumentHandler {
 
     public void printHelp() {
         System.out.println("Usage: java -jar AMG.jar -e <formula>");
-        String format = "%-17s";
+        List<Option> shortOps = new ArrayList<Option>();
+        List<Option> longOps = new ArrayList<Option>();
         for (Object op : options.getOptions()) {
             Option option = (Option) op;
             if (option.hasLongOpt()) {
-                if (option.hasArg()) {
-                    String head = String.format(format, 
-                            "--" + option.getLongOpt() + "=<" + option.getArgName() + ">");
-                    System.out.println(head + " = " + option.getDescription());
-                } else {
-                    String head = String.format(format, "-" + option.getLongOpt());
-                    System.out.println(head + " = " + option.getDescription());
-                }
+               longOps.add(option);
             } else {
-                if (option.hasArg()) {
-                    String head = String.format(format, 
-                            "-" + option.getOpt() + " <" + option.getArgName() + ">");
-                    System.out.println(head + " = " + option.getDescription());
-                } else {
-                    String head = String.format(format, "-" + option.getOpt());
-                    System.out.println(head + " = " + option.getDescription());
-                }
+               shortOps.add(option); 
             }
+        }
+        
+        String shortFormat = "%-14s";
+        System.out.println("\nBasic options :");
+        for (Option shortOp : shortOps) {
+            printShortOp(shortOp, shortFormat);
+        }
+        
+        String longFormat = "%-23s";
+        System.out.println("\nAdvanced options :");
+        for (Option longOp : longOps) {
+            printLongOp(longOp, longFormat);
+        }
+    }
+    
+    private void printLongOp(Option option, String format) {
+        if (option.hasArg()) {
+            String head = String.format(format, 
+                    "--" + option.getLongOpt() + "=<" + option.getArgName() + ">");
+            System.out.println(head + "  " + option.getDescription());
+        } else {
+            String head = String.format(format, "-" + option.getLongOpt());
+            System.out.println(head + "  " + option.getDescription());
+        }
+    }
+    
+    private void printShortOp(Option option, String format) {
+        if (option.hasArg()) {
+            String head = String.format(format, 
+                    "-" + option.getOpt() + " <" + option.getArgName() + ">");
+            System.out.println(head + "  " + option.getDescription());
+        } else {
+            String head = String.format(format, "-" + option.getOpt());
+            System.out.println(head + "  " + option.getDescription());
         }
     }
 
