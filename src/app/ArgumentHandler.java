@@ -48,6 +48,11 @@ public class ArgumentHandler {
     private boolean showParent;
     
     /**
+     * If true, print out the time taken.
+     */
+    private boolean isTiming;
+
+    /**
      * The chemical formula.
      */
     private String formula;
@@ -96,6 +101,8 @@ public class ArgumentHandler {
     
     public ArgumentHandler() {
         options = new Options();
+        
+        // short options
         options.addOption(opt("e", "formula", "Elemental Formula"));
         options.addOption(opt("h", "Print help"));
         options.addOption(opt("i", "path", "Input Filepath"));
@@ -105,6 +112,9 @@ public class ArgumentHandler {
         options.addOption(opt("n", "Number output lines"));
         options.addOption(opt("p", "Show parent of each molecule"));
         options.addOption(opt("r", "min:max", "Range of input file to use"));
+        options.addOption(opt("t", "Time the run"));
+
+        // long options
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
         options.addOption(lopt("validator", "method", "Validator method for canonical checking (REFINER, SIGNATURE)"));
         options.addOption(lopt("augmentation", "method", "Augmentation method (ATOM, BOND)"));
@@ -179,6 +189,10 @@ public class ArgumentHandler {
         
         if (line.hasOption('r')) {
             setRangeString(line.getOptionValue('r'));
+        }
+        
+        if (line.hasOption('t')) {
+            setTiming(true);
         }
         
         if (line.hasOption("lister")) {
@@ -338,6 +352,14 @@ public class ArgumentHandler {
 
     public void setShouldNumberLines(boolean shouldNumberLines) {
         this.shouldNumberLines = shouldNumberLines;
+    }
+    
+    public boolean isTiming() {
+        return isTiming;
+    }
+
+    public void setTiming(boolean isTiming) {
+        this.isTiming = isTiming;
     }
 
     public DataFormat getOutputFormat() {

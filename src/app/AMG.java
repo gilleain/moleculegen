@@ -67,7 +67,7 @@ public class AMG {
         DataFormat format = argsH.getOutputFormat();
         
         if (format == DataFormat.NONE) {
-            handler = new CountingHandler();
+            handler = new CountingHandler(argsH.isTiming());
         } else {
             PrintStream outStream;
             boolean shouldNumberLines = argsH.isShouldNumberLines();
@@ -95,8 +95,9 @@ public class AMG {
         // create the generator, with the appropriate handler and lister method
         ListerMethod listerMethod = (argsH.getListerMethod() == null)? ListerMethod.FILTER : argsH.getListerMethod();
         ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? ValidatorMethod.REFINER : argsH.getValidatorMethod();
-        AugmentingGenerator generator;
         AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
+        
+        AugmentingGenerator generator;
         if (augmentationMethod == AugmentationMethod.ATOM) {
             generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
         } else {
