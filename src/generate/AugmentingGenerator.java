@@ -13,4 +13,6 @@ public interface AugmentingGenerator {
     public void extend(IAtomContainer atomContainer, int maxSize);
 
     public List<String> getElementSymbols();
+    
+    public int setParamsFromFormula(String formulaString);
 }

@@ -8,12 +8,12 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import validate.CanonicalValidator;
+import validate.HCountValidator;
 import validate.MoleculeValidator;
 import validate.RefinementCanonicalValidator;
 import validate.SignatureCanonicalValidator;
-import validate.HCountValidator;
 
-public class AtomAugmentingGenerator implements AugmentingGenerator {
+public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements AugmentingGenerator {
 
     private GenerateHandler handler;
 
@@ -67,14 +67,17 @@ public class AtomAugmentingGenerator implements AugmentingGenerator {
     
     public void setElementSymbols(List<String> elementSymbols) {
         childLister.setElementSymbols(elementSymbols);
+        hCountValidator.setElementSymbols(elementSymbols);
     }
     
     public void extend(IAtomContainer parent, int size) {
+        hCountValidator.setImplicitHydrogens(parent);
         extend(parent, parent.getAtomCount(), size);
     }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
         if (currentAtomIndex >= size) return;
+        if (!hCountValidator.canExtend(parent)) return;
         
         List<IAtomContainer> children = childLister.listChildren(parent, currentAtomIndex);
         for (IAtomContainer child : children) {

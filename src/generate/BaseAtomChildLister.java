@@ -23,8 +23,13 @@ public class BaseAtomChildLister extends BaseChildLister {
             IAtomContainer parent, int[] bondOrderArr, int lastIndex) {
         try {
             IAtomContainer child = (IAtomContainer) parent.clone();
+            
             String atomSymbol = getElementSymbols().get(lastIndex);
-            child.addAtom(child.getBuilder().newInstance(IAtom.class, atomSymbol));
+            IAtom newAtom = child.getBuilder().newInstance(IAtom.class, atomSymbol); 
+            int maxBos = super.getMaxBondOrderSum(lastIndex);
+            child.addAtom(newAtom);
+
+            int implHCount = maxBos;
             for (int index = 0; index < bondOrderArr.length; index++) {
                 int value = bondOrderArr[index];
                 if (value > 0) {
@@ -36,8 +41,13 @@ public class BaseAtomChildLister extends BaseChildLister {
                         default: order = Order.SINGLE;
                     }
                     child.addBond(index, lastIndex, order);
+                    IAtom partner = child.getAtom(index);
+                    int partnerCount = partner.getImplicitHydrogenCount();
+                    partner.setImplicitHydrogenCount(partnerCount - value);
+                    implHCount -= value;
                 }
             }
+            newAtom.setImplicitHydrogenCount(implHCount);
 //            System.out.println(java.util.Arrays.toString(bondOrderArr) + "\t" 
 //                    + test.AtomContainerPrinter.toString(child));
             return child;

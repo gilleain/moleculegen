@@ -69,6 +69,10 @@ public class BaseChildLister {
     public int getMaxBondOrderSum(int index) {
         return maxBondOrderSumMap.get(elementSymbols.get(index));
     }
+    
+    public int getMaxBondOrderSum(String elementSymbol) {
+        return maxBondOrderSumMap.get(elementSymbol);
+    }
 
     public int getMaxBondOrder(int currentAtomIndex) {
         return maxBondOrderMap.get(elementSymbols.get(currentAtomIndex));

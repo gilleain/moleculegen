@@ -18,8 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
@@ -28,14 +26,11 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IElement;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 public class AMG {
     
@@ -104,7 +99,7 @@ public class AMG {
             generator = new BondAugmentingGenerator(handler);
         }
         
-        int heavyAtomCount = setParamsFromFormula(formula, generator);
+        int heavyAtomCount = generator.setParamsFromFormula(formula);
         if (heavyAtomCount < 2) {
             error("Please specify more than 1 heavy atom");
             return;
@@ -250,42 +245,6 @@ public class AMG {
         return reader;
     }
 
-    /**
-     * Set the hydrogen count and the heavy atom symbol string from the formula, 
-     * returning the count of heavy atoms.
-     * 
-     * @param formulaString
-     * @param generator
-     * @return
-     */
-    private static int setParamsFromFormula(
-            String formulaString, AugmentingGenerator generator) {
-        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-        IMolecularFormula formula = 
-            MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
-        List<IElement> elements = MolecularFormulaManipulator.elements(formula);
-        
-        // count the number of non-heavy atoms
-        int hCount = 0;
-        List<String> elementSymbols = new ArrayList<String>();
-        for (IElement element : elements) {
-            String symbol = element.getSymbol();
-            int count = MolecularFormulaManipulator.getElementCount(formula, element);
-            if (symbol.equals("H")) {
-                hCount = count;
-            } else {
-                for (int i = 0; i < count; i++) {
-                    elementSymbols.add(symbol);
-                }
-            }
-        }
-        generator.setHCount(hCount);
-        Collections.sort(elementSymbols);
-        generator.setElementSymbols(elementSymbols);
-        
-        return elementSymbols.size();
-    }
-    
     private static void error(String text) {
         System.out.println(text);
     }

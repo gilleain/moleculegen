@@ -11,7 +11,7 @@ import validate.BondCanonicalValidator;
 import validate.HCountValidator;
 import validate.MoleculeValidator;
 
-public class BondAugmentingGenerator implements AugmentingGenerator {
+public class BondAugmentingGenerator extends BaseAugmentingGenerator implements AugmentingGenerator {
     
     private GenerateHandler handler;
     
