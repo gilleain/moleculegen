@@ -14,7 +14,7 @@ public class BondCanonicalValidator {
     public boolean isCanonical(IAtomContainer atomContainer) {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         refiner.getAutomorphismGroup(atomContainer);
-        Permutation labelling = refiner.getBest();
+        Permutation labelling = refiner.getBest().invert();
         Partition autPartition = refiner.getAutomorphismPartition();
 //        int lastAtomIndex = atomContainer.getAtomCount() - 1;
         int lastBondIndex = atomContainer.getBondCount() - 1;
