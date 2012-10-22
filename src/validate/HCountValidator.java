@@ -5,6 +5,8 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 /**
  * Validate a molecule as having the correct number of hydrogens.
@@ -16,8 +18,12 @@ public class HCountValidator implements MoleculeValidator {
     
     private int hCount;
     
+    private CDKAtomTypeMatcher matcher;
+    
     public HCountValidator() {
         hCount = 0;
+        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+        matcher = CDKAtomTypeMatcher.getInstance(builder);
     }
 
     @Override
@@ -29,7 +35,6 @@ public class HCountValidator implements MoleculeValidator {
 
     private boolean hydrogensCorrect(IAtomContainer atomContainer) {
         try {
-            CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(atomContainer.getBuilder());
             int actualCount = 0;
             for (IAtom atom : atomContainer.atoms()) {
                 IAtomType atomType = matcher.findMatchingAtomType(atomContainer, atom);
