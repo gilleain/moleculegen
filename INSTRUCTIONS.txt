@@ -1,3 +1,6 @@
+BASIC USAGE
+-----------
+
 There are a number of ways to run AMG:
 
 WARNING : only use very small formulae to test at first.
@@ -20,3 +23,25 @@ Then, run AMG on chunks of this input list, possibly using the "-r" option:
   
 Each run will take a different chunk of the master list, and produce a non-overlapping set of
 results in each of the results files.
+
+DEBUG OPTIONS
+-------------
+
+Some of the basic flags (-t, -n, -p) are used for debugging, so they can be ignored by most users. Timing with
+(-t) is obviously for speed checks, and only works when no output format is given. Numbering the output lines
+(with -n) is just an alternative to using the nl utility. Printing the parent structure (with -p) does exactly that, and is basically just for me.
+
+Also, the "ACP" output format gives an exact string-form for the atom and bonds of a structure, which is near-
+readable. So "C0C1O2 0:1(3),0:2(1),1:2(1)" has two carbons and on oxygen, and three bonds (triple, single, 
+single) between the numbered atoms. It cannot currently be used as an input format.
+
+ADVANCED OPTIONS
+----------------
+
+There are some advanced options available, for those that know what they are doing:
+
+1) augmentation=ATOM or augmentation=BOND : augment molecules by adding atoms or by bonds.
+2) lister=FILTER or lister=SYMMETRIC : the method used to list candidate children of a parent.
+3) validator=REFINER or validator=SIGNATURE : the canonical checking algorithm.
+
+These options are really only useful at the moment for testing the behaviour of the different algorithms.
