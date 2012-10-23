@@ -44,7 +44,7 @@ public class BaseChildLister {
         
         maxBondOrderMap = new HashMap<String, Integer>();
         maxBondOrderMap.put("C", 3);
-        maxBondOrderMap.put("O", 3);
+        maxBondOrderMap.put("O", 2);
         maxBondOrderMap.put("N", 3);
         maxBondOrderMap.put("S", 2);
         maxBondOrderMap.put("P", 2);

@@ -24,10 +24,13 @@ public class BondChildLister extends BaseChildLister {
         int[] satCap = getSaturationCapacity(parent);
         int max = Math.min(n + 1, size);
         for (IBond.Order order : orders) {
+            int o = orderToInt(order);
             for (int i = 0; i < n; i++) {
-                if (satCap[i] <= 0) continue;
+                if (satCap[i] < o) continue;
+                if (!orderValid(i, o)) continue;
                 for (int j = i + 1; j < max; j++) {
-                    if (j < n && satCap[j] <= 0) continue;
+                    if (j < n && satCap[j] < o) continue;
+                    if (!orderValid(j, o)) continue;
                     if (parent.getBond(parent.getAtom(i), parent.getAtom(j)) != null) continue;
                     IAtomContainer child = makeChild(parent, i, j, order);
                     MoleculeSignature molSig = new MoleculeSignature(child);
@@ -41,6 +44,20 @@ public class BondChildLister extends BaseChildLister {
             }
         }
         return children;
+    }
+    
+    private int orderToInt(IBond.Order order) {
+        switch (order) {
+            case SINGLE: return 1;
+            case DOUBLE: return 2;
+            case TRIPLE: return 3;
+            default:     return 0;
+        }
+    }
+    
+    private boolean orderValid(int atomIndex, int order) { 
+        int maxBondOrder = super.getMaxBondOrder(atomIndex);
+        return maxBondOrder >= order;
     }
     
     public IAtomContainer makeChild(
