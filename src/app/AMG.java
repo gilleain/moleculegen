@@ -24,7 +24,6 @@ import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -120,18 +119,9 @@ public class AMG {
             }
         } else if (argsH.isStartingFromScratch()) {
             List<String> symbols = generator.getElementSymbols();
-            
-            if (augmentationMethod == AugmentationMethod.ATOM) {
-                String firstSymbol = symbols.get(0);
-                IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
-                generator.extend(startingAtom, heavyAtomCount);
-            } else {
-                String firstSymbol = symbols.get(0);
-                String secondSymbol = symbols.get(1);
-                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.SINGLE), heavyAtomCount);
-                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.DOUBLE), heavyAtomCount);
-                generator.extend(makeEdge(firstSymbol, secondSymbol, IBond.Order.TRIPLE), heavyAtomCount);
-            }
+            String firstSymbol = symbols.get(0);
+            IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
+            generator.extend(startingAtom, heavyAtomCount);
         }
         handler.finish();
     }
@@ -255,11 +245,4 @@ public class AMG {
         return ac;
     }
     
-    private static IAtomContainer makeEdge(String elementA, String elementB, IBond.Order order) {
-        IAtomContainer ac = builder.newInstance(IAtomContainer.class);
-        ac.addAtom(builder.newInstance(IAtom.class, elementA));
-        ac.addAtom(builder.newInstance(IAtom.class, elementB));
-        ac.addBond(0, 1, order);
-        return ac;
-    }
 }
