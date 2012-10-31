@@ -25,6 +25,13 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     private List<Map<Integer, Integer>> connectionTable;
     
     /**
+     * For compact connection tables, this is necessary to map the original atom indices
+     * to the ones used in the compact table.
+     * 
+     */
+    private int[] indexMap;
+    
+    /**
      * If there are atoms in the structure without bonds, this should be true
      */
     private boolean checkForDisconnectedAtoms;
@@ -72,6 +79,10 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         this.ignoreBondOrders = ignoreBondOrders;
     }
     
+    public void reset() {
+        connectionTable = null;
+    }
+    
     /**
      * Makes a lookup table for the connection between atoms, to avoid looking
      * through the bonds each time.
@@ -113,8 +124,11 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      */
     public List<Map<Integer, Integer>> makeCompactConnectionTable(IAtomContainer atomContainer) {
         List<Map<Integer, Integer>> table = new ArrayList<Map<Integer, Integer>>();
+        
+        // make the index map anew
+        indexMap = new int[atomContainer.getAtomCount()];
+        
         int tableIndex = 0;
-        int[] indexMap = new int[atomContainer.getAtomCount()];
         for (int i = 0; i < atomContainer.getAtomCount(); i++) {
             IAtom atom = atomContainer.getAtom(i);
             List<IAtom> connected = atomContainer.getConnectedAtomsList(atom);
@@ -132,6 +146,8 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 table.add(connectedIndices);
                 indexMap[i] = tableIndex;
                 tableIndex++;
+            } else {
+                indexMap[i] = -1;
             }
         }
         List<Map<Integer, Integer>> shortTable =  new ArrayList<Map<Integer, Integer>>();
@@ -156,8 +172,10 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     
     private void setup(IAtomContainer atomContainer) {
         // have to setup the connection table before making the group 
-        // otherwise the size may be wrong 
-        setupConnectionTable(atomContainer);
+        // otherwise the size may be wrong, but only setup if it doesn't exist
+        if (connectionTable == null) {
+            setupConnectionTable(atomContainer);
+        }
         int size = getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(size));
         setup(group, new AtomEquitablePartitionRefiner(connectionTable));
@@ -224,18 +242,25 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      * @return a partition of the atom indices based on the element symbols
      */
     public Partition getElementPartition(IAtomContainer atomContainer) {
+        if (connectionTable == null) {
+            setupConnectionTable(atomContainer);
+        }
         Partition elementPartition = new Partition();
-        // the element symbols in order of discovery, for 
+        // the element symbols in order of discovery 
         List<String> elementList = new ArrayList<String>();
-        for (int atomIndex = 0; atomIndex < atomContainer.getAtomCount(); atomIndex++) {
-            String elementSymbol = atomContainer.getAtom(atomIndex).getSymbol();
-            int cellIndex = elementList.indexOf(elementSymbol);
-            if (cellIndex == -1) {
-                cellIndex = elementList.size();
-                elementList.add(elementSymbol);
-                elementPartition.addSingletonCell(atomIndex);
-            } else {
-                elementPartition.addToCell(cellIndex, atomIndex);
+        int numberOfAtoms = atomContainer.getAtomCount(); 
+        for (int atomIndex = 0; atomIndex < numberOfAtoms; atomIndex++) {
+            int index = (indexMap == null)? atomIndex : indexMap[atomIndex];
+            if (index >= 0) {
+                String elementSymbol = atomContainer.getAtom(atomIndex).getSymbol();
+                int cellIndex = elementList.indexOf(elementSymbol);
+                if (cellIndex == -1) {
+                    cellIndex = elementList.size();
+                    elementList.add(elementSymbol);
+                    elementPartition.addSingletonCell(index);
+                } else {
+                    elementPartition.addToCell(cellIndex, index);
+                }
             }
         }
         
