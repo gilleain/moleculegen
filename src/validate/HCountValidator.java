@@ -6,6 +6,7 @@ import generate.BaseChildLister;
 
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
@@ -43,11 +44,32 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         matcher = CDKAtomTypeMatcher.getInstance(builder);
     }
+    
+    public boolean isConnected(IAtomContainer atomContainer) {
+        Object connectedProperty = atomContainer.getProperty("IS_CONNECTED");
+        if (connectedProperty == null) {
+            return true; // assume connected
+        } else {
+            return (Boolean) connectedProperty;
+        }
+    }
+    
+    public void checkConnectivity(IAtomContainer atomContainer) {
+        if (isConnected(atomContainer)) {
+            return;
+        } else {
+            if (ConnectivityChecker.isConnected(atomContainer)) {
+                atomContainer.setProperty("IS_CONNECTED", true);
+            }
+        }
+    }
 
     @Override
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
 //        System.out.println("validating " + test.AtomContainerPrinter.toString(atomContainer));
-        return atomContainer.getAtomCount() == size && hydrogensCorrect(atomContainer);
+        return atomContainer.getAtomCount() == size
+            && isConnected(atomContainer)
+            && hydrogensCorrect(atomContainer);
     }
 
     private boolean hydrogensCorrect(IAtomContainer atomContainer) {

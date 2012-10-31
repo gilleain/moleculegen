@@ -45,6 +45,9 @@ public class AtomSymmetricChildLister extends BaseAtomChildLister implements Chi
                 children.add(makeChild(parent, bondOrderArray, currentAtomIndex));
             }
         }
+        
+        children.add(makeDisconnectedChild(parent, currentAtomIndex));
+        
         return children;
     }
 

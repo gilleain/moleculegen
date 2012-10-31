@@ -47,6 +47,10 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
                 certs.add(molSigString);
             }
         }
+        
+        children.add(makeDisconnectedChild(parent, currentAtomIndex));
+        
         return children;
     }
+
 }

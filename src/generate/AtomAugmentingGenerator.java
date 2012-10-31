@@ -17,7 +17,7 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
 
     private GenerateHandler handler;
 
-    private MoleculeValidator hCountValidator;
+    private MoleculeValidator moleculeValidator;
     
     private CanonicalValidator canonicalValidator;
     
@@ -51,7 +51,7 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
             // XXX
         }
         
-        hCountValidator = new HCountValidator();
+        moleculeValidator = new HCountValidator();
         if (validatorMethod == ValidatorMethod.REFINER) {
             canonicalValidator = new RefinementCanonicalValidator();
         } else if (validatorMethod == ValidatorMethod.SIGNATURE) {
@@ -62,27 +62,29 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
     }
     
     public void setHCount(int hCount) {
-        hCountValidator.setHCount(hCount);
+        moleculeValidator.setHCount(hCount);
     }
     
     public void setElementSymbols(List<String> elementSymbols) {
         childLister.setElementSymbols(elementSymbols);
-        hCountValidator.setElementSymbols(elementSymbols);
+        moleculeValidator.setElementSymbols(elementSymbols);
     }
     
     public void extend(IAtomContainer parent, int size) {
-        hCountValidator.setImplicitHydrogens(parent);
+        moleculeValidator.setImplicitHydrogens(parent);
         extend(parent, parent.getAtomCount(), size);
     }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
         if (currentAtomIndex >= size) return;
-        if (!hCountValidator.canExtend(parent)) return;
+        if (!moleculeValidator.canExtend(parent)) return;
+        
+        moleculeValidator.checkConnectivity(parent);
         
         List<IAtomContainer> children = childLister.listChildren(parent, currentAtomIndex);
         for (IAtomContainer child : children) {
             if (canonicalValidator.isCanonical(child)) {
-                if (hCountValidator.isValidMol(child, size)) {
+                if (moleculeValidator.isValidMol(child, size)) {
                     handler.handle(parent, child);
                 }
                 extend(child, currentAtomIndex + 1, size);

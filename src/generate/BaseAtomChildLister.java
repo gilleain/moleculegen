@@ -56,6 +56,25 @@ public class BaseAtomChildLister extends BaseChildLister {
             return null;
         }
     }
+
+    public IAtomContainer makeDisconnectedChild(IAtomContainer parent, int lastIndex) {
+        try {
+            IAtomContainer child = (IAtomContainer) parent.clone();
+            
+            String atomSymbol = getElementSymbols().get(lastIndex);
+            IAtom newAtom = child.getBuilder().newInstance(IAtom.class, atomSymbol); 
+            int maxBos = super.getMaxBondOrderSum(lastIndex);
+            child.addAtom(newAtom);
+            newAtom.setImplicitHydrogenCount(maxBos);
+//            System.out.println(java.util.Arrays.toString(bondOrderArr) + "\t" 
+//                    + test.AtomContainerPrinter.toString(child));
+            child.setProperty("IS_CONNECTED", false);    // UGH
+            return child;
+        } catch (CloneNotSupportedException cnse) {
+            // TODO
+            return null;
+        }
+    }
     
     public List<int[]> getBondOrderArrays(
             IAtomContainer parent, int currentAtomIndex, int maxDegreeSumForCurrent, int maxDegree) {
