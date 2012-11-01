@@ -22,7 +22,9 @@ public class AtomAugmentingGeneratorTest extends BaseTest {
     
     public IAtomContainer makeSingleC() {
         IAtomContainer ac = builder.newInstance(IAtomContainer.class);
-        ac.addAtom(builder.newInstance(IAtom.class, "C"));
+        IAtom atom = builder.newInstance(IAtom.class, "C");
+        atom.setImplicitHydrogenCount(4);
+        ac.addAtom(atom);
         return ac;
     }
     
@@ -232,7 +234,7 @@ public class AtomAugmentingGeneratorTest extends BaseTest {
     
     @Test
     public void testFoursFromSingleAtom() {
-        testFromSingleAtom("CCCC", 1, 4, 0);
+        testFromSingleAtom("CCCC", 1, 4, 8);
     }
     
     @Test
