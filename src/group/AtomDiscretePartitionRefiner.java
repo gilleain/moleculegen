@@ -1,9 +1,12 @@
 package group;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -245,23 +248,31 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         if (connectionTable == null) {
             setupConnectionTable(atomContainer);
         }
-        Partition elementPartition = new Partition();
-        // the element symbols in order of discovery 
-        List<String> elementList = new ArrayList<String>();
+        
+        Map<String, SortedSet<Integer>> cellMap = new HashMap<String, SortedSet<Integer>>();
         int numberOfAtoms = atomContainer.getAtomCount(); 
         for (int atomIndex = 0; atomIndex < numberOfAtoms; atomIndex++) {
             int index = (indexMap == null)? atomIndex : indexMap[atomIndex];
             if (index >= 0) {
-                String elementSymbol = atomContainer.getAtom(atomIndex).getSymbol();
-                int cellIndex = elementList.indexOf(elementSymbol);
-                if (cellIndex == -1) {
-                    cellIndex = elementList.size();
-                    elementList.add(elementSymbol);
-                    elementPartition.addSingletonCell(index);
+                String symbol = atomContainer.getAtom(index).getSymbol();
+                SortedSet<Integer> cell;
+                if (cellMap.containsKey(symbol)) {
+                    cell = cellMap.get(symbol);
                 } else {
-                    elementPartition.addToCell(cellIndex, index);
+                    cell = new TreeSet<Integer>();
+                    cellMap.put(symbol, cell);
                 }
+                cell.add(index);
             }
+        }
+        
+        List<String> atomSymbols = new ArrayList<String>(cellMap.keySet());
+        Collections.sort(atomSymbols);
+        
+        Partition elementPartition = new Partition();
+        for (String key : atomSymbols) {
+            SortedSet<Integer> cell = cellMap.get(key);
+            elementPartition.addCell(cell);
         }
         
         return elementPartition;
