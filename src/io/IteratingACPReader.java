@@ -1,4 +1,4 @@
-package app;
+package io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,20 +8,17 @@ import java.io.Reader;
 import java.util.NoSuchElementException;
 
 import org.openscience.cdk.annotations.TestMethod;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
-import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
-import signature.chemistry.AtomSignature;
+import test.AtomContainerPrinter;
 
-public class IteratingSignatureReader extends DefaultIteratingChemObjectReader<IAtomContainer> {
+public class IteratingACPReader extends DefaultIteratingChemObjectReader<IAtomContainer> {
     
     private BufferedReader input;
     
@@ -36,8 +33,6 @@ public class IteratingSignatureReader extends DefaultIteratingChemObjectReader<I
     
     private IAtomContainer nextMolecule;
     
-    private MoleculeFromSignatureBuilder molBuilder;
-    
     private IChemObjectBuilder builder;
     
     /**
@@ -48,9 +43,8 @@ public class IteratingSignatureReader extends DefaultIteratingChemObjectReader<I
      * @see org.openscience.cdk.DefaultChemObjectBuilder
      * @see org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder
      */
-    public IteratingSignatureReader(Reader in, IChemObjectBuilder builder) {
+    public IteratingACPReader(Reader in, IChemObjectBuilder builder) {
         this.builder = builder;
-        molBuilder = new MoleculeFromSignatureBuilder(builder);
         setReader(in);
     }
     
@@ -60,7 +54,7 @@ public class IteratingSignatureReader extends DefaultIteratingChemObjectReader<I
      * @param in      The input stream
      * @param builder The builder
      */
-    public IteratingSignatureReader(InputStream in, IChemObjectBuilder builder) {
+    public IteratingACPReader(InputStream in, IChemObjectBuilder builder) {
         this(new InputStreamReader(in), builder);
     }
 
@@ -91,23 +85,9 @@ public class IteratingSignatureReader extends DefaultIteratingChemObjectReader<I
                     currentLine = input.readLine().trim();
                     logger.debug("Line: ", currentLine);
 
-                    String signatureString = currentLine;
+                    String acpString = currentLine;
                     
-                    // XXX annoying, but the signature builder is broken...
-                    molBuilder = new MoleculeFromSignatureBuilder(builder);
-                    molBuilder.makeFromColoredTree(AtomSignature.parse(signatureString));
-                    IAtomContainer builtMol = molBuilder.getAtomContainer();
-                    
-                    // XXX fix for the problem of bonds with the wrong atom order...
-                    for (IBond bond : builtMol.bonds()) {
-                        IAtom a0 = bond.getAtom(0);
-                        IAtom a1 = bond.getAtom(1);
-                        if (builtMol.getAtomNumber(a0) > builtMol.getAtomNumber(a1)) {
-                            bond.setAtom(a0, 1);
-                            bond.setAtom(a1, 0);
-                        }
-                    }
-                    nextMolecule = builtMol;
+                    nextMolecule = AtomContainerPrinter.fromString(acpString, builder);
                     if (nextMolecule.getAtomCount() > 0) {
                         hasNext = true;
                     } else {

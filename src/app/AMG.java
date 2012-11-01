@@ -11,6 +11,7 @@ import handler.DataFormat;
 import handler.GenerateHandler;
 import handler.PrintStreamStringHandler;
 import handler.SDFHandler;
+import io.IteratingSignatureReader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
