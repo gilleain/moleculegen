@@ -11,6 +11,7 @@ import handler.DataFormat;
 import handler.GenerateHandler;
 import handler.PrintStreamStringHandler;
 import handler.SDFHandler;
+import io.IteratingACPReader;
 import io.IteratingSignatureReader;
 
 import java.io.FileInputStream;
@@ -230,7 +231,8 @@ public class AMG {
         switch (inputFormat) {
             case SMILES: reader = new IteratingSMILESReader(in, builder); break;
             case SIGNATURE: reader = new IteratingSignatureReader(in, builder); break;
-            case SDF: reader = new IteratingSDFReader(in, builder); break; 
+            case SDF: reader = new IteratingSDFReader(in, builder); break;
+            case ACP: reader = new IteratingACPReader(in, builder); break;
             default: reader = null; error("Unrecognised format"); break;
         }
         return reader;
