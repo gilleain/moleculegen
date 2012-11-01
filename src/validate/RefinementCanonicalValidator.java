@@ -5,6 +5,7 @@ import group.Partition;
 import group.Permutation;
 
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -40,32 +41,61 @@ public class RefinementCanonicalValidator implements CanonicalValidator {
         refiner.reset();
 //        System.out.println("Conn : " + test.AtomContainerPrinter.toString(atomContainer));
         refiner.getAutomorphismGroup(atomContainer);
-        Permutation labelling = refiner.getBest().invert();
-        Partition partition = refiner.getAutomorphismPartition();
         int size = refiner.getVertexCount() - 1;
-        int del = labelling.get(size);
+        
+        Permutation labelling = refiner.getBest();
+        Permutation inverse = labelling.invert();
+        Partition partition = refiner.getAutomorphismPartition();
+        partition = translate(partition, inverse);
+        int del = inverse.get(size);
+        
         boolean canonical = (del == size || inSameCell(partition, del, size));
-//        boolean canonical = labelling.isIdentity();
+//        String acp = test.AtomContainerPrinter.toString(atomContainer);
         if (canonical) {
-//            System.out.println(labelling + "\t" + size + "\t" + del + "\t" + partition);
+//            System.out.println("C " + labelling + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
             return true;
         } else {
+//            System.out.println("N " + labelling + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
             return false;
         }
     }
     
+    private Partition translate(Partition original, Permutation labelling) {
+        Partition translation = new Partition();
+        for (int cellIndex = 0; cellIndex < original.size(); cellIndex++) {
+            SortedSet<Integer> oCell = original.getCell(cellIndex);
+            SortedSet<Integer> tCell = new TreeSet<Integer>();
+            for (int i : oCell) {
+                tCell.add(labelling.get(i));
+            }
+            translation.addCell(tCell);
+        }
+        return translation;
+    }
+    
     private boolean isCanonicalDisconnected(IAtomContainer atomContainer) {
         if (atomContainer.getBondCount() == 0) {
+//            System.out.println("Disc(C): " + test.AtomContainerPrinter.toString(atomContainer));
             return true;
         } else {
             disconnectedRefiner.reset();
-//            System.out.println("Disc : " + test.AtomContainerPrinter.toString(atomContainer));
             disconnectedRefiner.getAutomorphismGroup(atomContainer);
-            Permutation labelling = disconnectedRefiner.getBest().invert();
-            Partition partition = disconnectedRefiner.getAutomorphismPartition();
             int size = disconnectedRefiner.getVertexCount() - 1;
-            int del = labelling.get(size);
-            return del == size || inSameCell(partition, del, size);
+            Partition partition = disconnectedRefiner.getAutomorphismPartition();
+            
+            Permutation labelling = disconnectedRefiner.getBest();
+            Permutation inverse = labelling.invert();
+            partition = translate(partition, inverse);
+            int del = inverse.get(size);
+            
+            boolean canon = del == size || inSameCell(partition, del, size);
+            if (canon) {
+//                System.out.println("Disc(C): " + test.AtomContainerPrinter.toString(atomContainer));
+                return true;
+            } else {
+//                System.out.println("Disc(N): " + test.AtomContainerPrinter.toString(atomContainer));
+                return false;
+            }
         }
     }
 
