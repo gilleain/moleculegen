@@ -165,6 +165,10 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         return shortTable;
     }
     
+    public int[] getIndexMap() {
+        return indexMap;
+    }
+    
     private void setupConnectionTable(IAtomContainer atomContainer) {
         if (checkForDisconnectedAtoms) {
             this.connectionTable = makeCompactConnectionTable(atomContainer);

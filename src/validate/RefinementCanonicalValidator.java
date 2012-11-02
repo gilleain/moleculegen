@@ -7,6 +7,7 @@ import group.Permutation;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class RefinementCanonicalValidator implements CanonicalValidator {
@@ -50,7 +51,8 @@ public class RefinementCanonicalValidator implements CanonicalValidator {
         int del = inverse.get(size);
         
         boolean canonical = (del == size || inSameCell(partition, del, size));
-//        String acp = test.AtomContainerPrinter.toString(atomContainer);
+//        boolean canonical = inverse.isIdentity();
+        String acp = test.AtomContainerPrinter.toString(atomContainer);
         if (canonical) {
 //            System.out.println("C " + labelling + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
             return true;
@@ -74,7 +76,8 @@ public class RefinementCanonicalValidator implements CanonicalValidator {
     }
     
     private boolean isCanonicalDisconnected(IAtomContainer atomContainer) {
-        if (atomContainer.getBondCount() == 0) {
+        IAtom lastAtom = atomContainer.getAtom(atomContainer.getAtomCount() - 1);
+        if (atomContainer.getBondCount() == 0 || atomContainer.getConnectedAtomsCount(lastAtom) == 0) {
 //            System.out.println("Disc(C): " + test.AtomContainerPrinter.toString(atomContainer));
             return true;
         } else {
@@ -82,21 +85,57 @@ public class RefinementCanonicalValidator implements CanonicalValidator {
             disconnectedRefiner.getAutomorphismGroup(atomContainer);
             int size = disconnectedRefiner.getVertexCount() - 1;
             Partition partition = disconnectedRefiner.getAutomorphismPartition();
+            int[] indexMap = disconnectedRefiner.getIndexMap();
             
             Permutation labelling = disconnectedRefiner.getBest();
-            Permutation inverse = labelling.invert();
-            partition = translate(partition, inverse);
+//            System.out.println(labelling + "\t" + java.util.Arrays.toString(indexMap));
+            Permutation inverse = invert(labelling, indexMap);
+            addDisconnectedCell(partition, labelling.size(), indexMap);
+//            partition = translate(partition, inverse);
             int del = inverse.get(size);
             
             boolean canon = del == size || inSameCell(partition, del, size);
+            String acp = test.AtomContainerPrinter.toString(atomContainer);
             if (canon) {
-//                System.out.println("Disc(C): " + test.AtomContainerPrinter.toString(atomContainer));
+//                System.out.println("C " + inverse + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
                 return true;
             } else {
-//                System.out.println("Disc(N): " + test.AtomContainerPrinter.toString(atomContainer));
+//                System.out.println("D " + inverse + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
                 return false;
             }
         }
+    }
+    
+    private Permutation invert(Permutation p, int[] indexMap) {
+        int n = indexMap.length;
+        int m = p.size();
+        int l = m;
+        Permutation inversion = new Permutation(n);
+        for (int i = 0; i < n; i++) {
+            int j = indexMap[i];
+            if (j >= 0) {
+                inversion.set(p.get(j), j);
+            } else {
+                inversion.set(l, l);
+                l++;
+            }
+        }
+        return inversion;
+    }
+    
+    private void addDisconnectedCell(Partition partition, int l, int[] indexMap) {
+        SortedSet<Integer> cell = new TreeSet<Integer>();
+        int j = l;
+        for (int i = 0; i < indexMap.length; i++) {
+            if (indexMap[i] == -1) {
+                cell.add(j);
+                j++;
+            }
+        }
+        if (cell.size() > 0) {
+            partition.addCell(cell);
+        }
+//        System.out.println(partition);
     }
 
     private boolean inSameCell(Partition partition, int i, int j) {

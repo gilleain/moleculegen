@@ -26,6 +26,14 @@ public class AtomRefineValidatorTest {
         System.out.println("A " + canonA + " B " + canonB);
     }
     
+    public void testSingle(String acp, boolean isConnected) {
+        RefinementCanonicalValidator validator = new RefinementCanonicalValidator();
+        IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
+        ac.setProperty("IS_CONNECTED", isConnected);
+        boolean canon = validator.isCanonical(ac);
+        System.out.println(canon);
+    }
+    
     @Test
     public void C3O3_1Test() {
         String acpA = "C0C1C2O3O4O5 0:1(1),0:3(1),2:3(1),0:4(1),0:5(1),4:5(1)";
@@ -45,6 +53,11 @@ public class AtomRefineValidatorTest {
         String acpA = "C0C1C2 0:1(1)";
         String acpB = "C0C1C2 0:2(1)";
         testPair(acpA, acpB, false);
+    }
+    
+    @Test
+    public void disconnTest() {
+        testSingle("C0C1C2O3O4O5 0:1(1),0:2(1),1:3(2),0:5(1),2:5(1)", false);
     }
 
 }
