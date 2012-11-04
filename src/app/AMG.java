@@ -154,6 +154,7 @@ public class AMG {
             reader.close();
         } else {
             // XXX - other single file formats?
+            in.close();
             return;
         }
 //        test.AtomContainerPrinter.print(parent);
