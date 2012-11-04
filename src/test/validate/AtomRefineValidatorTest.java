@@ -59,5 +59,10 @@ public class AtomRefineValidatorTest {
     public void disconnTest() {
         testSingle("C0C1C2O3O4O5 0:1(1),0:2(1),1:3(2),0:5(1),2:5(1)", false);
     }
+    
+    @Test
+    public void C3O3_4Test() {
+        testSingle("C0C1C2O3O4O5 0:1(1),0:4(1),0:5(1),1:5(1),2:3(1),3:4(1)", true);
+    }
 
 }

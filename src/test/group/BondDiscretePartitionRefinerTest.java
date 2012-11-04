@@ -3,7 +3,6 @@ package test.group;
 import group.BondDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
-import group.PermutationGroup;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -24,10 +23,8 @@ public class BondDiscretePartitionRefinerTest {
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initial = refiner.getBondPartition(alleneA);
 //        PermutationGroup group = refiner.getAutomorphismGroup(alleneA, initial);
-        PermutationGroup group = refiner.getAutomorphismGroup(alleneA);
-        for (Permutation p : group.all()) {
-//            System.out.println(p);
-        }
+//        PermutationGroup group = refiner.getAutomorphismGroup(alleneA);
+//        for (Permutation p : group.all()) { System.out.println(p); }
         Permutation best = refiner.getBest();
         System.out.println(initial + "\t" + best);
     }
@@ -40,10 +37,8 @@ public class BondDiscretePartitionRefinerTest {
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initial = refiner.getBondPartition(alleneB);
 //        PermutationGroup group = refiner.getAutomorphismGroup(alleneB, initial);
-        PermutationGroup group = refiner.getAutomorphismGroup(alleneB);
-        for (Permutation p : group.all()) {
-//            System.out.println(p);
-        }
+//        PermutationGroup group = refiner.getAutomorphismGroup(alleneB);
+//      for (Permutation p : group.all()) { System.out.println(p); }
         Permutation best = refiner.getBest();
         System.out.println(initial + "\t" + best);
     }

@@ -15,7 +15,6 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.SmilesGenerator;
 
 import test.AtomContainerPrinter;
 
@@ -37,7 +36,7 @@ public class BondAutPartitionTests {
     public void testFile(String filename) throws IOException {
         IIteratingChemObjectReader<IAtomContainer> reader = 
             new IteratingSMILESReader(new FileReader(filename), builder);
-        SmilesGenerator smilesGen = new SmilesGenerator();
+//        SmilesGenerator smilesGen = new SmilesGenerator();
         while (reader.hasNext()) {
             IAtomContainer ac = reader.next();
             sort(ac);
@@ -47,7 +46,7 @@ public class BondAutPartitionTests {
             Partition autPartition = refiner.getAutomorphismPartition();
             String aS = autPartition.toString();
             String acp = AtomContainerPrinter.toString(ac);
-            String smiles = smilesGen.createSMILES(ac);
+//            String smiles = smilesGen.createSMILES(ac);
 //            System.out.println(smiles + "\t" + aS + "\t" + group.order() + "\t" + initial + "\t" + acp);
             System.out.println(String.format("%-18s\t%s\t%-18s\t%s", aS, group.order(), initial, acp));
         }

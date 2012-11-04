@@ -227,4 +227,10 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             return 0;
         }
     }
+
+    @Override
+    public boolean colorsPreserved(Permutation p) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

@@ -25,10 +25,17 @@ public abstract class AbstractDiscretePartitionRefiner {
     
     private PermutationGroup group;
     
+    private boolean isVertexColorPreserving;
+    
     public AbstractDiscretePartitionRefiner() {
+        this(false);
+    }
+    
+    public AbstractDiscretePartitionRefiner(boolean isVertexColorPreserving) {
         this.bestExist = false;
         this.best = null;
         this.equitableRefiner = null;
+        this.isVertexColorPreserving = isVertexColorPreserving;
     }
     
     public abstract int getVertexCount();
@@ -55,7 +62,6 @@ public abstract class AbstractDiscretePartitionRefiner {
         int n = group.getSize();
         boolean[] inOrbit = new boolean[n];
         List<Permutation> permutations = group.all();
-        int cellIndex = 0;
         DisjointSetForest forest = new DisjointSetForest(n);
         int inOrbitCount = 0;
         for (Permutation p : permutations) {
@@ -72,7 +78,6 @@ public abstract class AbstractDiscretePartitionRefiner {
                         }
                         x = p.get(x);
                     }
-                    cellIndex++;
                 }
             }
             if (inOrbitCount == n) {
@@ -166,7 +171,7 @@ public abstract class AbstractDiscretePartitionRefiner {
         }
         
         Permutation pi1 = new Permutation(firstNonDiscreteCell);
-        Permutation pi2 = new Permutation(vertexCount);
+        Permutation pi2 = new Permutation(vertexCount); // TODO : move this down to local block
         
         Result result = Result.BETTER;
         if (bestExist) {
@@ -174,7 +179,8 @@ public abstract class AbstractDiscretePartitionRefiner {
             result = compareRowwise(pi1);
         }
         
-        if (finer.size() == vertexCount) {    // partition is discrete
+        // partition is discrete
+        if (finer.size() == vertexCount && (!isVertexColorPreserving || colorsPreserved(pi1))) {    
 //        	System.out.println("Disc :\t" + finer + "\t" + result);
             if (!bestExist) {
                 best = finer.toPermutation();
@@ -240,4 +246,6 @@ public abstract class AbstractDiscretePartitionRefiner {
         }
         return Result.EQUAL;
     }
+    
+    public abstract boolean colorsPreserved(Permutation p);
 }

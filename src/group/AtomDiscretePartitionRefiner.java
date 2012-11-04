@@ -50,6 +50,11 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     private boolean ignoreBondOrders;
     
     /**
+     * The vertex colors
+     */
+    private Partition colors;
+    
+    /**
      * Default constructor - does not check for disconnected atoms, ignore elements
      * or bond orders.
      */
@@ -77,6 +82,9 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             boolean checkForDisconnectedAtoms, 
             boolean ignoreElements,
             boolean ignoreBondOrders) {
+        // if we are ignoring elements, we are not preserving colors and v.v.
+        super(!ignoreElements);
+        
         this.checkForDisconnectedAtoms = checkForDisconnectedAtoms;
         this.ignoreElements = ignoreElements;
         this.ignoreBondOrders = ignoreBondOrders;
@@ -279,7 +287,13 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             elementPartition.addCell(cell);
         }
         
+//        this.colors = elementPartition;
+        
         return elementPartition;
+    }
+    
+    public void setElementPartition(Partition elementPartition) {
+        this.colors = elementPartition;
     }
     
     /**
@@ -330,6 +344,40 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public boolean colorsPreserved(Permutation p) {
+        if (colors != null) {
+            String cStr = colors.toString();
+            String pStr = p.toCycleString();
+            String format = "%" + cStr.length() + "s\t%" + cStr.length() + "s"; 
+//            System.out.print(String.format(format, cStr, pStr));
+            for (int i = 0; i < getVertexCount(); i++) {
+                if (inSameCell(i, p.get(i), colors)) {
+                    continue;
+                } else {
+//                    System.out.println(" false");
+                    return false;
+                }
+            }
+//            System.out.println(" true");
+            return true;
+        } else {
+//            System.out.println("colors null, so true");
+            return true;    // XXX - what if colors are null accidentally?
+        }
+    }
+    
+    // TODO : make this a partition method
+    private boolean inSameCell(int i, int j, Partition p) {
+        for (int c = 0; c < p.size(); c++) {
+            SortedSet<Integer> cell = p.getCell(c); 
+            if (cell.contains(i) && cell.contains(j)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

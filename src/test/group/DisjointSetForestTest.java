@@ -62,7 +62,6 @@ public class DisjointSetForestTest {
     public Partition getAutPartition(int n, PermutationGroup group) {
         boolean[] inOrbit = new boolean[n];
         List<Permutation> permutations = group.all();
-        int cellIndex = 0;
         DisjointSetForest forest = new DisjointSetForest(n);
         int inOrbitCount = 0;
         for (Permutation p : permutations) {
@@ -79,7 +78,6 @@ public class DisjointSetForestTest {
                         }
                         x = p.get(x);
                     }
-                    cellIndex++;
                 }
             }
 //            System.out.println(p + "\t" + set);
