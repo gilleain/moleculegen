@@ -266,7 +266,7 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         for (int atomIndex = 0; atomIndex < numberOfAtoms; atomIndex++) {
             int index = (indexMap == null)? atomIndex : indexMap[atomIndex];
             if (index >= 0) {
-                String symbol = atomContainer.getAtom(index).getSymbol();
+                String symbol = atomContainer.getAtom(atomIndex).getSymbol();
                 SortedSet<Integer> cell;
                 if (cellMap.containsKey(symbol)) {
                     cell = cellMap.get(symbol);
@@ -349,9 +349,9 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     @Override
     public boolean colorsPreserved(Permutation p) {
         if (colors != null) {
-            String cStr = colors.toString();
-            String pStr = p.toCycleString();
-            String format = "%" + cStr.length() + "s\t%" + cStr.length() + "s"; 
+//            String cStr = colors.toString();
+//            String pStr = p.toCycleString();
+//            String format = "%" + cStr.length() + "s\t%" + cStr.length() + "s"; 
 //            System.out.print(String.format(format, cStr, pStr));
             for (int i = 0; i < getVertexCount(); i++) {
                 if (inSameCell(i, p.get(i), colors)) {
