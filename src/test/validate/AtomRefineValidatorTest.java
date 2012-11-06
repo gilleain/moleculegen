@@ -89,6 +89,11 @@ public class AtomRefineValidatorTest {
     }
     
     @Test
+    public void C3O3_9Test() {
+        testSingle("C0C1C2O3O4O5 0:1(1),0:3(1),1:3(1),0:4(1),2:5(1),4:5(1)", true);
+    }
+    
+    @Test
     public void CEdge_CDot_OEdge_Test() {
         testSingle("C0C1C2O3O4 0:1(1),3:4(1)", false);
     }

@@ -50,26 +50,32 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
         if (connectedProperty == null) {
             return true; // assume connected
         } else {
-            return (Boolean) connectedProperty;
+            if ((Boolean) connectedProperty) {
+                return true;
+            } else {
+                boolean connected = ConnectivityChecker.isConnected(atomContainer);
+                if (connected) {
+                    atomContainer.setProperty("IS_CONNECTED", true);    
+                } else {
+                    atomContainer.setProperty("IS_CONNECTED", false);
+                }
+                return connected;
+            }
         }
     }
     
     public void checkConnectivity(IAtomContainer atomContainer) {
-        if (isConnected(atomContainer)) {
-            return;
-        } else {
-            if (ConnectivityChecker.isConnected(atomContainer)) {
-                atomContainer.setProperty("IS_CONNECTED", true);
-            }
-        }
+        isConnected(atomContainer);
     }
 
     @Override
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
-//        System.out.println("validating " + test.AtomContainerPrinter.toString(atomContainer));
-        return atomContainer.getAtomCount() == size
+//        System.out.print("validating " + test.AtomContainerPrinter.toString(atomContainer));
+        boolean valid = atomContainer.getAtomCount() == size
             && isConnected(atomContainer)
             && hydrogensCorrect(atomContainer);
+//        System.out.println(valid);
+        return valid;
     }
 
     private boolean hydrogensCorrect(IAtomContainer atomContainer) {

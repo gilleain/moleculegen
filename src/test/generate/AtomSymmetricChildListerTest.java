@@ -1,5 +1,6 @@
 package test.generate;
 
+import generate.AtomFilteringChildLister;
 import generate.AtomSymmetricChildLister;
 import group.Permutation;
 import group.PermutationGroup;
@@ -92,6 +93,20 @@ public class AtomSymmetricChildListerTest extends BaseTest {
             if (certs.contains(cert)) {
                 System.out.println("DUP! " + AtomContainerPrinter.toString(child));
             }
+        }
+    }
+    
+    @Test
+    public void disconnectedParentTest() {
+        String acp = "C0C1C2 0:1(1)";
+        IAtomContainer parent = AtomContainerPrinter.fromString(acp, builder);
+        parent.getAtom(0).setImplicitHydrogenCount(3);
+        parent.getAtom(1).setImplicitHydrogenCount(3);
+        parent.getAtom(2).setImplicitHydrogenCount(4);
+        AtomSymmetricChildLister lister = new AtomSymmetricChildLister();
+        lister.setElementSymbols(Arrays.asList("C", "C", "C", "O"));
+        for (IAtomContainer child : lister.listChildren(parent, 3)) {
+            AtomContainerPrinter.print(child);
         }
     }
 }
