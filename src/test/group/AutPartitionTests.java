@@ -2,6 +2,7 @@ package test.group;
 
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
+import group.Permutation;
 import group.PermutationGroup;
 
 import java.io.FileReader;
@@ -64,6 +65,37 @@ public class AutPartitionTests {
             p.addCell(o.getAtomIndices());
         }
         return p;
+    }
+    
+    public void testDisconnectedStructure(String acp) {
+        IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
+        AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner(true);
+        PermutationGroup group = refiner.getAutomorphismGroup(ac);
+        Partition autPartition = refiner.getAutomorphismPartition();
+        System.out.println(acp + "\t" + group.order() + "\t" + autPartition);
+        for (Permutation p : group.all()) {
+            System.out.println(p);
+        }
+    }
+    
+    @Test
+    public void CEdge_CDot_OEdge_Test() {
+        testDisconnectedStructure("C0C1C2O3O4 0:1(1),3:4(1)");
+    }
+
+    @Test
+    public void CEdge_CDot_OEdge_ODotTest() {
+        testDisconnectedStructure("C0C1C2O3O4O5 0:1(1),3:4(1)");
+    }
+
+    @Test
+    public void C_Dot_CEdge_ODot_OEdgeTest() {
+        testDisconnectedStructure("C0C1C2O3O4O5 1:2(1),4:5(1)");
+    }
+
+    @Test
+    public void CEdge_OEdgeTest() {
+        testDisconnectedStructure("C0C1O2O3 0:1(1),2:3(1)");
     }
     
     @Test
