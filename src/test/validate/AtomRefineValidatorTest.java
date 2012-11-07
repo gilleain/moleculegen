@@ -1,8 +1,5 @@
 package test.validate;
 
-import group.Partition;
-import group.Permutation;
-
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -127,15 +124,4 @@ public class AtomRefineValidatorTest {
     public void CEdgesComplex_ODot() {
         testSingle("C0C1C2O3O4O5 0:1(1),0:2(1),1:2(1),0:3(1),0:5(1),1:5(1)", true);
     }
-    
-    @Test
-    public void translatePartitionTest() {
-        RefinementCanonicalValidator validator = new RefinementCanonicalValidator();
-        int[] indexMap = new int[] { 0, 1, -1, 2, 3, -1 };
-        Partition autPart = Partition.fromString("0,1|2,3");
-        Permutation labelling = new Permutation(new int[] {0, 1, 2, 3, 4, 5});
-        Partition translated = validator.translate(autPart, labelling, indexMap);
-        System.out.println(translated);
-    }
-
 }

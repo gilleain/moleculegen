@@ -1,6 +1,5 @@
 package test.generate;
 
-import generate.AtomFilteringChildLister;
 import generate.AtomSymmetricChildLister;
 import group.Permutation;
 import group.PermutationGroup;
