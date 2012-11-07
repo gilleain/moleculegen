@@ -35,6 +35,10 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 public class AMG {
     
+    private static ListerMethod DEFAULT_LISTER = ListerMethod.SYMMETRIC;
+    
+    private static ValidatorMethod DEFAULT_VALIDATOR = ValidatorMethod.REFINER;
+    
     private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     public static void main(String[] args) throws CDKException, IOException {
@@ -89,8 +93,8 @@ public class AMG {
         }
         
         // create the generator, with the appropriate handler and lister method
-        ListerMethod listerMethod = (argsH.getListerMethod() == null)? ListerMethod.FILTER : argsH.getListerMethod();
-        ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? ValidatorMethod.REFINER : argsH.getValidatorMethod();
+        ListerMethod listerMethod = (argsH.getListerMethod() == null)? DEFAULT_LISTER : argsH.getListerMethod();
+        ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? DEFAULT_VALIDATOR : argsH.getValidatorMethod();
         AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
         
         AugmentingGenerator generator;
