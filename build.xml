@@ -5,7 +5,7 @@
 	<property name="cdk_bin_dir" value="${CDK_dir}/build"/>
 	<property name="module_list" value="core,standard,silent,annotation,io,ioformats,interfaces,signature,smiles,formula,valencycheck"/>
 
-	<target name="test">
+	<target name="testgroovy">
 		<script language="groovy">
 		<classpath>
 		    <fileset dir="lib" includes="*.jar"/>
@@ -107,4 +107,21 @@
 	<target name="clean" description="remove build dir">
 		<delete dir="build"/>
 	</target>
+
+    <target name="test" description="Run junit tests">
+        <junit printsummary="yes">
+            <classpath>
+                <pathelement location="build"/>
+            </classpath>
+            <formatter type="plain"/>
+            <test name="test.generate.symmetry.AlkaneTests"/>
+            <test name="test.generate.symmetry.AlkeneTests"/>
+            <test name="test.generate.symmetry.AlkyneTests"/>
+            <test name="test.generate.symmetry.CarbonNitrogenTests"/>
+            <test name="test.generate.symmetry.CarbonOnlyTests"/>
+            <test name="test.generate.symmetry.CarbonOxygenTests"/>
+            <test name="test.generate.symmetry.SubAlkyneTests"/>
+        </junit>
+    </target>
+
 </project>
