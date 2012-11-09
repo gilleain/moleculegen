@@ -9,7 +9,7 @@ public class FilterTest extends BaseTest {
     
     public static final ListerMethod LISTER_METHOD = ListerMethod.FILTER;
     
-    public static final LabellerMethod LABELLER_METHOD = LabellerMethod.SIGNATURE;
+    public static final LabellerMethod LABELLER_METHOD = LabellerMethod.REFINER;
     
     public static final ValidatorMethod VALIDATOR_METHOD = ValidatorMethod.REFINER;
     

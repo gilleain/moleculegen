@@ -18,13 +18,17 @@ public class ADPRCanonicalLabeller implements CanonicalLabeller {
     public String getCanonicalStringForm(IAtomContainer atomContainer) {
         refiner.getAutomorphismGroup(atomContainer);
         Permutation labelling = refiner.getBest().invert();
-        return AtomContainerPrinter.toString(atomContainer, labelling);
+        refiner.reset();
+        String stringForm = AtomContainerPrinter.toString(atomContainer, labelling, true);
+        return stringForm;
     }
 
     @Override
     public int[] getLabels(IAtomContainer atomContainer) {
         refiner.getAutomorphismGroup(atomContainer);
-        return refiner.getBest().invert().getValues();
+        int[] labels = refiner.getBest().invert().getValues();
+        refiner.reset();
+        return labels;
     }
 
 }
