@@ -4,6 +4,7 @@ import generate.AtomAugmentingGenerator;
 import generate.AugmentationMethod;
 import generate.AugmentingGenerator;
 import generate.BondAugmentingGenerator;
+import generate.LabellerMethod;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.CountingHandler;
@@ -48,9 +49,12 @@ public class BaseTest {
         return ac;
     }
     
-    public int countNFromAtom(String formulaString, ListerMethod listerMethod, ValidatorMethod validatorMethod) {
+    public int countNFromAtom(String formulaString,
+                              ListerMethod listerMethod, 
+                              LabellerMethod labellerMethod,
+                              ValidatorMethod validatorMethod) {
         CountingHandler handler = new CountingHandler();
-        generateNFromAtom(formulaString, listerMethod, validatorMethod, handler);
+        generateNFromAtom(formulaString, listerMethod, labellerMethod, validatorMethod, handler);
         return handler.getCount();
     }
     
@@ -76,11 +80,12 @@ public class BaseTest {
         
     public void generateNFromAtom(String formulaString, 
                                   ListerMethod listerMethod,
+                                  LabellerMethod labellerMethod,
                                   ValidatorMethod validatorMethod,
                                   GenerateHandler handler) {
        
         AugmentingGenerator generator = 
-            new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+            new AtomAugmentingGenerator(handler, listerMethod, labellerMethod, validatorMethod);
         parseFormula(formulaString, (AugmentingGenerator) generator);
         List<String> elementSymbols = generator.getElementSymbols();
         
@@ -92,14 +97,16 @@ public class BaseTest {
     }
     
     public int countNFromSingleDoubleTriple(String formulaString, 
-                                            ListerMethod listerMethod, 
+                                            ListerMethod listerMethod,
+                                            LabellerMethod labellerMethod,
                                             ValidatorMethod validatorMethod) {
         return countNFromSingleDoubleTriple(
-                formulaString, listerMethod, validatorMethod, AugmentationMethod.ATOM);
+                formulaString, listerMethod, labellerMethod, validatorMethod, AugmentationMethod.ATOM);
     }
     
     public int countNFromSingleDoubleTriple(String formulaString, 
-                                            ListerMethod listerMethod, 
+                                            ListerMethod listerMethod,
+                                            LabellerMethod labellerMethod,
                                             ValidatorMethod validatorMethod,
                                             AugmentationMethod augmentMethod) {
         
@@ -110,7 +117,7 @@ public class BaseTest {
         
         AugmentingGenerator generator;
         if (augmentMethod == AugmentationMethod.ATOM) {
-            generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+            generator = new AtomAugmentingGenerator(handler, listerMethod, labellerMethod, validatorMethod);
         } else {
             generator = new BondAugmentingGenerator(handler);
         }

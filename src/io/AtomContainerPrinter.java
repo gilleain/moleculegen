@@ -1,5 +1,7 @@
 package io;
 
+import group.Permutation;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -12,20 +14,29 @@ public class AtomContainerPrinter {
     }
 
     public static String toString(IAtomContainer atomContainer) {
+        return AtomContainerPrinter.toString(atomContainer, new Permutation(atomContainer.getAtomCount()));
+    }
+        
+    public static String toString(IAtomContainer atomContainer, Permutation permutation) {
         StringBuffer sb = new StringBuffer();
-        int i = 0;
-        for (IAtom atom : atomContainer.atoms()) {
-            sb.append(atom.getSymbol()).append(i);
-            i++;
+        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
+            IAtom atomI = atomContainer.getAtom(permutation.get(i)); 
+            sb.append(atomI.getSymbol()).append(i);
         }
         sb.append(" ");
         
-        i = 0;
+        int i = 0;
         for (IBond bond : atomContainer.bonds()) {
             int a0 = atomContainer.getAtomNumber(bond.getAtom(0));
             int a1 = atomContainer.getAtomNumber(bond.getAtom(1));
+            int pA0 = permutation.get(a0);
+            int pA1 = permutation.get(a1);
             char o = bondOrderToChar(bond.getOrder());
-            sb.append(a0 + ":" + a1 + "(" + o + ")");
+            if (pA0 < pA1) {
+                sb.append(pA0 + ":" + pA1 + "(" + o + ")");
+            } else {
+                sb.append(pA1 + ":" + pA0 + "(" + o + ")");
+            }
             if (i < atomContainer.getBondCount() - 1) {
                 sb.append(",");
             }

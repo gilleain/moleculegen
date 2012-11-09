@@ -12,6 +12,8 @@ import validate.HCountValidator;
 import validate.MoleculeValidator;
 import validate.RefinementCanonicalValidator;
 import validate.SignatureCanonicalValidator;
+import canonical.ADPRCanonicalLabeller;
+import canonical.SignatureCanonicalLabeller;
 
 public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements AugmentingGenerator {
 
@@ -28,23 +30,28 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
     }
 
     public AtomAugmentingGenerator(GenerateHandler handler) {
-        this(handler, ListerMethod.FILTER, ValidatorMethod.REFINER);
+        this(handler, ListerMethod.FILTER, LabellerMethod.SIGNATURE, ValidatorMethod.REFINER);
     }
     
     public AtomAugmentingGenerator(ListerMethod listerMethod) {
-        this(new PrintStreamStringHandler(), listerMethod, ValidatorMethod.REFINER);
+        this(new PrintStreamStringHandler(), listerMethod, LabellerMethod.SIGNATURE, ValidatorMethod.REFINER);
     }
     
     public AtomAugmentingGenerator(ValidatorMethod validatorMethod) {
-        this(new PrintStreamStringHandler(), ListerMethod.FILTER, validatorMethod);
+        this(new PrintStreamStringHandler(), ListerMethod.FILTER, LabellerMethod.SIGNATURE, validatorMethod);
     }
     
     public AtomAugmentingGenerator(GenerateHandler handler, 
                                    ListerMethod listerMethod, 
+                                   LabellerMethod labellingMethod,
                                    ValidatorMethod validatorMethod) {
         this.handler = handler;
         if (listerMethod == ListerMethod.FILTER) {
-            childLister = new AtomFilteringChildLister();
+            if (labellingMethod == LabellerMethod.SIGNATURE) {
+                childLister = new AtomFilteringChildLister(new SignatureCanonicalLabeller());
+            } else {
+                childLister = new AtomFilteringChildLister(new ADPRCanonicalLabeller());
+            }
         } else if (listerMethod == ListerMethod.SYMMETRIC) {
             childLister = new AtomSymmetricChildLister();
         } else {

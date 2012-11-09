@@ -4,6 +4,7 @@ import generate.AtomAugmentingGenerator;
 import generate.AugmentationMethod;
 import generate.AugmentingGenerator;
 import generate.BondAugmentingGenerator;
+import generate.LabellerMethod;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.CountingHandler;
@@ -36,6 +37,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 public class AMG {
     
     private static ListerMethod DEFAULT_LISTER = ListerMethod.SYMMETRIC;
+    
+    private static LabellerMethod DEFAULT_LABELLER = LabellerMethod.SIGNATURE;
     
     private static ValidatorMethod DEFAULT_VALIDATOR = ValidatorMethod.REFINER;
     
@@ -94,12 +97,13 @@ public class AMG {
         
         // create the generator, with the appropriate handler and lister method
         ListerMethod listerMethod = (argsH.getListerMethod() == null)? DEFAULT_LISTER : argsH.getListerMethod();
+        LabellerMethod labellerMethod = (argsH.getLabellerMethod() == null)? DEFAULT_LABELLER : argsH.getLabellerMethod();
         ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? DEFAULT_VALIDATOR : argsH.getValidatorMethod();
         AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
         
         AugmentingGenerator generator;
         if (augmentationMethod == AugmentationMethod.ATOM) {
-            generator = new AtomAugmentingGenerator(handler, listerMethod, validatorMethod);
+            generator = new AtomAugmentingGenerator(handler, listerMethod, labellerMethod, validatorMethod);
         } else {
             generator = new BondAugmentingGenerator(handler);
         }

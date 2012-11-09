@@ -1,6 +1,7 @@
 package test.generate;
 
 import generate.AtomAugmentingGenerator;
+import generate.LabellerMethod;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import group.AtomDiscretePartitionRefiner;
@@ -74,7 +75,7 @@ public class BraceletGenTest {
             AtomAugmentingGenerator molGen = new AtomAugmentingGenerator(
                     handler, 
                     ListerMethod.FILTER, 
-//                    ValidatorMethod.SIGNATURE
+                    LabellerMethod.SIGNATURE,
                     ValidatorMethod.REFINER
             );
             molGen.setElementSymbols(elementSymbols);
@@ -101,7 +102,7 @@ public class BraceletGenTest {
         for (List<String> elementSymbols : convertedBracelets) {
             System.out.println(elementSymbols);
             AtomAugmentingGenerator molGen = new AtomAugmentingGenerator(
-                    handler, ListerMethod.FILTER, ValidatorMethod.SIGNATURE);
+                    handler, ListerMethod.FILTER, LabellerMethod.SIGNATURE, ValidatorMethod.SIGNATURE);
             molGen.setElementSymbols(elementSymbols);
             molGen.setHCount(hCount);
             String initialSymbol = elementSymbols.get(0);

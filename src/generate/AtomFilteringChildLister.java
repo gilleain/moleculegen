@@ -20,8 +20,12 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
     private CanonicalLabeller labeller;
     
     public AtomFilteringChildLister() {
+        this(new SignatureCanonicalLabeller());
+    }
+    
+    public AtomFilteringChildLister(CanonicalLabeller labeller) {
         super();
-        labeller = new SignatureCanonicalLabeller();
+        this.labeller = labeller;
     }
     
     /**
@@ -31,6 +35,11 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
      */
     public AtomFilteringChildLister(List<String> elementSymbols) {
         this();
+        setElementSymbols(elementSymbols);
+    }
+    
+    public AtomFilteringChildLister(List<String> elementSymbols, CanonicalLabeller labeller) {
+        this(labeller);
         setElementSymbols(elementSymbols);
     }
     

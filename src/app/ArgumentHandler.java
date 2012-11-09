@@ -1,6 +1,7 @@
 package app;
 
 import generate.AugmentationMethod;
+import generate.LabellerMethod;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.DataFormat;
@@ -88,6 +89,11 @@ public class ArgumentHandler {
     private ListerMethod listerMethod;
     
     /**
+     * The child listing labeller method to use.
+     */
+    private LabellerMethod labellerMethod;
+    
+    /**
      * The canonical validation method to use.
      */
     private ValidatorMethod validatorMethod;
@@ -116,6 +122,7 @@ public class ArgumentHandler {
 
         // long options
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
+        options.addOption(lopt("labeller", "method", "Labeller method for filtering children (REFINER, SIGNATURE)"));
         options.addOption(lopt("validator", "method", "Validator method for canonical checking (REFINER, SIGNATURE)"));
         options.addOption(lopt("augmentation", "method", "Augmentation method (ATOM, BOND)"));
     }
@@ -199,6 +206,12 @@ public class ArgumentHandler {
             ListerMethod chosenLister = 
                 ListerMethod.valueOf(line.getOptionValue("lister"));
             setListerMethod(chosenLister);
+        }
+        
+        if (line.hasOption("labeller")) {
+            LabellerMethod chosenLabeller = 
+                LabellerMethod.valueOf(line.getOptionValue("labeller"));
+            setLabellerMethod(chosenLabeller);
         }
         
         if (line.hasOption("validator")) {
@@ -429,5 +442,13 @@ public class ArgumentHandler {
 
     public void setAugmentationMethod(AugmentationMethod augmentationMethod) {
         this.augmentationMethod = augmentationMethod;
+    }
+    
+    public void setLabellerMethod(LabellerMethod labellerMethod) {
+        this.labellerMethod = labellerMethod;
+    }
+
+    public LabellerMethod getLabellerMethod() {
+        return labellerMethod;
     }
 }
