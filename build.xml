@@ -108,10 +108,11 @@
 		<delete dir="build"/>
 	</target>
 
-    <target name="test" description="Run junit tests">
+    <target name="test-sym" description="Run symmetry lister junit tests">
         <junit printsummary="yes">
             <classpath>
                 <pathelement location="build"/>
+                <pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>
             </classpath>
             <formatter type="plain"/>
             <test name="test.generate.symmetry.AlkaneTests"/>
@@ -121,6 +122,23 @@
             <test name="test.generate.symmetry.CarbonOnlyTests"/>
             <test name="test.generate.symmetry.CarbonOxygenTests"/>
             <test name="test.generate.symmetry.SubAlkyneTests"/>
+        </junit>
+    </target>
+
+    <target name="test-fil" description="Run filtering lister junit tests">
+        <junit printsummary="yes">
+            <classpath>
+                <pathelement location="build"/>
+                <pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>
+            </classpath>
+            <formatter type="plain"/>
+            <test name="test.generate.filter.AlkaneTests"/>
+            <test name="test.generate.filter.AlkeneTests"/>
+            <test name="test.generate.filter.AlkyneTests"/>
+            <test name="test.generate.filter.CarbonNitrogenTests"/>
+            <test name="test.generate.filter.CarbonOnlyTests"/>
+            <test name="test.generate.filter.CarbonOxygenTests"/>
+            <test name="test.generate.filter.SubAlkyneTests"/>
         </junit>
     </target>
 

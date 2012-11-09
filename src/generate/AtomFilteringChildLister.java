@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.signature.MoleculeSignature;
+
+import canonical.CanonicalLabeller;
+import canonical.SignatureCanonicalLabeller;
 
 /**
  * List candidate children of a parent molecule, by connecting a new atom to the existing atoms 
@@ -15,8 +17,11 @@ import org.openscience.cdk.signature.MoleculeSignature;
  */
 public class AtomFilteringChildLister extends BaseAtomChildLister implements ChildLister {
     
+    private CanonicalLabeller labeller;
+    
     public AtomFilteringChildLister() {
         super();
+        labeller = new SignatureCanonicalLabeller();
     }
     
     /**
@@ -38,13 +43,12 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
         for (int[] bondOrderArray : getBondOrderArrays(
                 parent, currentAtomIndex, maxDegreeSumForCurrent, maxDegreeForCurrent)) {
             IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
-            MoleculeSignature molSig = new MoleculeSignature(child);
-            String molSigString = molSig.toCanonicalString();
-            if (certs.contains(molSigString)) {
+            String certificate = labeller.getCanonicalStringForm(child);
+            if (certs.contains(certificate)) {
                 continue;
             } else {
                 children.add(child);
-                certs.add(molSigString);
+                certs.add(certificate);
             }
         }
         
