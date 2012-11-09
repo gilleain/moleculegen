@@ -1,11 +1,13 @@
 package test.validate;
 
+import io.AtomContainerPrinter;
+
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 import validate.BondCanonicalValidator;
 
 public class BondCanonicalValidatorTest {

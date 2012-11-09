@@ -1,5 +1,7 @@
 package validate;
 
+import io.AtomContainerPrinter;
+
 import java.util.Arrays;
 
 import org.openscience.cdk.exception.CDKException;
@@ -10,7 +12,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import test.AtomContainerPrinter;
+
 
 /**
  * BROKEN : This validator used a (possibly) incorrect canonicalization routine.

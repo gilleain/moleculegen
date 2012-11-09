@@ -4,6 +4,8 @@ import group.BondDiscretePartitionRefiner;
 import group.Partition;
 import group.PermutationGroup;
 
+import io.AtomContainerPrinter;
+
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -16,7 +18,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class BondAutPartitionTests {
     

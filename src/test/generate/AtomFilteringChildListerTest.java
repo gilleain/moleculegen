@@ -2,6 +2,8 @@ package test.generate;
 
 import generate.AtomFilteringChildLister;
 
+import io.AtomContainerPrinter;
+
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -9,7 +11,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class AtomFilteringChildListerTest {
     

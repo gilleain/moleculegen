@@ -1,5 +1,6 @@
 package test.group;
 
+import io.AtomContainerPrinter;
 import junit.framework.Assert;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
@@ -9,7 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class ElementPartitionTest {
     

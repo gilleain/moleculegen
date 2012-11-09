@@ -7,6 +7,8 @@ import group.Partition;
 import group.Permutation;
 import group.PermutationGroup;
 
+import io.AtomContainerPrinter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +21,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
-import test.AtomContainerPrinter;
+
 
 public class DisjointSetForestTest {
     

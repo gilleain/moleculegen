@@ -3,6 +3,7 @@ package test.generate.symmetry;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
 import handler.DuplicateCountingHandler;
+import io.AtomContainerPrinter;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import test.AtomContainerPrinter;
+
 import test.generate.BaseTest;
 
 public class DuplicateTests extends BaseTest {

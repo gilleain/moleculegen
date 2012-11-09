@@ -1,5 +1,7 @@
 package app;
 
+import io.AtomContainerPrinter;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -17,7 +19,7 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class DiffTool {
     

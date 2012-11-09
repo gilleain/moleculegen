@@ -1,4 +1,4 @@
-package test;
+package io;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;

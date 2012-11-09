@@ -4,6 +4,8 @@ import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
 
+import io.AtomContainerPrinter;
+
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class AtomDiscretePartitionRefinerTest {
     

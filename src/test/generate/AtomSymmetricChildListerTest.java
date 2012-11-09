@@ -4,6 +4,8 @@ import generate.AtomSymmetricChildLister;
 import group.Permutation;
 import group.PermutationGroup;
 
+import io.AtomContainerPrinter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +18,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class AtomSymmetricChildListerTest extends BaseTest {
     

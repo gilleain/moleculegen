@@ -1,5 +1,6 @@
 package test.group;
 
+import io.AtomContainerPrinter;
 import group.BondDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
@@ -9,7 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class BondDiscretePartitionRefinerTest {
     

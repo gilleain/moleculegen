@@ -5,6 +5,8 @@ import group.Partition;
 import group.Permutation;
 import group.PermutationGroup;
 
+import io.AtomContainerPrinter;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +22,7 @@ import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class AutPartitionTests {
     

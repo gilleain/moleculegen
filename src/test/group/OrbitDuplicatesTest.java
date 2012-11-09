@@ -1,5 +1,6 @@
 package test.group;
 
+import io.AtomContainerPrinter;
 import generate.BaseAtomChildLister;
 
 import org.junit.Test;
@@ -9,7 +10,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 import validate.SignatureCanonicalValidator;
 
 public class OrbitDuplicatesTest {

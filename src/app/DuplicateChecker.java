@@ -1,5 +1,6 @@
 package app;
 
+import io.AtomContainerPrinter;
 import io.IteratingACPReader;
 
 import java.io.FileInputStream;
@@ -15,7 +16,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import test.AtomContainerPrinter;
+
 
 public class DuplicateChecker {
     

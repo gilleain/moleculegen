@@ -1,12 +1,14 @@
 package handler;
 
+import io.AtomContainerPrinter;
+
 import java.io.PrintStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
-import test.AtomContainerPrinter;
+
 
 /**
  * Prints the generated molecules in a string form to a print 

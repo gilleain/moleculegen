@@ -16,7 +16,7 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
-import test.AtomContainerPrinter;
+
 
 public class IteratingACPReader extends DefaultIteratingChemObjectReader<IAtomContainer> {
     
