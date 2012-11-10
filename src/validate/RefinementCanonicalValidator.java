@@ -25,19 +25,15 @@ public class RefinementCanonicalValidator implements CanonicalValidator {
         
         Permutation labelling = refiner.getBest();
         Permutation inverse = labelling.invert();
-        Partition partition = refiner.getAutomorphismPartition();
-        partition = translate(partition, inverse);
         int del = inverse.get(size);
         
-        boolean canonical = (del == size || inSameCell(partition, del, size));
-//        String acp = test.AtomContainerPrinter.toString(atomContainer);
-        if (canonical) {
-//            System.out.println("CC " + inverse + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
-            return true;
-        } else {
-//            System.out.println("CN " + inverse + "\t" + size + "\t" + del + "\t" + partition + "\t" + acp);
-            return false;
-        }
+        return (del == size || inSameCell(inverse, del, size));
+    }
+    
+    private boolean inSameCell(Permutation inverse, int del, int size) {
+        Partition partition = refiner.getAutomorphismPartition();
+        partition = translate(partition, inverse);
+        return inSameCell(partition, del, size);
     }
     
     private Partition translate(Partition original, Permutation labelling) {
