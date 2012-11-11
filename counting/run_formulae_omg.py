@@ -1,5 +1,5 @@
 import re, sys
-from subprocess import check_output
+from subprocess import call, check_output
 
 outputCountRe = re.compile("molecules ([0-9]*)")
 outputTimeRe = re.compile("Duration: ([0-9]*) miliseconds")
@@ -17,4 +17,4 @@ for f in formulae:
     matchTime = outputTimeRe.match(lines[3])
     time = matchTime.group(1)
     print f, count, time
-subprocess.call("rm", "default_out.sdf")
+call(["rm", "default_out.sdf"])
