@@ -35,5 +35,15 @@ public class CarbonNitrogenTests extends FilterTest {
     public void c2H3NTest() {
         Assert.assertEquals(5, countNFromAtom("C2H3N"));
     }
+    
+    @Test
+    public void c2H5NTest() {
+        Assert.assertEquals(4, countNFromAtom("C2H5N"));
+    }
+    
+    @Test
+    public void c2H7NTest() {
+        Assert.assertEquals(2, countNFromAtom("C2H7N"));
+    }
 
 }

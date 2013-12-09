@@ -37,6 +37,11 @@ public class AtomRefineValidatorTest {
     }
     
     @Test
+    public void pentaMethylNitrogenTest() {
+        testSingle("C0C1C2C3C4N5 0:5(1),1:5(1),2:5(1),3:5(1),4:5(1)", true);
+    }
+    
+    @Test
     public void C3O3_1Test() {
         String acpA = "C0C1C2O3O4O5 0:1(1),0:3(1),2:3(1),0:4(1),0:5(1),4:5(1)";
         String acpB = "C0C1C2O3O4O5 0:2(1),0:3(1),1:3(1),0:4(1),0:5(1),4:5(1)";
