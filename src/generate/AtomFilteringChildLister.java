@@ -1,5 +1,7 @@
 package generate;
 
+import io.AtomContainerPrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,13 @@ public class AtomFilteringChildLister extends BaseAtomChildLister implements Chi
         for (int[] bondOrderArray : getBondOrderArrays(
                 parent, currentAtomIndex, maxDegreeSumForCurrent, maxDegreeForCurrent)) {
             IAtomContainer child = makeChild(parent, bondOrderArray, currentAtomIndex);
+//            System.out.println(
+//                    AtomContainerPrinter.toString(parent)
+//                    + " + "
+//                    + java.util.Arrays.toString(bondOrderArray)
+//                    + " -> "
+//                    + AtomContainerPrinter.toString(child)
+//                    );
             String certificate = labeller.getCanonicalStringForm(child);
             if (certs.contains(certificate)) {
                 continue;

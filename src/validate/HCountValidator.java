@@ -1,10 +1,14 @@
 package validate;
 
+import generate.BaseChildLister;
+import io.AtomContainerPrinter;
+
 import java.util.List;
 
-import generate.BaseChildLister;
-
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
+import org.openscience.cdk.atomtype.IAtomTypeMatcher;
+import org.openscience.cdk.atomtype.StructGenAtomTypeGuesser;
+import org.openscience.cdk.atomtype.StructGenMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -37,12 +41,13 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
      */
     private int[] maxHRem;
     
-    private CDKAtomTypeMatcher matcher;
+    private IAtomTypeMatcher matcher;
     
     public HCountValidator() {
         hCount = 0;
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         matcher = CDKAtomTypeMatcher.getInstance(builder);
+//        matcher = new StructGenMatcher();
     }
     
     public boolean isConnected(IAtomContainer atomContainer) {
@@ -84,9 +89,23 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
             for (IAtom atom : atomContainer.atoms()) {
                 IAtomType atomType = matcher.findMatchingAtomType(atomContainer, atom);
                 if (atomType != null) {
-                    actualCount += 
+                    int count = 
                             atomType.getFormalNeighbourCount() - 
-                            atomContainer.getConnectedAtomsCount(atom);
+                            atomContainer.getConnectedAtomsCount(atom); 
+//                    System.out.println(
+//                            "+" + count
+//                            + " " + atomType.getAtomTypeName() 
+//                            + " for atom " + atomContainer.getAtomNumber(atom)
+//                            + " in " +  AtomContainerPrinter.toString(atomContainer)
+//                            );
+                    actualCount += count;
+//                    actualCount += atom.getImplicitHydrogenCount();
+                } else {
+//                    System.out.println(
+//                            "+ 0 NULL " 
+//                            + " for atom " + atomContainer.getAtomNumber(atom)
+//                            + " in " +  AtomContainerPrinter.toString(atomContainer)
+//                            );
                 }
                 if (actualCount > hCount) {
                     return false;
