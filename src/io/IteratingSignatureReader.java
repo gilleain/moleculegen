@@ -15,11 +15,10 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
+import org.openscience.cdk.signature.AtomSignature;
 import org.openscience.cdk.signature.MoleculeFromSignatureBuilder;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
-
-import signature.chemistry.AtomSignature;
 
 public class IteratingSignatureReader extends DefaultIteratingChemObjectReader<IAtomContainer> {
     
