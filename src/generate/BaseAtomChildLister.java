@@ -42,7 +42,8 @@ public class BaseAtomChildLister extends BaseChildLister {
                     }
                     child.addBond(index, lastIndex, order);
                     IAtom partner = child.getAtom(index);
-                    int partnerCount = partner.getImplicitHydrogenCount();
+                    Integer hCount = partner.getImplicitHydrogenCount();
+                    int partnerCount = (hCount == null)? 0 : hCount;
                     partner.setImplicitHydrogenCount(partnerCount - value);
                     implHCount -= value;
                 }

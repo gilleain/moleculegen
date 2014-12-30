@@ -53,7 +53,6 @@ public class MultiKSubsetLister<T> implements Iterable<List<T>> {
 		return list;
 	}
 
-	@Override
 	public Iterator<List<T>> iterator() {
 		final int maxRank = KSubsetLister.choose(size + k - 1, k);
 		return new Iterator<List<T>>() {

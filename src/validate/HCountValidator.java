@@ -73,7 +73,6 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
         isConnected(atomContainer);
     }
 
-    @Override
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
 //        System.out.print("validating " + test.AtomContainerPrinter.toString(atomContainer));
         boolean valid = atomContainer.getAtomCount() == size
@@ -130,7 +129,8 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
     public boolean canExtend(IAtomContainer atomContainer) {
         int implH = 0;
         for (IAtom atom : atomContainer.atoms()) {
-            implH += atom.getImplicitHydrogenCount();
+        	Integer hCount = atom.getImplicitHydrogenCount(); 
+            implH += (hCount == null)? 0 : hCount;
         }
         int index = atomContainer.getAtomCount() - 1;
         int hAdd = maxHAdd[index];

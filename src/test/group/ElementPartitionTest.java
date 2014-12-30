@@ -18,7 +18,7 @@ public class ElementPartitionTest {
     
     @Test
     public void c3O3Test() {
-        Partition expected = Partition.fromString("0,1,2|3,4,5");
+        Partition expected = Partition.fromString("0,1,5|2,3,4");
         String acp = "C0C1O2O3O4C5 0:1(1),1:2(1),0:2(1),0:3(1),3:4(1),4:5(1)";
         IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();

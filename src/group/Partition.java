@@ -416,5 +416,17 @@ public class Partition {
         p.addToCell(currentCell, lastElement);
         return p;
     }
+    
+    public boolean equals(Object other) {
+    	if (other instanceof Partition) {
+    		Partition o = (Partition) other;
+    		return this.cells.equals(o.cells);
+    	}
+    	return false;
+    }
+    
+    public int hashCode() {
+    	return this.cells.hashCode();
+    }
 
 }
