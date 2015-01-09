@@ -46,7 +46,7 @@ public class PrintStreamStringHandler implements GenerateHandler {
 		this.printStream = printStream;
 		this.format = format;
 		if (format == DataFormat.SMILES) {
-		    smilesGenerator = new SmilesGenerator();
+		    smilesGenerator = SmilesGenerator.unique();
 		}
 		count = 0;
 		this.shouldNumberLines = numberLines;
