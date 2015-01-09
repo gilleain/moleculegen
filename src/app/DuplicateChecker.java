@@ -5,6 +5,7 @@ import io.IteratingACPReader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class DuplicateChecker {
     
     private static final IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         if (args.length != 1) return;   // TODO
         
         String filename = args[0];
@@ -60,6 +61,7 @@ public class DuplicateChecker {
                 count++;
             }
         }
+        reader.close();
         
     }
 
