@@ -84,6 +84,11 @@ public class ArgumentHandler {
     private String rangeString;
     
     /**
+     * If true, zip the output
+     */
+    private boolean isZipOutput;
+    
+    /**
      * The child listing method to use.
      */
     private ListerMethod listerMethod;
@@ -119,6 +124,7 @@ public class ArgumentHandler {
         options.addOption(opt("p", "Show parent of each molecule"));
         options.addOption(opt("r", "min:max", "Range of input file to use"));
         options.addOption(opt("t", "Time the run"));
+        options.addOption(opt("z", "Compress (zip) the output"));
 
         // long options
         options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
@@ -200,6 +206,10 @@ public class ArgumentHandler {
         
         if (line.hasOption('t')) {
             setTiming(true);
+        }
+        
+        if (line.hasOption('z')) {
+        	setZipOutput(true);
         }
         
         if (line.hasOption("lister")) {
@@ -451,4 +461,12 @@ public class ArgumentHandler {
     public LabellerMethod getLabellerMethod() {
         return labellerMethod;
     }
+
+	public boolean isZipOutput() {
+		return isZipOutput;
+	}
+
+	public void setZipOutput(boolean isZipOutput) {
+		this.isZipOutput = isZipOutput;
+	}
 }

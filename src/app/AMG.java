@@ -12,6 +12,7 @@ import handler.DataFormat;
 import handler.GenerateHandler;
 import handler.PrintStreamStringHandler;
 import handler.SDFHandler;
+import handler.ZipDecoratingHandler;
 import io.IteratingACPReader;
 import io.IteratingSignatureReader;
 
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
@@ -88,9 +91,15 @@ public class AMG {
                 if (format == DataFormat.SDF) {
                     handler = new SDFHandler(outputFilename);
                 } else {
-                    outStream = new PrintStream(new FileOutputStream(outputFilename));
-                    handler = new PrintStreamStringHandler(
-                            outStream, format, shouldNumberLines, shouldShowParent);
+                	if (argsH.isZipOutput()) {
+                		String zipEntryName = formula + ".txt"; // TODO?
+                		handler = new ZipDecoratingHandler(
+                				outputFilename, zipEntryName, format, shouldNumberLines, shouldShowParent);
+                	} else {
+                		handler = new PrintStreamStringHandler(
+                				new PrintStream(new FileOutputStream(outputFilename)),
+                						format, shouldNumberLines, shouldShowParent);
+                	}
                 }
             }
         }
