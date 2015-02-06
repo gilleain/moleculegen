@@ -7,6 +7,7 @@ import generate.BondAugmentingGenerator;
 import generate.LabellerMethod;
 import generate.ListerMethod;
 import generate.ValidatorMethod;
+import handler.ChecklistHandler;
 import handler.CountingHandler;
 import handler.DataFormat;
 import handler.GenerateHandler;
@@ -70,36 +71,40 @@ public class AMG {
         GenerateHandler handler;
         DataFormat format = argsH.getOutputFormat();
         
-        if (format == DataFormat.NONE) {
+        if (format == DataFormat.NONE && ! argsH.isComparingToFile()) {
             handler = new CountingHandler(argsH.isTiming());
         } else {
-            PrintStream outStream;
-            boolean shouldNumberLines = argsH.isShouldNumberLines();
-            boolean shouldShowParent = argsH.isShowParent();
-            if (argsH.isStdOut()) {
-                if (format == DataFormat.SDF) {
-                    handler = new SDFHandler();
-                } else {
-                    outStream = System.out;
-                    handler = new PrintStreamStringHandler(
-                            outStream, format, shouldNumberLines, shouldShowParent);
-                }
-            } else {
-                String outputFilename = argsH.getOutputFilepath();
-                if (format == DataFormat.SDF) {
-                    handler = new SDFHandler(outputFilename);
-                } else {
-                	if (argsH.isZipOutput()) {
-                		String zipEntryName = formula + ".txt"; // TODO?
-                		handler = new ZipDecoratingHandler(
-                				outputFilename, zipEntryName, format, shouldNumberLines, shouldShowParent);
-                	} else {
-                		handler = new PrintStreamStringHandler(
-                				new PrintStream(new FileOutputStream(outputFilename)),
-                						format, shouldNumberLines, shouldShowParent);
-                	}
-                }
-            }
+        	if (argsH.isComparingToFile()) {
+        		handler = new ChecklistHandler(argsH.getInputFilepath());
+        	} else {
+	            PrintStream outStream;
+	            boolean shouldNumberLines = argsH.isShouldNumberLines();
+	            boolean shouldShowParent = argsH.isShowParent();
+	            if (argsH.isStdOut()) {
+	                if (format == DataFormat.SDF) {
+	                    handler = new SDFHandler();
+	                } else {
+	                    outStream = System.out;
+	                    handler = new PrintStreamStringHandler(
+	                            outStream, format, shouldNumberLines, shouldShowParent);
+	                }
+	            } else {
+	                String outputFilename = argsH.getOutputFilepath();
+	                if (format == DataFormat.SDF) {
+	                    handler = new SDFHandler(outputFilename);
+	                } else {
+	                	if (argsH.isZipOutput()) {
+	                		String zipEntryName = formula + ".txt"; // TODO?
+	                		handler = new ZipDecoratingHandler(
+	                				outputFilename, zipEntryName, format, shouldNumberLines, shouldShowParent);
+	                	} else {
+	                		handler = new PrintStreamStringHandler(
+	                				new PrintStream(new FileOutputStream(outputFilename)),
+	                						format, shouldNumberLines, shouldShowParent);
+	                	}
+	                }
+	            }
+	        }
         }
         
         // create the generator, with the appropriate handler and lister method
@@ -121,26 +126,34 @@ public class AMG {
             return;
         }
         
-        if (argsH.isAugmentingFile()) {
+        if (argsH.isAugmentingFile() || argsH.isComparingToFile()) {
             String inputFile = argsH.getInputFilepath();
             if (inputFile == null) {
                 error("No input file specified");
                 return;
             } else {
-                DataFormat inputFormat = argsH.getInputFormat();
-                if (inputFormat == DataFormat.MOL) {
-                    augmentSingleInputStructure(argsH, inputFile, generator, heavyAtomCount);
-                } else {
-                    augmentMultipleInputStructures(argsH, inputFile, generator, heavyAtomCount);
-                }
+            	if (argsH.isAugmentingFile()) {
+	                DataFormat inputFormat = argsH.getInputFormat();
+	                if (inputFormat == DataFormat.MOL) {
+	                    augmentSingleInputStructure(argsH, inputFile, generator, heavyAtomCount);
+	                } else {
+	                    augmentMultipleInputStructures(argsH, inputFile, generator, heavyAtomCount);
+	                }
+            	} else {
+            		startFromScratch(generator, heavyAtomCount);
+            	}
             }
         } else if (argsH.isStartingFromScratch()) {
-            List<String> symbols = generator.getElementSymbols();
-            String firstSymbol = symbols.get(0);
-            IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
-            generator.extend(startingAtom, heavyAtomCount);
+            startFromScratch(generator, heavyAtomCount);
         }
         handler.finish();
+    }
+    
+    private static void startFromScratch(AugmentingGenerator generator, int heavyAtomCount) {
+    	List<String> symbols = generator.getElementSymbols();
+        String firstSymbol = symbols.get(0);
+        IAtomContainer startingAtom = makeAtomInAtomContainer(firstSymbol, builder);
+        generator.extend(startingAtom, heavyAtomCount);
     }
     
     /**

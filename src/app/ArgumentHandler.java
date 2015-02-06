@@ -54,6 +54,16 @@ public class ArgumentHandler {
     private boolean isTiming;
 
     /**
+     * If true, zip the output
+     */
+    private boolean isZipOutput;
+    
+    /**
+     * If true, we are comparing the results to the contents of inputFilepath
+     */
+    private boolean isComparingToFile;
+    
+    /**
      * The chemical formula.
      */
     private String formula;
@@ -83,10 +93,6 @@ public class ArgumentHandler {
      */
     private String rangeString;
     
-    /**
-     * If true, zip the output
-     */
-    private boolean isZipOutput;
     
     /**
      * The child listing method to use.
@@ -114,6 +120,7 @@ public class ArgumentHandler {
         options = new Options();
         
         // short options
+        options.addOption(opt("c", "Compare the output to the input file"));
         options.addOption(opt("e", "formula", "Elemental Formula"));
         options.addOption(opt("h", "Print help"));
         options.addOption(opt("i", "path", "Input Filepath"));
@@ -181,9 +188,13 @@ public class ArgumentHandler {
             setInputStringFormat(line.getOptionValue('I'));
         }
         
-        if (line.hasOption('i')) {
+        if (line.hasOption('i') || line.hasOption('c')) {
             setInputFilepath(line.getOptionValue('i'));
-            setIsAugmentingFile(true);
+            if (line.hasOption('c')) {
+            	setComparingToFile(true);
+            } else {
+            	setIsAugmentingFile(true);
+            }
         } else {
             setIsStartingFromScratch(true);
         }
@@ -468,5 +479,13 @@ public class ArgumentHandler {
 
 	public void setZipOutput(boolean isZipOutput) {
 		this.isZipOutput = isZipOutput;
+	}
+
+	public boolean isComparingToFile() {
+		return isComparingToFile;
+	}
+
+	public void setComparingToFile(boolean isComparingToFile) {
+		this.isComparingToFile = isComparingToFile;
 	}
 }
