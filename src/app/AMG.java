@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
@@ -74,37 +76,33 @@ public class AMG {
         if (format == DataFormat.NONE && ! argsH.isComparingToFile()) {
             handler = new CountingHandler(argsH.isTiming());
         } else {
-        	if (argsH.isComparingToFile()) {
-        		handler = new ChecklistHandler(argsH.getInputFilepath());
-        	} else {
-	            PrintStream outStream;
-	            boolean shouldNumberLines = argsH.isShouldNumberLines();
-	            boolean shouldShowParent = argsH.isShowParent();
-	            if (argsH.isStdOut()) {
-	                if (format == DataFormat.SDF) {
-	                    handler = new SDFHandler();
-	                } else {
-	                    outStream = System.out;
-	                    handler = new PrintStreamStringHandler(
-	                            outStream, format, shouldNumberLines, shouldShowParent);
-	                }
-	            } else {
-	                String outputFilename = argsH.getOutputFilepath();
-	                if (format == DataFormat.SDF) {
-	                    handler = new SDFHandler(outputFilename);
-	                } else {
-	                	if (argsH.isZipOutput()) {
-	                		String zipEntryName = formula + ".txt"; // TODO?
-	                		handler = new ZipDecoratingHandler(
-	                				outputFilename, zipEntryName, format, shouldNumberLines, shouldShowParent);
-	                	} else {
-	                		handler = new PrintStreamStringHandler(
-	                				new PrintStream(new FileOutputStream(outputFilename)),
-	                						format, shouldNumberLines, shouldShowParent);
-	                	}
-	                }
-	            }
-	        }
+            PrintStream outStream;
+            boolean shouldNumberLines = argsH.isShouldNumberLines();
+            boolean shouldShowParent = argsH.isShowParent();
+            if (argsH.isStdOut()) {
+                if (format == DataFormat.SDF) {
+                    handler = new SDFHandler();
+                } else {
+                    outStream = System.out;
+                    handler = new PrintStreamStringHandler(
+                            outStream, format, shouldNumberLines, shouldShowParent);
+                }
+            } else {
+                String outputFilename = argsH.getOutputFilepath();
+                if (format == DataFormat.SDF) {
+                    handler = new SDFHandler(outputFilename);
+                } else {
+                	if (argsH.isZipOutput()) {
+                		String zipEntryName = formula + ".txt"; // TODO?
+                		handler = new ZipDecoratingHandler(
+                				outputFilename, zipEntryName, format, shouldNumberLines, shouldShowParent);
+                	} else {
+                		handler = new PrintStreamStringHandler(
+                				new PrintStream(new FileOutputStream(outputFilename)),
+                						format, shouldNumberLines, shouldShowParent);
+                	}
+                }
+            }
         }
         
         // create the generator, with the appropriate handler and lister method

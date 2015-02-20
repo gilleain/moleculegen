@@ -92,8 +92,7 @@ public class ArgumentHandler {
      * A string like 10:20 that indicates a section of an input file to use.
      */
     private String rangeString;
-    
-    
+  
     /**
      * The child listing method to use.
      */
