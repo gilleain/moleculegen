@@ -1,31 +1,15 @@
 package app;
 
-import generate.AtomAugmentingGenerator;
-import generate.AugmentationMethod;
 import generate.AugmentingGenerator;
-import generate.BondAugmentingGenerator;
-import generate.LabellerMethod;
-import generate.ListerMethod;
-import generate.ValidatorMethod;
-import handler.ChecklistHandler;
-import handler.CountingHandler;
 import handler.DataFormat;
-import handler.GenerateHandler;
-import handler.PrintStreamStringHandler;
-import handler.SDFHandler;
-import handler.ZipDecoratingHandler;
 import io.IteratingACPReader;
 import io.IteratingSignatureReader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
@@ -40,12 +24,6 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 public class AMG {
     
-    private static ListerMethod DEFAULT_LISTER = ListerMethod.SYMMETRIC;
-    
-    private static LabellerMethod DEFAULT_LABELLER = LabellerMethod.SIGNATURE;
-    
-    private static ValidatorMethod DEFAULT_VALIDATOR = ValidatorMethod.REFINER;
-    
     private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     public static void main(String[] args) throws CDKException, IOException {
@@ -59,70 +37,8 @@ public class AMG {
     }
     
     public static void run(ArgumentHandler argsH) throws CDKException, IOException {
-        if (argsH.isHelp()) {
-            argsH.printHelp();
-            return;
-        }
-        
-        String formula = argsH.getFormula();
-        if (formula == null) {
-            error("Please supply a formula");
-            return;
-        }
-        
-        GenerateHandler handler;
-        DataFormat format = argsH.getOutputFormat();
-        
-        if (format == DataFormat.NONE && ! argsH.isComparingToFile()) {
-            handler = new CountingHandler(argsH.isTiming());
-        } else {
-            PrintStream outStream;
-            boolean shouldNumberLines = argsH.isShouldNumberLines();
-            boolean shouldShowParent = argsH.isShowParent();
-            if (argsH.isStdOut()) {
-                if (format == DataFormat.SDF) {
-                    handler = new SDFHandler();
-                } else {
-                    outStream = System.out;
-                    handler = new PrintStreamStringHandler(
-                            outStream, format, shouldNumberLines, shouldShowParent);
-                }
-            } else {
-                String outputFilename = argsH.getOutputFilepath();
-                if (format == DataFormat.SDF) {
-                    handler = new SDFHandler(outputFilename);
-                } else {
-                	if (argsH.isZipOutput()) {
-                		String zipEntryName = formula + ".txt"; // TODO?
-                		handler = new ZipDecoratingHandler(
-                				outputFilename, zipEntryName, format, shouldNumberLines, shouldShowParent);
-                	} else {
-                		handler = new PrintStreamStringHandler(
-                				new PrintStream(new FileOutputStream(outputFilename)),
-                						format, shouldNumberLines, shouldShowParent);
-                	}
-                }
-            }
-        }
-        
-        // create the generator, with the appropriate handler and lister method
-        ListerMethod listerMethod = (argsH.getListerMethod() == null)? DEFAULT_LISTER : argsH.getListerMethod();
-        LabellerMethod labellerMethod = (argsH.getLabellerMethod() == null)? DEFAULT_LABELLER : argsH.getLabellerMethod();
-        ValidatorMethod validatorMethod = (argsH.getValidatorMethod() == null)? DEFAULT_VALIDATOR : argsH.getValidatorMethod();
-        AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
-        
-        AugmentingGenerator generator;
-        if (augmentationMethod == AugmentationMethod.ATOM) {
-            generator = new AtomAugmentingGenerator(handler, listerMethod, labellerMethod, validatorMethod);
-        } else {
-            generator = new BondAugmentingGenerator(handler);
-        }
-        
-        int heavyAtomCount = generator.setParamsFromFormula(formula);
-        if (heavyAtomCount < 2) {
-            error("Please specify more than 1 heavy atom");
-            return;
-        }
+        AugmentingGenerator generator = AugmentingGeneratorFactory.build(argsH);
+        int heavyAtomCount = generator.getHeavyAtomCount();
         
         if (argsH.isAugmentingFile() || argsH.isComparingToFile()) {
             String inputFile = argsH.getInputFilepath();
@@ -144,7 +60,7 @@ public class AMG {
         } else if (argsH.isStartingFromScratch()) {
             startFromScratch(generator, heavyAtomCount);
         }
-        handler.finish();
+        generator.finish();
     }
     
     private static void startFromScratch(AugmentingGenerator generator, int heavyAtomCount) {

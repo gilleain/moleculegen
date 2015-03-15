@@ -16,6 +16,12 @@ public abstract class BaseAugmentingGenerator {
     
     public abstract void setElementSymbols(List<String> elementSymbol);
     
+    public abstract List<String> getElementSymbols();
+    
+    public int getHeavyAtomCount() {
+    	return getElementSymbols() == null? 0 : getElementSymbols().size();
+    }
+    
     /**
      * Set the hydrogen count and the heavy atom symbol string from the formula, 
      * returning the count of heavy atoms.

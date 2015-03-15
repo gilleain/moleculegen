@@ -110,4 +110,9 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
     public List<String> getElementSymbols() {
         return childLister.getElementSymbols();
     }
+
+	@Override
+	public void finish() {
+		handler.finish();
+	}
 }

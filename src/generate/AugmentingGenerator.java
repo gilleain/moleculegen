@@ -15,4 +15,9 @@ public interface AugmentingGenerator {
     public List<String> getElementSymbols();
     
     public int setParamsFromFormula(String formulaString);
+    
+    public int getHeavyAtomCount();
+    
+    public void finish();
+    
 }

@@ -59,4 +59,9 @@ public class BondAugmentingGenerator extends BaseAugmentingGenerator implements 
     public List<String> getElementSymbols() {
         return childLister.getElementSymbols();
     }
+
+	@Override
+	public void finish() {
+		handler.finish();
+	}
 }
