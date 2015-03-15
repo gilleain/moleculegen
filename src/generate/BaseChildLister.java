@@ -35,6 +35,10 @@ public class BaseChildLister {
         maxBondOrderSumMap.put("C", 4);
         maxBondOrderSumMap.put("O", 2);
         maxBondOrderSumMap.put("N", 3);
+//        maxBondOrderSumMap.put("N", 5); XXX pentavalent N is rare
+        maxBondOrderSumMap.put("Ag", 4);
+        maxBondOrderSumMap.put("As", 4);
+        maxBondOrderSumMap.put("Fe", 5);
         maxBondOrderSumMap.put("S", 6);
         maxBondOrderSumMap.put("P", 5);
         maxBondOrderSumMap.put("Br", 1);
@@ -46,6 +50,9 @@ public class BaseChildLister {
         maxBondOrderMap.put("C", 3);
         maxBondOrderMap.put("O", 2);
         maxBondOrderMap.put("N", 3);
+        maxBondOrderMap.put("Ag", 1);
+        maxBondOrderMap.put("As", 1);
+        maxBondOrderMap.put("Fe", 1);
         maxBondOrderMap.put("S", 2);
         maxBondOrderMap.put("P", 2);
         maxBondOrderMap.put("Br", 1);
