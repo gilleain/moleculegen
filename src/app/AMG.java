@@ -1,6 +1,5 @@
 package app;
 
-import generate.AugmentingGenerator;
 import handler.DataFormat;
 import io.IteratingACPReader;
 import io.IteratingSignatureReader;

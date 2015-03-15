@@ -1,4 +1,4 @@
-package generate;
+package app;
 
 import java.util.List;
 

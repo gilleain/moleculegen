@@ -6,7 +6,6 @@ import java.io.PrintStream;
 
 import generate.AtomAugmentingGenerator;
 import generate.AugmentationMethod;
-import generate.AugmentingGenerator;
 import generate.BondAugmentingGenerator;
 import generate.LabellerMethod;
 import generate.ListerMethod;

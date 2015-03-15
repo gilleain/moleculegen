@@ -2,7 +2,6 @@ package test.generate;
 
 import generate.AtomAugmentingGenerator;
 import generate.AugmentationMethod;
-import generate.AugmentingGenerator;
 import generate.BondAugmentingGenerator;
 import generate.LabellerMethod;
 import generate.ListerMethod;
@@ -22,6 +21,8 @@ import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+
+import app.AugmentingGenerator;
 
 public class BaseTest {
     

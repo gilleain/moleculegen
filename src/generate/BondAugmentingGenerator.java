@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import app.AugmentingGenerator;
 import validate.BondCanonicalValidator;
 import validate.HCountValidator;
 import validate.MoleculeValidator;
