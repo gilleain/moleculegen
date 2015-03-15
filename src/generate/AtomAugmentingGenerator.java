@@ -2,6 +2,7 @@ package generate;
 
 import handler.GenerateHandler;
 import handler.PrintStreamStringHandler;
+import io.AtomContainerPrinter;
 
 import java.util.List;
 
@@ -83,8 +84,15 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
     }
 
     public void extend(IAtomContainer parent, int currentAtomIndex, int size) {
-        if (currentAtomIndex >= size) return;
-        if (!moleculeValidator.canExtend(parent)) return;
+//    	System.out.println("parent " + AtomContainerPrinter.toString(parent));
+        if (currentAtomIndex >= size) {
+//        	System.out.println("current atom index >= size");
+        	return;
+        }
+        if (!moleculeValidator.canExtend(parent)) {
+//        	System.out.println("can't extend");
+        	return;
+        }
         
         moleculeValidator.checkConnectivity(parent);
         

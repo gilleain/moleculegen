@@ -1,5 +1,7 @@
 package generate;
 
+import io.AtomContainerPrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +109,7 @@ public class BaseAtomChildLister extends BaseChildLister {
 //                    System.out.println(
 //                            "converting to " + java.util.Arrays.toString(bondOrderArray)
 //                            + " from " + multiset 
-//                            + " for " + test.AtomContainerPrinter.toString(parent)
+//                            + " for " + AtomContainerPrinter.toString(parent)
 //                    );
                     bondOrderArrays.add(bondOrderArray);
                 }
