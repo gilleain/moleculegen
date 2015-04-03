@@ -4,12 +4,16 @@ import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
+
+import setorbit.BruteForcer;
+import setorbit.SetOrbit;
 
 /**
  * An {@link Augmentation} of an atom container by atom.
@@ -30,10 +34,14 @@ public class AtomAugmentation implements Augmentation {
         this.augmentation = augmentation;
         this.augmentedMolecule = make(parent, atomToAdd, augmentation);
     }
+    
+    public IAtomContainer getAugmentedMolecule() {
+        return augmentedMolecule;
+    }
 
     private IAtomContainer make(IAtomContainer parent, IAtom atomToAdd, int[] augmentation) {
         try {
-            int lastIndex = augmentation.length + 1;
+            int lastIndex = augmentation.length;
             IAtomContainer child = (IAtomContainer) parent.clone();
             child.addAtom(atomToAdd);
 
@@ -67,7 +75,31 @@ public class AtomAugmentation implements Augmentation {
         PermutationGroup autH = refiner.getAutomorphismGroup(augmentedMolecule);
         Permutation labelling = refiner.getBest().invert();
         int[] connected = getConnected(augmentedMolecule, labelling);
+        return inOrbit(connected, autH);
+    }
+    
+    private boolean inOrbit(int[] targetSetArray, PermutationGroup autH) {
+        List<Integer> targetSet = toSet(targetSetArray);
+        List<Integer> augmentationSet = toSet(augmentation);
+        
+        SetOrbit orbit = new BruteForcer().getInOrbit(targetSet, autH);
+        for (List<Integer> subset : orbit) {
+            if (subset.equals(augmentationSet)) {
+                return true;
+            }
+        }
         return false;
+    }
+    
+    private List<Integer> toSet(int[] setArray) {
+        List<Integer> set = new ArrayList<Integer>();
+        for (int index = 0; index < setArray.length; index++) {
+            int element = setArray[index];
+            if (element > 0) {
+                set.add(element);
+            }
+        }
+        return set;
     }
     
     private int[] getConnected(IAtomContainer h, Permutation labelling) {
@@ -82,25 +114,6 @@ public class AtomAugmentation implements Augmentation {
             }
         }
         return connected;
-    }
-    
-    private boolean isMinimal(int[] bondOrderArray, PermutationGroup autG) {
-        String oStr = Arrays.toString(bondOrderArray);
-        for (Permutation p : autG.all()) {
-            String pStr = Arrays.toString(permute(bondOrderArray, p));
-            if (oStr.compareTo(pStr) < 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private int[] permute(int[] a, Permutation p) {
-        int[] pA = new int[a.length];
-        for (int i = 0; i < a.length; i++) {
-            pA[p.get(i)] = a[i];
-        }
-        return pA;
     }
 
 }
