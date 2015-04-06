@@ -1,5 +1,7 @@
 package branch;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 /**
  * An augmented object.
  * 
@@ -14,5 +16,10 @@ public interface Augmentation {
      * @return true if it is a canonical augmentation
      */
     public boolean isCanonical();
+    
+    /**
+     * @return the augmented molecule
+     */
+    public IAtomContainer getAugmentedMolecule();
 
 }

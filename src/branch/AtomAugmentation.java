@@ -31,6 +31,15 @@ public class AtomAugmentation implements Augmentation {
      */
     private int[] augmentation;
     
+    /**
+     * Make an augmentation from a parent, an atom, and a set of bonds. The augmentation
+     * array is a list like {0, 1, 0, 2} which means add a single bond to atom 1 and 
+     * a double to atom 3, connecting both to the new atom. 
+     *  
+     * @param parent the atom container to augment
+     * @param atomToAdd the additional atom
+     * @param augmentation a list of bond orders to augment
+     */
     public AtomAugmentation(IAtomContainer parent, IAtom atomToAdd, int[] augmentation) {
         this.augmentation = augmentation;
         this.augmentedMolecule = make(parent, atomToAdd, augmentation);
@@ -75,6 +84,7 @@ public class AtomAugmentation implements Augmentation {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup autH = refiner.getAutomorphismGroup(augmentedMolecule);
         Permutation labelling = refiner.getBest().invert();
+        // TODO : couldn't we return a set here?
         int[] connected = getConnected(augmentedMolecule, labelling);
         return inOrbit(connected, autH);
     }
