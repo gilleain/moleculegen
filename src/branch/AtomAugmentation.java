@@ -5,6 +5,7 @@ import group.Permutation;
 import group.PermutationGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -81,9 +82,11 @@ public class AtomAugmentation implements Augmentation {
     private boolean inOrbit(int[] targetSetArray, PermutationGroup autH) {
         List<Integer> targetSet = toSet(targetSetArray);
         List<Integer> augmentationSet = toSet(augmentation);
+        System.out.println("target " + targetSet + " aug " + augmentationSet);
         
         SetOrbit orbit = new BruteForcer().getInOrbit(targetSet, autH);
         for (List<Integer> subset : orbit) {
+            System.out.println("subset "  + subset);
             if (subset.equals(augmentationSet)) {
                 return true;
             }
@@ -96,7 +99,7 @@ public class AtomAugmentation implements Augmentation {
         for (int index = 0; index < setArray.length; index++) {
             int element = setArray[index];
             if (element > 0) {
-                set.add(element);
+                set.add(index);
             }
         }
         return set;
@@ -104,7 +107,8 @@ public class AtomAugmentation implements Augmentation {
     
     private int[] getConnected(IAtomContainer h, Permutation labelling) {
         int[] connected = new int[h.getAtomCount()];
-        int chosen = labelling.get(h.getAtomCount());
+        int chosen = labelling.get(h.getAtomCount() - 1);
+        System.out.println("chosen " + chosen + " under labelling " + labelling);
         IAtom chosenAtom = h.getAtom(chosen);
         for (int bondIndex = 0; bondIndex < h.getBondCount(); bondIndex++) {
             IBond bond = h.getBond(bondIndex); 
@@ -113,6 +117,7 @@ public class AtomAugmentation implements Augmentation {
                 connected[h.getAtomNumber(partner)] = bond.getOrder().numeric();
             }
         }
+        System.out.println("connected " + Arrays.toString(connected));
         return connected;
     }
 

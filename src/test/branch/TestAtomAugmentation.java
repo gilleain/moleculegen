@@ -22,22 +22,31 @@ public class TestAtomAugmentation {
     
     private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
-    private IAtomContainer makeTestMolecule() {
-        IAtomContainer mol = builder.newInstance(IAtomContainer.class);
-        mol.addAtom(builder.newInstance(IAtom.class, "C"));
-        mol.addAtom(builder.newInstance(IAtom.class, "C"));
-        mol.addAtom(builder.newInstance(IAtom.class, "C"));
-        mol.addBond(0, 1, IBond.Order.SINGLE);
-        mol.addBond(0, 2, IBond.Order.SINGLE);
-        return mol;
+    private IAtomContainer make(String acpString) {
+        return AtomContainerPrinter.fromString(acpString, builder);
+    }
+    
+    private AtomAugmentation makeAugmentation(IAtomContainer mol, String elementSymbol, int... points) {
+        return new AtomAugmentation(mol, builder.newInstance(IAtom.class, elementSymbol), points);
+    }
+    
+    @Test
+    public void testCanonical() {
+        IAtomContainer molA = make("C0C1C2C3 0:1(1),0:2(1),1:3(1),2:3(1)");
+        AtomAugmentation augmentationA = makeAugmentation(molA, "C", 1, 1, 0, 0);
+        IAtomContainer augmentedMolA = augmentationA.getAugmentedMolecule();
+        System.out.println(augmentationA.isCanonical() + " " + AtomContainerPrinter.toString(augmentedMolA));
+        
+        IAtomContainer molB = make("C0C1C2C3 0:1(1),0:2(1),0:3(1),1:2(1)");
+        AtomAugmentation augmentationB = makeAugmentation(molB, "C", 0, 1, 0, 1);
+        IAtomContainer augmentedMolB = augmentationB.getAugmentedMolecule();
+        System.out.println(augmentationB.isCanonical() + " " + AtomContainerPrinter.toString(augmentedMolB));
     }
     
     @Test
     public void testGetAugmentedMolecule() {
-        IAtomContainer mol = makeTestMolecule();
-        IAtom atom = builder.newInstance(IAtom.class, "C");
-        int[] augmentationPoints = new int[] {1, 0, 1};
-        AtomAugmentation augmentation = new AtomAugmentation(mol, atom, augmentationPoints);
+        IAtomContainer mol = make("C0C1C2 0:1(1),0:2(1)");
+        AtomAugmentation augmentation = makeAugmentation(mol, "C", 1, 0, 1);
         IAtomContainer augmentedMol = augmentation.getAugmentedMolecule();
         AtomContainerPrinter.print(augmentedMol);
         IBond addedBond = augmentedMol.getBond(2);
