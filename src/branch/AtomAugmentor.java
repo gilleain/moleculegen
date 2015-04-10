@@ -26,6 +26,15 @@ public class AtomAugmentor implements Augmentor {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
         }
     }
+    
+    /**
+     * @return the initial structure
+     */
+    public Augmentation getInitial() {
+        String elementSymbol = elementSymbols.get(0);
+        IAtom initialAtom = builder.newInstance(IAtom.class, elementSymbol);
+        return new AtomAugmentation(initialAtom);
+    }
 
     @Override
     public List<Augmentation> augment(Augmentation parent) {

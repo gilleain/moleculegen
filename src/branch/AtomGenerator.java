@@ -13,7 +13,7 @@ public class AtomGenerator {
     }
     
     public void run() {
-        augment(getInitial(), 1);
+        augment(augmentor.getInitial(), 1);
     }
     
     private void augment(Augmentation parent, int index) {
@@ -25,9 +25,4 @@ public class AtomGenerator {
             }
         }
     }
-    
-    private Augmentation getInitial() {
-        return null;    // XXX
-    }
-
 }
