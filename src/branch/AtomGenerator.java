@@ -1,6 +1,5 @@
 package branch;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class AtomGenerator {
     
@@ -14,20 +13,20 @@ public class AtomGenerator {
     }
     
     public void run() {
-        augment(getInitialContainer(), 1);
+        augment(getInitial(), 1);
     }
     
-    private void augment(IAtomContainer atomContainer, int index) {
+    private void augment(Augmentation parent, int index) {
         if (index >= maxSize) return;
         
-        for (Augmentation augmentation : augmentor.augment(atomContainer)) {
+        for (Augmentation augmentation : augmentor.augment(parent)) {
             if (augmentation.isCanonical()) {
-                augment(augmentation.getAugmentedMolecule(), index++);
+                augment(augmentation, index++);
             }
         }
     }
     
-    private IAtomContainer getInitialContainer() {
+    private Augmentation getInitial() {
         return null;    // XXX
     }
 

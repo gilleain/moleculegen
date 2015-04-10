@@ -26,18 +26,22 @@ public class AtomAugmentor implements Augmentor {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
         }
     }
-    
 
     @Override
-    public List<Augmentation> augment(IAtomContainer atomContainer) {
+    public List<Augmentation> augment(Augmentation parent) {
+        IAtomContainer atomContainer = parent.getAugmentedMolecule();
         List<Augmentation> augmentations = new ArrayList<Augmentation>();
-        String elementSymbol = "C"; // XXX
+        String elementSymbol = getNextElementSymbol(parent);
         for (int[] bondOrders : getBondOrderArrays(atomContainer)) {
             IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);
             augmentations.add(new AtomAugmentation(atomContainer, atomToAdd, bondOrders));
         }
         
         return augmentations;
+    }
+    
+    private String getNextElementSymbol(Augmentation parent) {
+        return elementSymbols.get(parent.getAugmentedMolecule().getAtomCount());
     }
     
     private List<int[]> getBondOrderArrays(IAtomContainer atomContainer) {

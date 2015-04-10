@@ -2,8 +2,6 @@ package branch;
 
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 /**
  * Augment an object by some means.
  * 
@@ -12,6 +10,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public interface Augmentor {
     
-    public List<Augmentation> augment(IAtomContainer atomContainer); 
+    public List<Augmentation> augment(Augmentation parent); 
 
 }
