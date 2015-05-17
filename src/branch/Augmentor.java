@@ -8,8 +8,8 @@ import java.util.List;
  * @author maclean
  *
  */
-public interface Augmentor {
+public interface Augmentor<T> {
     
-    public List<Augmentation> augment(Augmentation parent); 
+    public List<Augmentation<T>> augment(Augmentation<T> parent); 
 
 }

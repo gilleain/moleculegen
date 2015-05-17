@@ -22,7 +22,7 @@ import setorbit.SetOrbit;
  * @author maclean
  *
  */
-public class AtomAugmentation implements Augmentation {
+public class AtomAugmentation implements Augmentation<IAtomContainer> {
     
     private IAtomContainer augmentedMolecule;
     
@@ -39,6 +39,10 @@ public class AtomAugmentation implements Augmentation {
     public AtomAugmentation(IAtom initialAtom) {
         augmentedMolecule = initialAtom.getBuilder().newInstance(IAtomContainer.class);
         augmentedMolecule.addAtom(initialAtom);
+    }
+    
+    public AtomAugmentation(IAtomContainer initialContainer) {
+        augmentedMolecule = initialContainer;   // TODO : could clone...
     }
     
     /**

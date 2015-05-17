@@ -1,6 +1,5 @@
 package branch;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * An augmented object.
@@ -8,7 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * @author maclean
  *
  */
-public interface Augmentation {
+public interface Augmentation<T> {
     
     /**
      * Check to see if this augmentation is the canonical one.
@@ -18,8 +17,8 @@ public interface Augmentation {
     public boolean isCanonical();
     
     /**
-     * @return the augmented molecule
+     * @return the augmented object
      */
-    public IAtomContainer getAugmentedMolecule();
+    public T getAugmentedMolecule();
 
 }
