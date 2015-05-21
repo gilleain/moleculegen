@@ -1,11 +1,11 @@
 package branch;
 
 import group.AtomDiscretePartitionRefiner;
+import group.BondDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -96,52 +96,59 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
     @Override
     public boolean isCanonical() {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
-        PermutationGroup autH = refiner.getAutomorphismGroup(augmentedMolecule);
-        Permutation labelling = refiner.getBest().invert();
+        refiner.getAutomorphismGroup(augmentedMolecule);
         // TODO : couldn't we return a set here?
-        int[] connected = getConnected(augmentedMolecule, labelling);
-        return inOrbit(connected, autH);
+        BondDiscretePartitionRefiner bondRefiner = new BondDiscretePartitionRefiner();
+        PermutationGroup autBondH = bondRefiner.getAutomorphismGroup(augmentedMolecule);
+        
+        Permutation labelling = refiner.getBest().invert();
+//        System.out.println("labelling " + labelling);
+        List<Integer> connected = getConnectedBonds(augmentedMolecule, labelling);
+        List<Integer> augmentation = getLastAdded();
+        return inOrbit(connected, augmentation, autBondH);
     }
     
-    private boolean inOrbit(int[] targetSetArray, PermutationGroup autH) {
-        List<Integer> targetSet = toSet(targetSetArray);
-        List<Integer> augmentationSet = toSet(augmentation);
-        System.out.println("target " + targetSet + " aug " + augmentationSet);
+    private List<Integer> getLastAdded() {
+        int last = augmentedMolecule.getAtomCount() - 1;
+        List<Integer> bondIndices = new ArrayList<Integer>();
+        for (int bondIndex = 0; bondIndex < augmentedMolecule.getBondCount(); bondIndex++) {
+            IBond bond = augmentedMolecule.getBond(bondIndex);
+            IAtom a0 = bond.getAtom(0);
+            IAtom a1 = bond.getAtom(1);
+            int a0n = augmentedMolecule.getAtomNumber(a0);
+            int a1n = augmentedMolecule.getAtomNumber(a1);
+            if (a0n == last || a1n == last) {
+                bondIndices.add(bondIndex);
+            }
+        }
+        return bondIndices;
+    }
+    
+    private boolean inOrbit(List<Integer> connected, List<Integer> augmentation, PermutationGroup autH) {
+//        System.out.println("connected " + connected + " aug " + augmentation);
         
-        SetOrbit orbit = new BruteForcer().getInOrbit(targetSet, autH);
+        SetOrbit orbit = new BruteForcer().getInOrbit(connected, autH);
         for (List<Integer> subset : orbit) {
-            System.out.println("subset "  + subset);
-            if (subset.equals(augmentationSet)) {
+//            System.out.println("subset "  + subset);
+            if (subset.equals(augmentation)) {
                 return true;
             }
         }
         return false;
     }
     
-    private List<Integer> toSet(int[] setArray) {
-        List<Integer> set = new ArrayList<Integer>();
-        for (int index = 0; index < setArray.length; index++) {
-            int element = setArray[index];
-            if (element > 0) {
-                set.add(index);
-            }
-        }
-        return set;
-    }
-    
-    private int[] getConnected(IAtomContainer h, Permutation labelling) {
-        int[] connected = new int[h.getAtomCount()];
+    private List<Integer> getConnectedBonds(IAtomContainer h, Permutation labelling) {
+        List<Integer> connected = new ArrayList<Integer>();
         int chosen = labelling.get(h.getAtomCount() - 1);
-        System.out.println("chosen " + chosen + " under labelling " + labelling);
+//        System.out.println("chosen " + chosen + " under labelling " + labelling);
         IAtom chosenAtom = h.getAtom(chosen);
         for (int bondIndex = 0; bondIndex < h.getBondCount(); bondIndex++) {
             IBond bond = h.getBond(bondIndex); 
             if (bond.contains(chosenAtom)) {
-                IAtom partner = bond.getConnectedAtom(chosenAtom);
-                connected[h.getAtomNumber(partner)] = bond.getOrder().numeric();
+                connected.add(bondIndex);
             }
         }
-        System.out.println("connected " + Arrays.toString(connected));
+//        System.out.println("connected " + Arrays.toString(connected));
         return connected;
     }
 

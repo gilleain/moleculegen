@@ -44,6 +44,19 @@ public class TestAtomAugmentation {
     }
     
     @Test
+    public void testCanonicalFromSingle() {
+        IAtomContainer molA = make("C0C1 0:1(1)");
+        AtomAugmentation augA = makeAugmentation(molA, "C", 2, 1);
+        IAtomContainer augMolA = augA.getAugmentedMolecule();
+        System.out.println(augA.isCanonical() + "\t" + AtomContainerPrinter.toString(augMolA));
+        
+        IAtomContainer molB = make("C0C1 0:1(2)");
+        AtomAugmentation augB = makeAugmentation(molB, "C", 1, 1);
+        IAtomContainer augMolB = augB.getAugmentedMolecule();
+        System.out.println(augB.isCanonical() + "\t" + AtomContainerPrinter.toString(augMolB));
+    }
+    
+    @Test
     public void testGetAugmentedMolecule() {
         IAtomContainer mol = make("C0C1C2 0:1(1),0:2(1)");
         AtomAugmentation augmentation = makeAugmentation(mol, "C", 1, 0, 1);

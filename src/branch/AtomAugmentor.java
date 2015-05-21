@@ -1,9 +1,11 @@
 package branch;
 
 import group.AtomDiscretePartitionRefiner;
+import group.Permutation;
 import group.PermutationGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -67,8 +69,35 @@ public class AtomAugmentor implements Augmentor<IAtomContainer> {
         
         int maxDegreeSumForCurrent = saturationCalculator.getMaxBondOrderSum(atomCount);
         int maxDegreeForCurrent = saturationCalculator.getMaxBondOrder(atomCount);
-        return saturationCalculator.getBondOrderArrays(
-                baseSet, atomCount, maxDegreeSumForCurrent, maxDegreeForCurrent, saturationCapacity);
+        
+        List<int[]> representatives = new ArrayList<int[]>();
+        for (int[] bondOrderArray : saturationCalculator.getBondOrderArrays(
+                baseSet, atomCount, maxDegreeSumForCurrent, maxDegreeForCurrent, saturationCapacity)) {
+            if (isMinimal(bondOrderArray, autG)) {
+                representatives.add(bondOrderArray);
+            }
+        }
+        return representatives;
+    }
+    
+    private boolean isMinimal(int[] bondOrderArray, PermutationGroup autG) {
+        String oStr = Arrays.toString(bondOrderArray);
+        for (Permutation p : autG.all()) {
+//            System.out.println("comparing " + oStr + " and " + p + " of " + Arrays.toString(bondOrderArray));
+            String pStr = Arrays.toString(permute(bondOrderArray, p));
+            if (oStr.compareTo(pStr) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private int[] permute(int[] a, Permutation p) {
+        int[] pA = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            pA[p.get(i)] = a[i];
+        }
+        return pA;
     }
     
     private List<Integer> getUndersaturatedSet(int atomCount, int[] saturationCapacity) {
