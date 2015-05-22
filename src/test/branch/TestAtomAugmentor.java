@@ -22,7 +22,7 @@ public class TestAtomAugmentor {
     private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     private List<Augmentation<IAtomContainer>> gen(String elementString, String startingGraph) {
-        AtomAugmentor augmentor = new AtomAugmentor("CCC");
+        AtomAugmentor augmentor = new AtomAugmentor(elementString);
         AtomAugmentation start = new AtomAugmentation(AtomContainerPrinter.fromString(startingGraph, builder));
         return augmentor.augment(start);
     }
@@ -52,13 +52,7 @@ public class TestAtomAugmentor {
         print(gen("CCC", "C0C1 0:1(3)"));
     }
     
-    @Test
-    public void testCCBonds() {
-        List<Augmentation<IAtomContainer>> augmentations = new ArrayList<Augmentation<IAtomContainer>>();
-        augmentations.addAll(gen("CCC", "C0C1 0:1(1)"));
-        augmentations.addAll(gen("CCC", "C0C1 0:1(2)"));
-        augmentations.addAll(gen("CCC", "C0C1 0:1(3)"));
-        
+    private void findDups(List<Augmentation<IAtomContainer>> augmentations) {
         Map<String, Augmentation<IAtomContainer>> canonical = new HashMap<String, Augmentation<IAtomContainer>>();
         for (Augmentation<IAtomContainer> augmentation : augmentations) {
             if (augmentation.isCanonical()) {
@@ -72,6 +66,26 @@ public class TestAtomAugmentor {
             }
         }
         print(canonical.values());
+    }
+    
+    @Test
+    public void testThreesFromCCBonds() {
+        List<Augmentation<IAtomContainer>> augmentations = new ArrayList<Augmentation<IAtomContainer>>();
+        augmentations.addAll(gen("CCC", "C0C1 0:1(1)"));
+        augmentations.addAll(gen("CCC", "C0C1 0:1(2)"));
+        augmentations.addAll(gen("CCC", "C0C1 0:1(3)"));
+        
+        findDups(augmentations);
+    }
+    
+    @Test
+    public void testFoursFromCCCLine() {
+        findDups(gen("CCCC", "C0C1C2 0:1(1),0:2(1)"));
+    }
+    
+    @Test
+    public void testFoursFromCCCTriangle() {
+        findDups(gen("CCCC", "C0C1C2 0:1(1),0:2(1),1:2(1)"));
     }
 
 }

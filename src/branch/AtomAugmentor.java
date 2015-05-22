@@ -55,7 +55,12 @@ public class AtomAugmentor implements Augmentor<IAtomContainer> {
     }
     
     private String getNextElementSymbol(Augmentation<IAtomContainer> parent) {
-        return elementSymbols.get(parent.getAugmentedMolecule().getAtomCount());
+        int index = parent.getAugmentedMolecule().getAtomCount() - 1;
+        if (index < elementSymbols.size()) {
+            return elementSymbols.get(index);
+        } else {
+            return "C"; // XXX TODO...
+        }
     }
     
     private List<int[]> getBondOrderArrays(IAtomContainer atomContainer) {
@@ -67,8 +72,8 @@ public class AtomAugmentor implements Augmentor<IAtomContainer> {
         int[] saturationCapacity = saturationCalculator.getSaturationCapacity(atomContainer);
         List<Integer> baseSet = getUndersaturatedSet(atomCount, saturationCapacity);
         
-        int maxDegreeSumForCurrent = saturationCalculator.getMaxBondOrderSum(atomCount);
-        int maxDegreeForCurrent = saturationCalculator.getMaxBondOrder(atomCount);
+        int maxDegreeSumForCurrent = saturationCalculator.getMaxBondOrderSum(atomCount - 1);
+        int maxDegreeForCurrent = saturationCalculator.getMaxBondOrder(atomCount - 1);
         
         List<int[]> representatives = new ArrayList<int[]>();
         for (int[] bondOrderArray : saturationCalculator.getBondOrderArrays(
