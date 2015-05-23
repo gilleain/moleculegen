@@ -1,11 +1,13 @@
 package test.branch;
 
+import static io.AtomContainerPrinter.fromString;
 import io.AtomContainerPrinter;
 
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -32,7 +34,7 @@ public class TestAtomGenerator {
     private int countFrom(String elementFormula, String fromString) {
         CountingHandler handler = new CountingHandler();
         AtomGenerator gen = new AtomGenerator(elementFormula, handler);
-        gen.run(AtomContainerPrinter.fromString(fromString, builder));
+        gen.run(fromString(fromString, builder));
         return handler.getCount();
     }
     
@@ -61,9 +63,17 @@ public class TestAtomGenerator {
     }
     
     @Test
-    public void testC2H2O() {
-        AtomGenerator gen = new AtomGenerator("C2H2O", new PrintStreamHandler(System.out));
+    public void testCH5N() {
+        AtomGenerator gen = new AtomGenerator("CH5N", new PrintStreamHandler(System.out));
         gen.run();
+    }
+    
+    @Test
+    public void testCH5NFromAtom() {
+        AtomGenerator gen = new AtomGenerator("CH5N", new PrintStreamHandler(System.out));
+        IAtomContainer a = builder.newInstance(IAtomContainer.class);
+        a.addAtom(builder.newInstance(IAtom.class, "C"));
+        gen.run(a);
     }
     
     @Test

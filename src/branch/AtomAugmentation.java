@@ -95,6 +95,7 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
 
     @Override
     public boolean isCanonical() {
+        if (augmentedMolecule.getAtomCount() <= 2) return true;
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         refiner.getAutomorphismGroup(augmentedMolecule);
         

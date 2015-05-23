@@ -1,8 +1,5 @@
 package branch;
 
-import static io.AtomContainerPrinter.fromString;
-import io.AtomContainerPrinter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,8 +25,6 @@ public class AtomGenerator {
     private int hMax;
     
     private HCountValidator hCountValidator;
-    
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     public AtomGenerator(String elementFormula, Handler handler) {
         List<String> elementSymbols = new ArrayList<String>();
@@ -68,19 +63,18 @@ public class AtomGenerator {
     }
     
     public void run() {
-//        augment(augmentor.getInitial(), 1);
-        augment(new AtomAugmentation(fromString("C0C1 0:1(1)", builder)), 1);
-        augment(new AtomAugmentation(fromString("C0C1 0:1(2)", builder)), 1);
-        augment(new AtomAugmentation(fromString("C0C1 0:1(3)", builder)), 1);
+        augment(augmentor.getInitial(), 0);
     }
     
     public void run(IAtomContainer initial) {
-        augment(new AtomAugmentation(initial), 1);  // XXX index = atomCount?
+        // XXX index = atomCount?
+        augment(new AtomAugmentation(initial), initial.getAtomCount() - 1);  
     }
     
     private void augment(Augmentation<IAtomContainer> parent, int index) {
         if (index >= maxIndex) {
-            IAtomContainer atomContainer = parent.getAugmentedMolecule(); 
+            IAtomContainer atomContainer = parent.getAugmentedMolecule();
+//            AtomContainerPrinter.print(atomContainer);
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
             }
