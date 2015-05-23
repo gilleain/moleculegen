@@ -97,11 +97,12 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
     public boolean isCanonical() {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         refiner.getAutomorphismGroup(augmentedMolecule);
-        // TODO : couldn't we return a set here?
+        
         BondDiscretePartitionRefiner bondRefiner = new BondDiscretePartitionRefiner();
         PermutationGroup autBondH = bondRefiner.getAutomorphismGroup(augmentedMolecule);
         
-        Permutation labelling = refiner.getBest().invert();
+//        Permutation labelling = refiner.getBest().invert();
+        Permutation labelling = refiner.getBest();
 //        System.out.println("labelling " + labelling);
         List<Integer> connected = getConnectedBonds(augmentedMolecule, labelling);
         List<Integer> augmentation = getLastAdded();

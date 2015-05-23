@@ -32,28 +32,27 @@ public class TestAtomAugmentation {
     
     @Test
     public void testCanonical() {
-        IAtomContainer molA = make("C0C1C2C3 0:1(1),0:2(1),1:3(1),2:3(1)");
-        AtomAugmentation augmentationA = makeAugmentation(molA, "C", 1, 1, 0, 0);
-        IAtomContainer augmentedMolA = augmentationA.getAugmentedMolecule();
-        System.out.println(augmentationA.isCanonical() + " " + AtomContainerPrinter.toString(augmentedMolA));
-        
-        IAtomContainer molB = make("C0C1C2C3 0:1(1),0:2(1),0:3(1),1:2(1)");
-        AtomAugmentation augmentationB = makeAugmentation(molB, "C", 0, 1, 0, 1);
-        IAtomContainer augmentedMolB = augmentationB.getAugmentedMolecule();
-        System.out.println(augmentationB.isCanonical() + " " + AtomContainerPrinter.toString(augmentedMolB));
+        test("C0C1C2C3 0:1(1),0:2(1),1:3(1),2:3(1)", "C", 1, 1, 0, 0);
+        test("C0C1C2C3 0:1(1),0:2(1),0:3(1),1:2(1)", "C", 0, 1, 0, 1);
+    }
+    
+    private void test(String start, String atom, int... points) {
+        IAtomContainer mol = make(start);
+        AtomAugmentation aug = makeAugmentation(mol, atom, points);
+        IAtomContainer augMol = aug.getAugmentedMolecule();
+        System.out.println(aug.isCanonical() + "\t" + AtomContainerPrinter.toString(augMol));
     }
     
     @Test
     public void testCanonicalFromSingle() {
-        IAtomContainer molA = make("C0C1 0:1(1)");
-        AtomAugmentation augA = makeAugmentation(molA, "C", 2, 1);
-        IAtomContainer augMolA = augA.getAugmentedMolecule();
-        System.out.println(augA.isCanonical() + "\t" + AtomContainerPrinter.toString(augMolA));
-        
-        IAtomContainer molB = make("C0C1 0:1(2)");
-        AtomAugmentation augB = makeAugmentation(molB, "C", 1, 1);
-        IAtomContainer augMolB = augB.getAugmentedMolecule();
-        System.out.println(augB.isCanonical() + "\t" + AtomContainerPrinter.toString(augMolB));
+        test("C0C1 0:1(1)", "C", 2, 1);
+        test("C0C1 0:1(2)", "C", 1, 1);
+    }
+    
+    @Test
+    public void testFailingPair() {
+        test("C0C1C2 0:1(1),0:2(1),1:2(1)", "C", 2, 0, 0);
+        test("C0C1C2 0:1(2),0:2(1)", "C", 1, 0, 1);
     }
     
     @Test
