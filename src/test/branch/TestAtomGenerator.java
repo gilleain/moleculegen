@@ -20,25 +20,25 @@ public class TestAtomGenerator {
     
     private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
-    private void run(String elementSymbols, String fromString, Handler handler) {
-        AtomGenerator gen = new AtomGenerator(elementSymbols, handler, elementSymbols.length());
+    private void run(String elementFormula, String fromString, Handler handler) {
+        AtomGenerator gen = new AtomGenerator(elementFormula, handler);
         gen.run(AtomContainerPrinter.fromString(fromString, builder));
     }
     
-    private void printFrom(String elementSymbols, String fromString) {
-        run(elementSymbols, fromString, new PrintStreamHandler(System.out));
+    private void printFrom(String elementFormula, String fromString) {
+        run(elementFormula, fromString, new PrintStreamHandler(System.out));
     }
     
-    private int countFrom(String elementSymbols, String fromString) {
+    private int countFrom(String elementFormula, String fromString) {
         CountingHandler handler = new CountingHandler();
-        AtomGenerator gen = new AtomGenerator(elementSymbols, handler, elementSymbols.length());
+        AtomGenerator gen = new AtomGenerator(elementFormula, handler);
         gen.run(AtomContainerPrinter.fromString(fromString, builder));
         return handler.getCount();
     }
     
     @Test
     public void testFromCCSingle() {
-        printFrom("CCCC", "C0C1 0:1(1)");
+        printFrom("C4H6", "C0C1 0:1(1)");
     }
     
     @Test
@@ -48,24 +48,36 @@ public class TestAtomGenerator {
     
     @Test
     public void testToFours() {
-        int count  = countFrom("CCCC", "C0C1 0:1(1)");
-            count += countFrom("CCCC", "C0C1 0:1(2)");
-            count += countFrom("CCCC", "C0C1 0:1(3)");
+        int count  = countFrom("C4H6", "C0C1 0:1(1)");
+            count += countFrom("C4H6", "C0C1 0:1(2)");
+            count += countFrom("C4H6", "C0C1 0:1(3)");
         System.out.println(count);
+    }
+    
+    @Test
+    public void testC4H8() {
+        AtomGenerator gen = new AtomGenerator("C4H8", new PrintStreamHandler(System.out));
+        gen.run();
+    }
+    
+    @Test
+    public void testC2H2O() {
+        AtomGenerator gen = new AtomGenerator("C2H2O", new PrintStreamHandler(System.out));
+        gen.run();
     }
     
     @Test
     public void testDups() {
         DuplicateHandler handler = new DuplicateHandler();
-        run("CCCC", "C0C1 0:1(1)", handler);
-        run("CCCC", "C0C1 0:1(2)", handler);
-        run("CCCC", "C0C1 0:1(3)", handler);
+        run("C4H6", "C0C1 0:1(1)", handler);
+        run("C4H6", "C0C1 0:1(2)", handler);
+        run("C4H6", "C0C1 0:1(3)", handler);
         Map<String, List<IAtomContainer>> map = handler.getDupMap();
         int count = 0;
         for (String key : map.keySet()) {
             List<IAtomContainer> dups = map.get(key);
             if (dups.size() == 1) {
-                System.out.println(count + "\t1" + AtomContainerPrinter.toString(dups.get(0)));
+                System.out.println(count + "\t1\t" + AtomContainerPrinter.toString(dups.get(0)));
             } else {
                 System.out.println(count + "\t" + dups.size());
             }

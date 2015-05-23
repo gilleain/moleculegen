@@ -1,6 +1,20 @@
 package branch;
 
+import static io.AtomContainerPrinter.fromString;
+import io.AtomContainerPrinter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+
+import validate.HCountValidator;
 
 
 public class AtomGenerator {
@@ -11,23 +25,65 @@ public class AtomGenerator {
     
     private int maxIndex;
     
-    public AtomGenerator(String elementSymbols, Handler handler, int maxSize) {
+    private int hMax;
+    
+    private HCountValidator hCountValidator;
+    
+    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    
+    public AtomGenerator(String elementFormula, Handler handler) {
+        List<String> elementSymbols = new ArrayList<String>();
+        this.hMax = parseFormula(elementFormula, elementSymbols);
+        this.hCountValidator = new HCountValidator();
+        hCountValidator.setHCount(hMax);
+        hCountValidator.setElementSymbols(elementSymbols);
+        
         this.augmentor = new AtomAugmentor(elementSymbols);
         this.handler = handler;
-        this.maxIndex = maxSize - 1;
+        this.maxIndex = elementSymbols.size() - 1;
+    }
+    
+    private int parseFormula(String elementFormula, List<String> elementSymbols) {
+        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+        IMolecularFormula formula = 
+            MolecularFormulaManipulator.getMolecularFormula(elementFormula, builder);
+        List<IElement> elements = MolecularFormulaManipulator.elements(formula);
+        
+        // count the number of non-heavy atoms
+        int hCount = 0;
+        for (IElement element : elements) {
+            String symbol = element.getSymbol();
+            int count = MolecularFormulaManipulator.getElementCount(formula, element);
+            if (symbol.equals("H")) {
+                hCount = count;
+            } else {
+                for (int i = 0; i < count; i++) {
+                    elementSymbols.add(symbol);
+                }
+            }
+        }
+        Collections.sort(elementSymbols);
+        
+        return hCount;
     }
     
     public void run() {
-        augment(augmentor.getInitial(), 1);
+//        augment(augmentor.getInitial(), 1);
+        augment(new AtomAugmentation(fromString("C0C1 0:1(1)", builder)), 1);
+        augment(new AtomAugmentation(fromString("C0C1 0:1(2)", builder)), 1);
+        augment(new AtomAugmentation(fromString("C0C1 0:1(3)", builder)), 1);
     }
     
     public void run(IAtomContainer initial) {
-        augment(new AtomAugmentation(initial), 1);
+        augment(new AtomAugmentation(initial), 1);  // XXX index = atomCount?
     }
     
     private void augment(Augmentation<IAtomContainer> parent, int index) {
         if (index >= maxIndex) {
-            handler.handle(parent.getAugmentedMolecule());
+            IAtomContainer atomContainer = parent.getAugmentedMolecule(); 
+            if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
+                handler.handle(atomContainer);
+            }
             return;
         }
         
