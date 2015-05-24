@@ -70,10 +70,12 @@ public class TestAtomGenerator {
     
     @Test
     public void testCH5NFromAtom() {
-        AtomGenerator gen = new AtomGenerator("CH5N", new PrintStreamHandler(System.out));
-        IAtomContainer a = builder.newInstance(IAtomContainer.class);
-        a.addAtom(builder.newInstance(IAtom.class, "C"));
-        gen.run(a);
+        new AtomGenerator("CH5N", new PrintStreamHandler(System.out)).run();
+    }
+    
+    @Test
+    public void testC2H2N2FromAtom() {
+        new AtomGenerator("C2H2N2", new PrintStreamHandler(System.out)).run();
     }
     
     @Test

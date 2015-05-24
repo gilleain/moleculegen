@@ -39,6 +39,7 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
     public AtomAugmentation(IAtom initialAtom) {
         augmentedMolecule = initialAtom.getBuilder().newInstance(IAtomContainer.class);
         augmentedMolecule.addAtom(initialAtom);
+        augmentedMolecule.setProperty("IS_CONNECTED", false);
     }
     
     public AtomAugmentation(IAtomContainer initialContainer) {
@@ -95,7 +96,9 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
 
     @Override
     public boolean isCanonical() {
-        if (augmentedMolecule.getAtomCount() <= 2) return true;
+        if (augmentedMolecule.getAtomCount() <= 2 || augmentedMolecule.getBondCount() == 0) {
+            return true;
+        }
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         refiner.getAutomorphismGroup(augmentedMolecule);
         
@@ -128,7 +131,7 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
     
     private boolean inOrbit(List<Integer> connected, List<Integer> augmentation, PermutationGroup autH) {
 //        System.out.println("connected " + connected + " aug " + augmentation);
-        
+        if (connected.size() == 0) return true;
         SetOrbit orbit = new BruteForcer().getInOrbit(connected, autH);
         for (List<Integer> subset : orbit) {
 //            System.out.println("subset "  + subset);

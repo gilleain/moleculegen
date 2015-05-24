@@ -87,6 +87,8 @@ public class AtomAugmentor implements Augmentor<IAtomContainer> {
                 representatives.add(bondOrderArray);
             }
         }
+        int[] emptySet = new int[atomCount];
+        representatives.add(emptySet);
         return representatives;
     }
     

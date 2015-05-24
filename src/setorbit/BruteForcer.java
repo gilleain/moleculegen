@@ -22,13 +22,17 @@ public class BruteForcer {
         SetOrbit orbits = new SetOrbit();
         KSubsetLister<Integer> lister = KSubsetLister.getIndexLister(s.size(), g.getSize());
         List<Permutation> all = g.all();
-        for (List<Integer> subset : lister) {
-            for (Permutation p : all) {
-                List<Integer> permuted = permute(p, subset);
-                if (permuted.equals(s) && !orbits.contains(subset)) {
-                    orbits.add(subset);
+        try {
+            for (List<Integer> subset : lister) {
+                for (Permutation p : all) {
+                    List<Integer> permuted = permute(p, subset);
+                    if (permuted.equals(s) && !orbits.contains(subset)) {
+                        orbits.add(subset);
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+//            System.out.println("AIOOBE" + s);
         }
         return orbits;
     }
