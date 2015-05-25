@@ -1,5 +1,6 @@
 package test.group;
 
+import static io.AtomContainerPrinter.fromString;
 import io.AtomContainerPrinter;
 import group.BondDiscretePartitionRefiner;
 import group.Partition;
@@ -20,7 +21,7 @@ public class BondDiscretePartitionRefinerTest {
     public void testAlleneA() {
         String acpString = "C0C1C2C3 0:1(1),0:2(2),2:3(2)";
         System.out.println(acpString);
-        IAtomContainer alleneA = AtomContainerPrinter.fromString(acpString, builder);
+        IAtomContainer alleneA = fromString(acpString, builder);
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initial = refiner.getBondPartition(alleneA);
 //        PermutationGroup group = refiner.getAutomorphismGroup(alleneA, initial);
@@ -34,7 +35,7 @@ public class BondDiscretePartitionRefinerTest {
     public void testAlleneB() {
         String acpString = "C0C1C2C3 0:1(2),0:2(2),1:3(1)";
         System.out.println(acpString);
-        IAtomContainer alleneB = AtomContainerPrinter.fromString(acpString, builder);
+        IAtomContainer alleneB = fromString(acpString, builder);
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initial = refiner.getBondPartition(alleneB);
 //        PermutationGroup group = refiner.getAutomorphismGroup(alleneB, initial);
@@ -48,8 +49,8 @@ public class BondDiscretePartitionRefinerTest {
     public void star3VsTriangleTest() {
         String star3String = "C0C1C2C3 0:1(1),0:2(1),0:3(1)";
         String triangleString = "C0C1C2 0:1(1),0:2(1),1:2(1)";
-        IAtomContainer star3 = AtomContainerPrinter.fromString(star3String, builder);
-        IAtomContainer triangle = AtomContainerPrinter.fromString(triangleString, builder);
+        IAtomContainer star3 = fromString(star3String, builder);
+        IAtomContainer triangle = fromString(triangleString, builder);
         BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
         Partition initialStar3 = refiner.getBondPartition(star3);
         Partition initialTri = refiner.getBondPartition(triangle);
@@ -58,6 +59,14 @@ public class BondDiscretePartitionRefinerTest {
         System.out.println(refiner.getBest());
         refiner.getAutomorphismGroup(triangle);
         System.out.println(refiner.getBest());
+    }
+    
+    @Test
+    public void testDisconnected() {
+        String discString = "C0C1C2C3C4 0:1(1),0:2(1),1:2(1),3:4(1)";
+        IAtomContainer disc = fromString(discString, builder);
+        BondDiscretePartitionRefiner refiner = new BondDiscretePartitionRefiner();
+        refiner.getAutomorphismGroup(disc);
     }
 
 }

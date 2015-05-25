@@ -195,19 +195,15 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         connectionTable = new HashMap<Integer, List<Integer>>();
         int bondCount = atomContainer.getBondCount();
         for (int bondIndexI = 0; bondIndexI < bondCount; bondIndexI++) {
+            if (!connectionTable.containsKey(bondIndexI)) {
+                connectionTable.put(bondIndexI, new ArrayList<Integer>());
+            }
             IBond bondI = atomContainer.getBond(bondIndexI);
             for (int bondIndexJ = 0; bondIndexJ < bondCount; bondIndexJ++) {
                 if (bondIndexI == bondIndexJ) continue;
                 IBond bondJ = atomContainer.getBond(bondIndexJ);
                 if (bondI.isConnectedTo(bondJ)) {
-                    List<Integer> connections;
-                    if (connectionTable.containsKey(bondIndexI)) {
-                        connections = connectionTable.get(bondIndexI);
-                    } else {
-                        connections = new ArrayList<Integer>();
-                        connectionTable.put(bondIndexI, connections);
-                    }
-                    connections.add(bondIndexJ);
+                    connectionTable.get(bondIndexI).add(bondIndexJ);
                 }
             }
         }
