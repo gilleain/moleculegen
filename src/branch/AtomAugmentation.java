@@ -4,6 +4,7 @@ import group.AtomDiscretePartitionRefiner;
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
+import io.AtomContainerPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,14 +104,19 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
         refiner.getAutomorphismGroup(augmentedMolecule);
         
         BondDiscretePartitionRefiner bondRefiner = new BondDiscretePartitionRefiner();
-        PermutationGroup autBondH = bondRefiner.getAutomorphismGroup(augmentedMolecule);
+        try {
+            PermutationGroup autBondH = bondRefiner.getAutomorphismGroup(augmentedMolecule);
         
 //        Permutation labelling = refiner.getBest().invert();
-        Permutation labelling = refiner.getBest();
+            Permutation labelling = refiner.getBest();
 //        System.out.println("labelling " + labelling);
-        List<Integer> connected = getConnectedBonds(augmentedMolecule, labelling);
-        List<Integer> augmentation = getLastAdded();
-        return inOrbit(connected, augmentation, autBondH);
+            List<Integer> connectedBonds = getConnectedBonds(augmentedMolecule, labelling);
+            List<Integer> augmentation = getLastAdded();
+            return inOrbit(connectedBonds, augmentation, autBondH);
+        } catch (Exception e) {
+            System.out.println(e + "\t" + AtomContainerPrinter.toString(augmentedMolecule));
+            return false;
+        }
     }
     
     private List<Integer> getLastAdded() {
@@ -129,10 +135,18 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
         return bondIndices;
     }
     
-    private boolean inOrbit(List<Integer> connected, List<Integer> augmentation, PermutationGroup autH) {
-//        System.out.println("connected " + connected + " aug " + augmentation);
-        if (connected.size() == 0) return true;
-        SetOrbit orbit = new BruteForcer().getInOrbit(connected, autH);
+    private boolean inOrbit(List<Integer> connectedBonds, List<Integer> augmentation, PermutationGroup autH) {
+//        System.out.println("connected bonds " + connectedBonds + " aug " + augmentation);
+        if (connectedBonds.size() == 0) {
+            return augmentation.size() == 0;
+        }
+        
+        // this should not really be necessary...
+        if (autH.getSize() == 0) {
+            return connectedBonds.equals(augmentation);
+        }
+        
+        SetOrbit orbit = new BruteForcer().getInOrbit(connectedBonds, autH);
         for (List<Integer> subset : orbit) {
 //            System.out.println("subset "  + subset);
             if (subset.equals(augmentation)) {

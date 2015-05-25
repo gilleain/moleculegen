@@ -36,6 +36,20 @@ public class TestAtomAugmentation {
         test("C0C1C2C3 0:1(1),0:2(1),0:3(1),1:2(1)", "C", 0, 1, 0, 1);
     }
     
+    @Test
+    public void testC3H3NPair() {
+        test("C0C1C2 0:2(3)", "N", 1, 1, 1);
+        test("C0C1C2 0:1(3)", "N", 1, 1, 1);
+    }
+    
+    @Test
+    public void testDisconnected() {
+//        test("C0C1",        "C", 1, 0);
+//        test("C0C1 0:1(1)", "C", 0, 0);
+        test("C0C1",        "N", 2, 0);
+        test("C0C1N2 0:2(2)", "N", 0, 2, 1);
+    }
+    
     private void test(String start, String atom, int... points) {
         IAtomContainer mol = make(start);
         AtomAugmentation aug = makeAugmentation(mol, atom, points);

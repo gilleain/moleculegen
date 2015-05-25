@@ -2,6 +2,7 @@ package app;
 
 import io.AtomContainerPrinter;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -26,12 +27,13 @@ public class DiffTool {
     private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 2) return;
-        String filenameA = args[0];
-        String filenameB = args[1];
+        if (args.length < 3) return;
+        String format    = args[0];
+        String filenameA = args[1];
+        String filenameB = args[2];
         
-        List<IAtomContainer> listA = read(filenameA);
-        List<IAtomContainer> listB = read(filenameB);
+        List<IAtomContainer> listA = read(format, filenameA);
+        List<IAtomContainer> listB = read(format, filenameB);
         if (listA.size() < listB.size()) {
             diff(listA, listB);
         } else {
@@ -61,8 +63,30 @@ public class DiffTool {
         }
     }
 
-    private static List<IAtomContainer> read(String filenameA) throws IOException {
-        Reader in = new FileReader(filenameA);
+    private static List<IAtomContainer> read(String format, String filename) throws IOException {
+        if (format.equals("SMI")) {
+            return readSmiles(filename);
+        } else if (format.equals("ACP")) {
+            return readACP(filename);
+        } else {
+            return new ArrayList<IAtomContainer>();
+        }
+    }
+    
+    private static List<IAtomContainer> readACP(String filename) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(filename));
+        String line;
+        List<IAtomContainer> list = new ArrayList<IAtomContainer>();
+        while ((line = in.readLine()) != null) {
+            String s = line.trim();
+            list.add(AtomContainerPrinter.fromString(s, builder));
+        }
+        in.close();
+        return list;
+    }
+    
+    private static List<IAtomContainer> readSmiles(String filename) throws IOException {
+        Reader in = new FileReader(filename);
         IIteratingChemObjectReader<IAtomContainer> reader = 
                 new IteratingSMILESReader(in, builder);
         List<IAtomContainer> list = new ArrayList<IAtomContainer>();
@@ -80,6 +104,7 @@ public class DiffTool {
             }
             list.add(ac);
         }
+        reader.close();
         return list;
     }
 

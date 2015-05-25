@@ -27,6 +27,11 @@ public class TestAtomGenerator {
         gen.run(AtomContainerPrinter.fromString(fromString, builder));
     }
     
+    private void print(String elementFormula) {
+        AtomGenerator gen = new AtomGenerator(elementFormula, new PrintStreamHandler(System.out));
+        gen.run();
+    }
+    
     private void printFrom(String elementFormula, String fromString) {
         run(elementFormula, fromString, new PrintStreamHandler(System.out));
     }
@@ -42,6 +47,12 @@ public class TestAtomGenerator {
     public void testFromCCSingle() {
         printFrom("C4H6", "C0C1 0:1(1)");
     }
+    
+    @Test
+    public void testC4O() {
+        print("C4O");
+    }
+    
     
     @Test
     public void testFromCCDouble() {

@@ -32,7 +32,7 @@ public class BruteForcer {
                 }
             }
         } catch (ArrayIndexOutOfBoundsException aioobe) {
-//            System.out.println("AIOOBE" + s);
+            System.out.println("AIOOBE" + s);
         }
         return orbits;
     }
