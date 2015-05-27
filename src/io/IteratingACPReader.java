@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.NoSuchElementException;
 
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
@@ -119,7 +118,6 @@ public class IteratingACPReader extends DefaultIteratingChemObjectReader<IAtomCo
         return nextMolecule;
     }
     
-    @TestMethod("testSetReader_Reader")
     public void setReader(Reader reader) {
         if (reader instanceof BufferedReader) {
             input = (BufferedReader)reader;
