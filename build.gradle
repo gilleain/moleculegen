@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+task fullJar(type: Jar) {
+	baseName = project.name + "-full"
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+	}
+}
+
+dependencies {
+	compile group: 'org.openscience.cdk', name: 'cdk', version: '1.5.11-SNAPSHOT'
+	compile group: 'org.openscience.cdk', name: 'cdk-formula', version: '1.5.11-SNAPSHOT'
+	compile group: 'org.openscience.cdk', name: 'cdk-interfaces', version: '1.5.11-SNAPSHOT'
+	compile group: 'org.openscience.cdk', name: 'cdk-io', version: '1.5.11-SNAPSHOT'
+	compile group: 'org.openscience.cdk', name: 'cdk-silent', version: '1.5.11-SNAPSHOT'
+	compile group: 'org.openscience.cdk', name: 'cdk-signature', version: '1.5.11-SNAPSHOT'
+	compile group: 'org.openscience.cdk', name: 'cdk-smiles', version: '1.5.11-SNAPSHOT'
+	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
+	compile group: 'junit', name: 'junit', version: '4.+'
+}
