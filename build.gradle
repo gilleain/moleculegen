@@ -1,6 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'groovy'
 
 task fullJar(type: Jar) {
+	manifest { 
+		attributes "Main-Class": "app.AMG"
+	}  
 	baseName = project.name + "-full"
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 	with jar
@@ -17,6 +21,12 @@ sourceSets {
 			srcDir 'src'
 		}
 	}
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 dependencies {
