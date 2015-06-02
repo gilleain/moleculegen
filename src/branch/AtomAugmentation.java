@@ -106,17 +106,39 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
         BondDiscretePartitionRefiner bondRefiner = new BondDiscretePartitionRefiner();
         try {
             PermutationGroup autBondH = bondRefiner.getAutomorphismGroup(augmentedMolecule);
+//            System.out.println("Bond labelling " + bondRefiner.getBest());
         
 //        Permutation labelling = refiner.getBest().invert();
             Permutation labelling = refiner.getBest();
-//        System.out.println("labelling " + labelling);
+//        System.out.println("Atom labelling " + labelling);
             List<Integer> connectedBonds = getConnectedBonds(augmentedMolecule, labelling);
             List<Integer> augmentation = getLastAdded();
-            return inOrbit(connectedBonds, augmentation, autBondH);
+            boolean isCanonical = inOrbit(connectedBonds, augmentation, autBondH);
+            if (isCanonical) {
+//                augmentedMolecule = transform(augmentedMolecule, bondRefiner.getBest().invert());
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             System.out.println(e + "\t" + AtomContainerPrinter.toString(augmentedMolecule));
             return false;
         }
+    }
+    
+    private IAtomContainer transform(IAtomContainer mol, Permutation bondPermutation) {
+        IAtomContainer permuted = mol.getBuilder().newInstance(IAtomContainer.class);
+        for (IAtom atom : mol.atoms()) {
+            permuted.addAtom(atom);
+        }
+        
+        IBond[] bonds = new IBond[mol.getBondCount()];
+        for (int bondIndex = 0; bondIndex < mol.getBondCount(); bondIndex++) {
+            bonds[bondPermutation.get(bondIndex)] = mol.getBond(bondIndex);
+        }
+        permuted.setBonds(bonds);
+        
+        return permuted;
     }
     
     private List<Integer> getLastAdded() {
