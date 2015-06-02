@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Generate bracelets (circular sequences) based on Joe Sawada's algorithm in
  * 
  * "Generating Bracelets in Constant Amortized Time" Siam Journal of Computing, 
- *  Vol. 31, No. 1, pp. 259Ð268.
+ *  Vol. 31, No. 1, pp. 259-268.
  * 
  * @author maclean
  *
