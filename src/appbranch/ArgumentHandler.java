@@ -1,11 +1,5 @@
 package appbranch;
 
-import generate.AugmentationMethod;
-import generate.LabellerMethod;
-import generate.ListerMethod;
-import generate.ValidatorMethod;
-import handler.DataFormat;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +9,12 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+
+import appbranch.handler.DataFormat;
+import generate.AugmentationMethod;
+import generate.LabellerMethod;
+import generate.ListerMethod;
+import generate.ValidatorMethod;
 
 public class ArgumentHandler {
     

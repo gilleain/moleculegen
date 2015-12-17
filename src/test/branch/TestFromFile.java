@@ -48,7 +48,7 @@ public class TestFromFile {
     }
     
     private int count(String elementFormula) {
-        CountingHandler handler = new CountingHandler();
+        CountingHandler handler = new CountingHandler(false);
         AtomGenerator gen = new AtomGenerator(elementFormula, handler);
         gen.run();
         return handler.getCount();

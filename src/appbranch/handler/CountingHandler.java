@@ -6,20 +6,37 @@ import appbranch.Handler;
 
 public class CountingHandler implements Handler {
     
-    private int counter;
+    private int count;
+    
+    private boolean isTiming;
+    
+    private long startTime;
+    
+    public CountingHandler(boolean isTiming) {
+        count = 0;
+        this.isTiming = isTiming; 
+        if (isTiming) {
+            startTime = System.currentTimeMillis();
+        }
+    }
     
     @Override
     public void handle(IAtomContainer atomContainer) {
-        counter++;
+        count++;
     }
     
     public int getCount() {
-        return counter;
+        return count;
     }
 
     @Override
     public void finish() {
-        // no op
+        if (isTiming) {
+            long time = System.currentTimeMillis() - startTime;
+            System.out.println(count + " structures in " + time + " ms");
+        } else {
+            System.out.println(count + " structures");
+        }
     }
 
 }

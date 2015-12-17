@@ -36,7 +36,7 @@ public class TestAtomGenerator {
     }
     
     private int countFrom(String elementFormula, String fromString) {
-        CountingHandler handler = new CountingHandler();
+        CountingHandler handler = new CountingHandler(false);
         AtomGenerator gen = new AtomGenerator(elementFormula, handler);
         gen.run(fromString(fromString, builder));
         return handler.getCount();
