@@ -75,7 +75,6 @@ public class AtomGenerator implements AugmentingGenerator {
     private void augment(Augmentation<IAtomContainer> parent, int index) {
         if (index >= maxIndex) {
             IAtomContainer atomContainer = parent.getAugmentedMolecule();
-//            AtomContainerPrinter.print(atomContainer);
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
             }
@@ -87,5 +86,10 @@ public class AtomGenerator implements AugmentingGenerator {
                 augment(augmentation, index + 1);
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        handler.finish();
     }
 }

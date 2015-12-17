@@ -12,4 +12,5 @@ public interface Augmentor<T> {
     
     public List<Augmentation<T>> augment(Augmentation<T> parent); 
 
+    public Augmentation<T> getInitial();
 }
