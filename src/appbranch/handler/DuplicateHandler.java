@@ -8,8 +8,6 @@ import java.util.Map;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 
-import appbranch.Handler;
-
 public class DuplicateHandler implements Handler {
     
     private Map<String, List<IAtomContainer>> dupMap;

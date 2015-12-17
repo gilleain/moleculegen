@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import appbranch.Handler;
 import io.AtomContainerPrinter;
 
 public class PrintStreamHandler implements Handler {

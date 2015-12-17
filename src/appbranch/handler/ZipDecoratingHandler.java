@@ -8,8 +8,6 @@ import java.util.zip.ZipOutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import appbranch.Handler;
-
 public class ZipDecoratingHandler implements Handler {
 	
 	private final PrintStreamStringHandler delegate;

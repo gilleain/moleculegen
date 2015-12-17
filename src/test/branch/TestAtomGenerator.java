@@ -11,9 +11,9 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import appbranch.AtomGenerator;
-import appbranch.Handler;
 import appbranch.handler.CountingHandler;
 import appbranch.handler.DuplicateHandler;
+import appbranch.handler.Handler;
 import appbranch.handler.PrintStreamHandler;
 import io.AtomContainerPrinter;
 

@@ -6,6 +6,7 @@ import java.io.PrintStream;
 
 import appbranch.handler.CountingHandler;
 import appbranch.handler.DataFormat;
+import appbranch.handler.Handler;
 import appbranch.handler.PrintStreamStringHandler;
 import appbranch.handler.SDFHandler;
 import appbranch.handler.ZipDecoratingHandler;

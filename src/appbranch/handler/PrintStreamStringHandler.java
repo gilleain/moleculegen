@@ -7,7 +7,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
-import appbranch.Handler;
 import io.AtomContainerPrinter;
 
 

@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
+import appbranch.handler.Handler;
 import validate.HCountValidator;
 
 

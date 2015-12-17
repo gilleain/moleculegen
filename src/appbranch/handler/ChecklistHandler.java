@@ -12,8 +12,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
-import appbranch.Handler;
-
 /**
  * Check each generated structure against a list of expected structures -
  * used for testing against results from other software.
