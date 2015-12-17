@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ import branch.CountingHandler;
  */
 public class TestFromFile {
     
-    public final static String filepath = "testformulae.txt";
+    public final static String filepath = "src/test/data/testformulae.txt";
     
     @Test
     public void runTest() throws IOException {
@@ -67,6 +66,8 @@ public class TestFromFile {
     }
 
     private void parseLine(String line, Map<String, Integer> counts) {
+        if (line.startsWith("#")) return;
+        
         String[] parts = line.split("\\s+");
         if (parts.length == 0) {
             parts = line.split(",");
