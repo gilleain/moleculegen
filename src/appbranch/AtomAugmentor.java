@@ -1,4 +1,4 @@
-package branch;
+package appbranch;
 
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;

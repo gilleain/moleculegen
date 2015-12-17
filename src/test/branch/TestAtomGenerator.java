@@ -1,7 +1,6 @@
 package test.branch;
 
 import static io.AtomContainerPrinter.fromString;
-import io.AtomContainerPrinter;
 
 import java.util.List;
 import java.util.Map;
@@ -11,11 +10,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import branch.AtomGenerator;
-import branch.CountingHandler;
-import branch.DuplicateHandler;
-import branch.Handler;
-import branch.PrintStreamHandler;
+import appbranch.AtomGenerator;
+import appbranch.Handler;
+import appbranch.handler.CountingHandler;
+import appbranch.handler.DuplicateHandler;
+import appbranch.handler.PrintStreamHandler;
+import io.AtomContainerPrinter;
 
 public class TestAtomGenerator {
     

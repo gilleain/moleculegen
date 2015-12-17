@@ -1,4 +1,4 @@
-package branch;
+package appbranch;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import validate.HCountValidator;
 
 
-public class AtomGenerator {
+public class AtomGenerator implements AugmentingGenerator {
     
     private AtomAugmentor augmentor;
     

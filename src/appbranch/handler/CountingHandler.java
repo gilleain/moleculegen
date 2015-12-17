@@ -1,6 +1,8 @@
-package branch;
+package appbranch.handler;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import appbranch.Handler;
 
 public class CountingHandler implements Handler {
     

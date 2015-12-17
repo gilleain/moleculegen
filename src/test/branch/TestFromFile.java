@@ -10,8 +10,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import branch.AtomGenerator;
-import branch.CountingHandler;
+import appbranch.AtomGenerator;
+import appbranch.handler.CountingHandler;
 
 /**
  * Test from a file list of formula-count pairs.

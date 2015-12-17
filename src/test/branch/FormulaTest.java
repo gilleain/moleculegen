@@ -1,7 +1,7 @@
 package test.branch;
 
-import branch.AtomGenerator;
-import branch.CountingHandler;
+import appbranch.AtomGenerator;
+import appbranch.handler.CountingHandler;
 
 public class FormulaTest {
     

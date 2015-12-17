@@ -2,7 +2,6 @@ package test.branch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import io.AtomContainerPrinter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +13,8 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import branch.NautyLikeCanonicalChecker;
+import appbranch.NautyLikeCanonicalChecker;
+import io.AtomContainerPrinter;
 
 public class TestNautyLikeCanonicalChecker {
     

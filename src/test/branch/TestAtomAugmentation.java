@@ -3,14 +3,14 @@ package test.branch;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import io.AtomContainerPrinter;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import branch.AtomAugmentation;
+import appbranch.AtomAugmentation;
+import io.AtomContainerPrinter;
 
 /**
  * Test augmentation of molecules by single atoms and sets of bonds.

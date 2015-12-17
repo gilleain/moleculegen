@@ -1,4 +1,4 @@
-package branch;
+package appbranch.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
+
+import appbranch.Handler;
 
 public class DuplicateHandler implements Handler {
     

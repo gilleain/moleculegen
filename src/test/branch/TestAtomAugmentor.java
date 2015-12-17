@@ -1,7 +1,5 @@
 package test.branch;
 
-import io.AtomContainerPrinter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +11,10 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import branch.AtomAugmentation;
-import branch.AtomAugmentor;
-import branch.Augmentation;
+import appbranch.AtomAugmentation;
+import appbranch.AtomAugmentor;
+import appbranch.Augmentation;
+import io.AtomContainerPrinter;
 
 public class TestAtomAugmentor {
     

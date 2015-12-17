@@ -1,4 +1,4 @@
-package branch;
+package appbranch;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
