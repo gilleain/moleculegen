@@ -1,4 +1,4 @@
-package appbranch;
+package appbranch.augment;
 
 public interface AugmentingGenerator {
 

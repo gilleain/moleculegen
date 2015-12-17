@@ -1,4 +1,4 @@
-package appbranch;
+package appbranch.canonical;
 
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;

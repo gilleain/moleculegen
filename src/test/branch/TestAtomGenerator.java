@@ -10,7 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import appbranch.AtomGenerator;
+import appbranch.augment.AtomGenerator;
 import appbranch.handler.CountingHandler;
 import appbranch.handler.DuplicateHandler;
 import appbranch.handler.Handler;

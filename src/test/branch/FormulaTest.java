@@ -1,6 +1,6 @@
 package test.branch;
 
-import appbranch.AtomGenerator;
+import appbranch.augment.AtomGenerator;
 import appbranch.handler.CountingHandler;
 
 public class FormulaTest {
