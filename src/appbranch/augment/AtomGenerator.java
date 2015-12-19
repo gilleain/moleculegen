@@ -11,6 +11,8 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
+import appbranch.canonical.CanonicalChecker;
+import appbranch.canonical.NonExpandingCanonicalChecker;
 import appbranch.handler.Handler;
 import validate.HCountValidator;
 
@@ -27,6 +29,8 @@ public class AtomGenerator implements AugmentingGenerator {
     
     private HCountValidator hCountValidator;
     
+    private CanonicalChecker<IAtomContainer> canonicalChecker;
+    
     public AtomGenerator(String elementFormula, Handler handler) {
         List<String> elementSymbols = new ArrayList<String>();
         this.hMax = parseFormula(elementFormula, elementSymbols);
@@ -35,6 +39,7 @@ public class AtomGenerator implements AugmentingGenerator {
         hCountValidator.setElementSymbols(elementSymbols);
         
         this.augmentor = new AtomAugmentor(elementSymbols);
+        this.canonicalChecker = new NonExpandingCanonicalChecker();
         this.handler = handler;
         this.maxIndex = elementSymbols.size() - 1;
     }
@@ -82,7 +87,7 @@ public class AtomGenerator implements AugmentingGenerator {
         }
         
         for (Augmentation<IAtomContainer> augmentation : augmentor.augment(parent)) {
-            if (augmentation.isCanonical()) {
+            if (canonicalChecker.isCanonical(augmentation)) {
                 augment(augmentation, index + 1);
             }
         }

@@ -89,11 +89,13 @@ public class TestAtomGenerator {
     }
     
     @Test
-    public void testDups() {
+    public void testC9H16Dups() {
         DuplicateHandler handler = new DuplicateHandler();
-        run("C4H6", "C0C1 0:1(1)", handler);
-        run("C4H6", "C0C1 0:1(2)", handler);
-        run("C4H6", "C0C1 0:1(3)", handler);
+        new AtomGenerator("C9H16", handler).run();
+        printDups(handler);
+    }
+    
+    private void printDups(DuplicateHandler handler) {
         Map<String, List<IAtomContainer>> map = handler.getDupMap();
         int count = 0;
         for (String key : map.keySet()) {
@@ -105,6 +107,15 @@ public class TestAtomGenerator {
             }
             count++;
         }
+    }
+    
+    @Test
+    public void testDups() {
+        DuplicateHandler handler = new DuplicateHandler();
+        run("C4H6", "C0C1 0:1(1)", handler);
+        run("C4H6", "C0C1 0:1(2)", handler);
+        run("C4H6", "C0C1 0:1(3)", handler);
+        printDups(handler);
     }
 
 }

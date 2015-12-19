@@ -14,6 +14,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 
+import appbranch.augment.Augmentation;
 import setorbit.BruteForcer;
 import setorbit.SetOrbit;
 
@@ -26,9 +27,15 @@ import setorbit.SetOrbit;
  * @author maclean
  *
  */
-public class NautyLikeCanonicalChecker {
+public class NautyLikeCanonicalChecker implements CanonicalChecker<IAtomContainer> {
     
-    public static boolean isCanonical(IAtomContainer atomContainer, Set<Integer> augmentedBonds) {
+    @Override
+    public boolean isCanonical(Augmentation<IAtomContainer> augmentation) {
+        IAtomContainer augmentedMolecule = augmentation.getAugmentedMolecule();
+        return NautyLikeCanonicalChecker.isCanonical(augmentedMolecule, getLastAdded(augmentedMolecule));
+    }
+
+    public static boolean isCanonical(IAtomContainer atomContainer, List<Integer> augmentedBonds) {
         IAtomContainer transformedContainer = transform(atomContainer);
         Set<Integer> transformedAugmentedBonds = transformBonds(atomContainer, transformedContainer, augmentedBonds);
         BondDiscretePartitionRefiner bondRefiner = new BondDiscretePartitionRefiner();
@@ -38,8 +45,24 @@ public class NautyLikeCanonicalChecker {
         return inOrbit(transformedAugmentedBonds, chosen, autGE);
     }
     
+    private List<Integer> getLastAdded(IAtomContainer augmentedMolecule) {
+        int last = augmentedMolecule.getAtomCount() - 1;
+        List<Integer> bondIndices = new ArrayList<Integer>();
+        for (int bondIndex = 0; bondIndex < augmentedMolecule.getBondCount(); bondIndex++) {
+            IBond bond = augmentedMolecule.getBond(bondIndex);
+            IAtom a0 = bond.getAtom(0);
+            IAtom a1 = bond.getAtom(1);
+            int a0n = augmentedMolecule.getAtomNumber(a0);
+            int a1n = augmentedMolecule.getAtomNumber(a1);
+            if (a0n == last || a1n == last) {
+                bondIndices.add(bondIndex);
+            }
+        }
+        return bondIndices;
+    }
+    
     private static Set<Integer> transformBonds(
-            IAtomContainer atomContainer, IAtomContainer transformedContainer, Set<Integer> augmentedBonds) {
+            IAtomContainer atomContainer, IAtomContainer transformedContainer, List<Integer> augmentedBonds) {
         Set<Integer> chosen = new HashSet<Integer>();
         
         // bit of a hack!

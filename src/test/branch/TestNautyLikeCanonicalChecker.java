@@ -3,8 +3,8 @@ package test.branch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
@@ -65,15 +65,22 @@ public class TestNautyLikeCanonicalChecker {
     public void testBPair() {
         IAtomContainer ac1 = AtomContainerPrinter.fromString("C0C1C2C3 0:1(1),0:3(2),1:2(2),2:3(1)", builder);
         IAtomContainer transformed1 = NautyLikeCanonicalChecker.transform(ac1);
-        NautyLikeCanonicalChecker.isCanonical(transformed1, set(0, 2));
+        boolean b1 = NautyLikeCanonicalChecker.isCanonical(ac1, set(0, 2));
         
         IAtomContainer ac2 = AtomContainerPrinter.fromString("C0C1C2C3 0:1(1),0:2(2),1:3(2),2:3(1)", builder);
         IAtomContainer transformed2 = NautyLikeCanonicalChecker.transform(ac2);
-        NautyLikeCanonicalChecker.isCanonical(transformed2, set(1, 2));
+        boolean b2 = NautyLikeCanonicalChecker.isCanonical(ac2, set(1, 2));
+        System.out.println(b1 + " " + b2);
     }
     
-    private Set<Integer> set(int... ints) {
-        Set<Integer> set = new HashSet<Integer>();
+    @Test
+    public void testFailingTenA() {
+        IAtomContainer ac = AtomContainerPrinter.fromString(
+                "C0C1C2C3 0:1(1),0:3(2),1:2(2),2:3(1)", builder);
+    }
+    
+    private List<Integer> set(int... ints) {
+        List<Integer> set = new ArrayList<Integer>();
         for (int i : ints){ 
             set.add(i);
         }

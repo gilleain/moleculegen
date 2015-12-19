@@ -11,6 +11,7 @@ import appbranch.handler.Handler;
 import appbranch.handler.PrintStreamStringHandler;
 import appbranch.handler.SDFHandler;
 import appbranch.handler.ZipDecoratingHandler;
+import generate.AugmentationMethod;
 
 public class AugmentingGeneratorFactory {
     
@@ -26,8 +27,14 @@ public class AugmentingGeneratorFactory {
             return null;
         }
         
-        AtomGenerator generator = new AtomGenerator(formula, getHandler(argsH));
-        return generator;
+        AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
+        if (augmentationMethod == AugmentationMethod.ATOM) {
+            return new AtomGenerator(formula, getHandler(argsH));
+        } else {
+            // TODO
+            System.err.println("ERROR : augmentation method " + augmentationMethod + " not yet implemented");
+            return null;
+        }
     }
     
     private static Handler getHandler(ArgumentHandler argsH) throws IOException {

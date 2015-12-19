@@ -10,6 +10,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import appbranch.augment.AtomAugmentation;
+import appbranch.canonical.CanonicalChecker;
+import appbranch.canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
 
 /**
@@ -57,10 +59,11 @@ public class TestAtomAugmentation {
     }
     
     private void test(String start, String atom, int... points) {
+        CanonicalChecker<IAtomContainer> checker = new NonExpandingCanonicalChecker();
         IAtomContainer mol = make(start);
         AtomAugmentation aug = makeAugmentation(mol, atom, points);
         IAtomContainer augMol = aug.getAugmentedMolecule();
-        System.out.println(aug.isCanonical() + "\t" + AtomContainerPrinter.toString(augMol));
+        System.out.println(checker.isCanonical(aug) + "\t" + AtomContainerPrinter.toString(augMol));
     }
     
     @Test
