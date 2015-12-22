@@ -1,4 +1,4 @@
-package appbranch.augment;
+package appbranch.augment.atom;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,8 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
+import appbranch.augment.Augmentation;
+import appbranch.augment.AugmentingGenerator;
 import appbranch.canonical.CanonicalChecker;
 import appbranch.canonical.NonExpandingCanonicalChecker;
 import appbranch.handler.Handler;

@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import appbranch.augment.AtomGenerator;
+import appbranch.augment.atom.AtomGenerator;
 import appbranch.handler.CountingHandler;
 
 /**

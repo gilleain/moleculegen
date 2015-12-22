@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import appbranch.ArgumentHandler;
+import appbranch.augment.atom.AtomGenerator;
 import appbranch.handler.CountingHandler;
 import appbranch.handler.DataFormat;
 import appbranch.handler.Handler;

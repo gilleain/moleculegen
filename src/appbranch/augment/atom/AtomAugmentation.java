@@ -1,4 +1,4 @@
-package appbranch.augment;
+package appbranch.augment.atom;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 
+import appbranch.augment.Augmentation;
 import appbranch.canonical.NautyLikeCanonicalChecker;
 import group.AtomDiscretePartitionRefiner;
 import group.BondDiscretePartitionRefiner;

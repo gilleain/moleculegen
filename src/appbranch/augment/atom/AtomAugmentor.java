@@ -1,4 +1,4 @@
-package appbranch.augment;
+package appbranch.augment.atom;
 
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
@@ -12,6 +12,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
+import appbranch.augment.Augmentation;
+import appbranch.augment.Augmentor;
+import appbranch.augment.SaturationCalculator;
 
 public class AtomAugmentor implements Augmentor<IAtomContainer> {
     
