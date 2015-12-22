@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import appbranch.augment.atom.AtomAugmentation;
+import appbranch.augment.atom.AtomExtension;
 import appbranch.canonical.CanonicalChecker;
 import appbranch.canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
@@ -59,10 +60,10 @@ public class TestAtomAugmentation {
     }
     
     private void test(String start, String atom, int... points) {
-        CanonicalChecker<IAtomContainer> checker = new NonExpandingCanonicalChecker();
+        CanonicalChecker<IAtomContainer, AtomExtension> checker = new NonExpandingCanonicalChecker();
         IAtomContainer mol = make(start);
         AtomAugmentation aug = makeAugmentation(mol, atom, points);
-        IAtomContainer augMol = aug.getAugmentedMolecule();
+        IAtomContainer augMol = aug.getBase();
         System.out.println(checker.isCanonical(aug) + "\t" + AtomContainerPrinter.toString(augMol));
     }
     
@@ -82,7 +83,7 @@ public class TestAtomAugmentation {
     public void testGetAugmentedMolecule() {
         IAtomContainer mol = make("C0C1C2 0:1(1),0:2(1)");
         AtomAugmentation augmentation = makeAugmentation(mol, "C", 1, 0, 1);
-        IAtomContainer augmentedMol = augmentation.getAugmentedMolecule();
+        IAtomContainer augmentedMol = augmentation.getBase();
         AtomContainerPrinter.print(augmentedMol);
         IBond addedBond = augmentedMol.getBond(2);
         assertEquals("Added bond 1", IBond.Order.SINGLE, addedBond.getOrder());

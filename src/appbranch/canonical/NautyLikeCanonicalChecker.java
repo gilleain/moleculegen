@@ -1,9 +1,5 @@
 package appbranch.canonical;
 
-import group.BondDiscretePartitionRefiner;
-import group.Permutation;
-import group.PermutationGroup;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +11,10 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 
 import appbranch.augment.Augmentation;
+import appbranch.augment.atom.AtomExtension;
+import group.BondDiscretePartitionRefiner;
+import group.Permutation;
+import group.PermutationGroup;
 import setorbit.BruteForcer;
 import setorbit.SetOrbit;
 
@@ -27,11 +27,11 @@ import setorbit.SetOrbit;
  * @author maclean
  *
  */
-public class NautyLikeCanonicalChecker implements CanonicalChecker<IAtomContainer> {
+public class NautyLikeCanonicalChecker implements CanonicalChecker<IAtomContainer, AtomExtension> {
     
     @Override
-    public boolean isCanonical(Augmentation<IAtomContainer> augmentation) {
-        IAtomContainer augmentedMolecule = augmentation.getAugmentedMolecule();
+    public boolean isCanonical(Augmentation<IAtomContainer, AtomExtension> augmentation) {
+        IAtomContainer augmentedMolecule = augmentation.getBase();
         return NautyLikeCanonicalChecker.isCanonical(augmentedMolecule, getLastAdded(augmentedMolecule));
     }
 

@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import appbranch.augment.Augmentation;
+import appbranch.augment.atom.AtomExtension;
 import group.AtomDiscretePartitionRefiner;
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;
@@ -16,11 +17,11 @@ import io.AtomContainerPrinter;
 import setorbit.BruteForcer;
 import setorbit.SetOrbit;
 
-public class NonExpandingCanonicalChecker implements CanonicalChecker<IAtomContainer> {
+public class NonExpandingCanonicalChecker implements CanonicalChecker<IAtomContainer, AtomExtension> {
 
     @Override
-    public boolean isCanonical(Augmentation<IAtomContainer> augmentation) {
-        IAtomContainer augmentedMolecule = augmentation.getAugmentedMolecule();
+    public boolean isCanonical(Augmentation<IAtomContainer, AtomExtension> augmentation) {
+        IAtomContainer augmentedMolecule = augmentation.getBase();
         if (augmentedMolecule.getAtomCount() <= 2 || augmentedMolecule.getBondCount() == 0) {
             return true;
         }

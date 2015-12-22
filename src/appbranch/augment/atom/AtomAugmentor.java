@@ -17,7 +17,7 @@ import appbranch.augment.Augmentation;
 import appbranch.augment.Augmentor;
 import appbranch.augment.SaturationCalculator;
 
-public class AtomAugmentor implements Augmentor<IAtomContainer> {
+public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
     
     /**
      * The elements (in order) used to make molecules for this run.
@@ -44,16 +44,17 @@ public class AtomAugmentor implements Augmentor<IAtomContainer> {
     /**
      * @return the initial structure
      */
-    public Augmentation<IAtomContainer> getInitial() {
+    public Augmentation<IAtomContainer, AtomExtension> getInitial() {
         String elementSymbol = elementSymbols.get(0);
         IAtom initialAtom = builder.newInstance(IAtom.class, elementSymbol);
         return new AtomAugmentation(initialAtom);
     }
 
     @Override
-    public List<Augmentation<IAtomContainer>> augment(Augmentation<IAtomContainer> parent) {
-        IAtomContainer atomContainer = parent.getAugmentedMolecule();
-        List<Augmentation<IAtomContainer>> augmentations = new ArrayList<Augmentation<IAtomContainer>>();
+    public List<Augmentation<IAtomContainer, AtomExtension>> augment(Augmentation<IAtomContainer, AtomExtension> parent) {
+        IAtomContainer atomContainer = parent.getBase();
+        List<Augmentation<IAtomContainer, AtomExtension>> augmentations = 
+                new ArrayList<Augmentation<IAtomContainer, AtomExtension>>();
         String elementSymbol = getNextElementSymbol(parent);
         for (int[] bondOrders : getBondOrderArrays(atomContainer)) {
             IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);
@@ -63,8 +64,8 @@ public class AtomAugmentor implements Augmentor<IAtomContainer> {
         return augmentations;
     }
     
-    private String getNextElementSymbol(Augmentation<IAtomContainer> parent) {
-        int index = parent.getAugmentedMolecule().getAtomCount();
+    private String getNextElementSymbol(Augmentation<IAtomContainer, AtomExtension> parent) {
+        int index = parent.getBase().getAtomCount();
         if (index < elementSymbols.size()) {
             return elementSymbols.get(index);
         } else {

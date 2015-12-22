@@ -1,24 +1,10 @@
 package appbranch.augment.atom;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 
 import appbranch.augment.Augmentation;
-import appbranch.canonical.NautyLikeCanonicalChecker;
-import group.AtomDiscretePartitionRefiner;
-import group.BondDiscretePartitionRefiner;
-import group.Permutation;
-import group.PermutationGroup;
-import io.AtomContainerPrinter;
-import setorbit.BruteForcer;
-import setorbit.SetOrbit;
 
 /**
  * An {@link Augmentation} of an atom container by atom.
@@ -26,15 +12,13 @@ import setorbit.SetOrbit;
  * @author maclean
  *
  */
-public class AtomAugmentation implements Augmentation<IAtomContainer> {
+public class AtomAugmentation implements Augmentation<IAtomContainer, AtomExtension> {
     
-    private IAtomContainer augmentedMolecule;
+    private final IAtomContainer augmentedMolecule;
     
-    /**
-     * An array the size of the parent, of bond orders to add
-     */
-    private int[] augmentation;
+    private final AtomExtension atomExtension;
     
+   
     /**
      * Construct the initial state.
      * 
@@ -44,10 +28,14 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
         augmentedMolecule = initialAtom.getBuilder().newInstance(IAtomContainer.class);
         augmentedMolecule.addAtom(initialAtom);
         augmentedMolecule.setProperty("IS_CONNECTED", false);
+        
+        // XXX TODO - wrong way round!
+        this.atomExtension = new AtomExtension(initialAtom.getSymbol(), new int[] {});
     }
     
     public AtomAugmentation(IAtomContainer initialContainer) {
         augmentedMolecule = initialContainer;   // TODO : could clone...
+        this.atomExtension = null;  // XXX!
     }
     
     /**
@@ -59,12 +47,12 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
      * @param atomToAdd the additional atom
      * @param augmentation a list of bond orders to augment
      */
-    public AtomAugmentation(IAtomContainer parent, IAtom atomToAdd, int[] augmentation) {
-        this.augmentation = augmentation;
-        this.augmentedMolecule = make(parent, atomToAdd, augmentation);
+    public AtomAugmentation(IAtomContainer parent, IAtom atomToAdd, int[] bondOrders) {
+        this.atomExtension = new AtomExtension(atomToAdd.getSymbol(), bondOrders);
+        this.augmentedMolecule = make(parent, atomToAdd, bondOrders);
     }
     
-    public IAtomContainer getAugmentedMolecule() {
+    public IAtomContainer getBase() {
         return augmentedMolecule;
     }
 
@@ -96,5 +84,11 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
             // TODO
             return null;
         }
+    }
+
+    @Override
+    public AtomExtension getExtension() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

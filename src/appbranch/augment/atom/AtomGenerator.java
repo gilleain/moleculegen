@@ -31,7 +31,7 @@ public class AtomGenerator implements AugmentingGenerator {
     
     private HCountValidator hCountValidator;
     
-    private CanonicalChecker<IAtomContainer> canonicalChecker;
+    private CanonicalChecker<IAtomContainer, AtomExtension> canonicalChecker;
     
     public AtomGenerator(String elementFormula, Handler handler) {
         List<String> elementSymbols = new ArrayList<String>();
@@ -79,16 +79,16 @@ public class AtomGenerator implements AugmentingGenerator {
         augment(new AtomAugmentation(initial), initial.getAtomCount() - 1);  
     }
     
-    private void augment(Augmentation<IAtomContainer> parent, int index) {
+    private void augment(Augmentation<IAtomContainer, AtomExtension> parent, int index) {
         if (index >= maxIndex) {
-            IAtomContainer atomContainer = parent.getAugmentedMolecule();
+            IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
             }
             return;
         }
         
-        for (Augmentation<IAtomContainer> augmentation : augmentor.augment(parent)) {
+        for (Augmentation<IAtomContainer, AtomExtension> augmentation : augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation)) {
                 augment(augmentation, index + 1);
             }

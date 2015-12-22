@@ -8,9 +8,9 @@ import java.util.List;
  * @author maclean
  *
  */
-public interface Augmentor<T> {
+public interface Augmentor<T, S> {
     
-    public List<Augmentation<T>> augment(Augmentation<T> parent); 
+    public List<Augmentation<T, S>> augment(Augmentation<T, S> parent); 
 
-    public Augmentation<T> getInitial();
+    public Augmentation<T, S> getInitial();
 }
