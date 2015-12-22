@@ -88,7 +88,6 @@ public class AtomAugmentation implements Augmentation<IAtomContainer, AtomExtens
 
     @Override
     public AtomExtension getExtension() {
-        // TODO Auto-generated method stub
-        return null;
+        return atomExtension;
     }
 }
