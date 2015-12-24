@@ -60,7 +60,7 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
             // XXX
         }
         
-        moleculeValidator = new HCountValidator();
+        moleculeValidator = new HCountValidator("");
         if (validatorMethod == ValidatorMethod.REFINER) {
             canonicalValidator = new RefinementCanonicalValidator();
         } else if (validatorMethod == ValidatorMethod.SIGNATURE) {
@@ -76,7 +76,7 @@ public class AtomAugmentingGenerator extends BaseAugmentingGenerator implements 
     
     public void setElementSymbols(List<String> elementSymbols) {
         childLister.setElementSymbols(elementSymbols);
-        moleculeValidator.setElementSymbols(elementSymbols);
+//        moleculeValidator.setElementSymbols(elementSymbols);
     }
     
     public void extend(IAtomContainer parent, int size) {

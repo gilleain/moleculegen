@@ -28,7 +28,7 @@ public class BondAugmentingGenerator extends BaseAugmentingGenerator implements 
 
     public BondAugmentingGenerator(GenerateHandler handler) {
         this.handler = handler;
-        hCountValidator = new HCountValidator();
+        hCountValidator = new HCountValidator("");
         childLister = new BondChildLister();
         canonicalValidator = new BondCanonicalValidator();
     }

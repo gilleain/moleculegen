@@ -1,9 +1,5 @@
 package appbranch.augment.atom;
 
-import group.AtomDiscretePartitionRefiner;
-import group.Permutation;
-import group.PermutationGroup;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +12,10 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import appbranch.augment.Augmentation;
 import appbranch.augment.Augmentor;
 import appbranch.augment.SaturationCalculator;
+import appbranch.augment.StateSource;
+import group.AtomDiscretePartitionRefiner;
+import group.Permutation;
+import group.PermutationGroup;
 
 public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
     
@@ -28,26 +28,28 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
     
     private SaturationCalculator saturationCalculator;
     
-    public AtomAugmentor(String elementString) {
+    private StateSource<IAtomContainer, String> stateSource;
+    
+    public AtomAugmentor(String elementString, StateSource<IAtomContainer, String> stateSource) {
         elementSymbols = new ArrayList<String>();
         for (int i = 0; i < elementString.length(); i++) {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
         }
         this.saturationCalculator = new SaturationCalculator(elementSymbols);
+        this.stateSource = stateSource;
     }
     
-    public AtomAugmentor(List<String> elementSymbols) {
+    public AtomAugmentor(List<String> elementSymbols, StateSource<IAtomContainer, String> stateSource) {
         this.elementSymbols = elementSymbols;
         this.saturationCalculator = new SaturationCalculator(elementSymbols);
+        this.stateSource = stateSource;
     }
     
     /**
      * @return the initial structure
      */
     public Augmentation<IAtomContainer, AtomExtension> getInitial() {
-        String elementSymbol = elementSymbols.get(0);
-        IAtom initialAtom = builder.newInstance(IAtom.class, elementSymbol);
-        return new AtomAugmentation(initialAtom);
+        return new AtomAugmentation(stateSource.get().iterator().next());
     }
 
     @Override
@@ -55,22 +57,13 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
         IAtomContainer atomContainer = parent.getBase();
         List<Augmentation<IAtomContainer, AtomExtension>> augmentations = 
                 new ArrayList<Augmentation<IAtomContainer, AtomExtension>>();
-        String elementSymbol = getNextElementSymbol(parent);
+        String elementSymbol = stateSource.getNextExtension(atomContainer);
         for (int[] bondOrders : getBondOrderArrays(atomContainer)) {
             IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);
             augmentations.add(new AtomAugmentation(atomContainer, atomToAdd, bondOrders));
         }
         
         return augmentations;
-    }
-    
-    private String getNextElementSymbol(Augmentation<IAtomContainer, AtomExtension> parent) {
-        int index = parent.getBase().getAtomCount();
-        if (index < elementSymbols.size()) {
-            return elementSymbols.get(index);
-        } else {
-            return "C"; // XXX TODO...
-        }
     }
     
     private List<int[]> getBondOrderArrays(IAtomContainer atomContainer) {

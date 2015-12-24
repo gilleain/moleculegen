@@ -16,6 +16,4 @@ public interface MoleculeValidator {
 	
     public void setImplicitHydrogens(IAtomContainer parent);
 
-    public void setElementSymbols(List<String> elementSymbols);
-
 }
