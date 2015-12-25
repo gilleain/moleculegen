@@ -1,6 +1,5 @@
 package validate;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,15 +11,13 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IElement;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
-import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
+import appbranch.FormulaParser;
 import generate.BaseChildLister;
 
 /**
@@ -50,35 +47,13 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
     private IAtomTypeMatcher matcher;
     
     public HCountValidator(String formulaString) {
-        List<String> elementSymbols = new ArrayList<String>();
-        hCount = getHCount(formulaString, elementSymbols);
-        this.setSymbols(elementSymbols);
+        FormulaParser formulaParser = new FormulaParser(formulaString);
+        hCount = formulaParser.getHydrogenCount();
+        this.setSymbols(formulaParser.getElementSymbols());
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         matcher = CDKAtomTypeMatcher.getInstance(builder);
 		hAdder = CDKHydrogenAdder.getInstance(builder);
 		satCheck = new SaturationChecker();
-    }
-    
-    private int getHCount(String formulaString, List<String> elementSymbols) {
-        int hCount = 0;
-        
-        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-        IMolecularFormula formula = 
-            MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
-        List<IElement> elements = MolecularFormulaManipulator.elements(formula);
-        for (IElement element : elements) {
-            String symbol = element.getSymbol();
-            int count = MolecularFormulaManipulator.getElementCount(formula, element);
-            if (symbol.equals("H")) {
-                hCount = count;
-            } else {
-                for (int index = 0; index < count; index++) {
-                    elementSymbols.add(symbol);
-                }
-            }
-        }
-        Collections.sort(elementSymbols);
-        return hCount;
     }
     
     public boolean isConnected(IAtomContainer atomContainer) {

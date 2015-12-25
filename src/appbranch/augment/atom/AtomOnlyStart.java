@@ -1,17 +1,14 @@
 package appbranch.augment.atom;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IElement;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
+import appbranch.FormulaParser;
 import appbranch.augment.StateSource;
 
 public class AtomOnlyStart implements StateSource<IAtomContainer, String> {
@@ -22,22 +19,8 @@ public class AtomOnlyStart implements StateSource<IAtomContainer, String> {
     
     public AtomOnlyStart(String elementFormula) {
         builder = SilentChemObjectBuilder.getInstance();
-        IMolecularFormula formula = 
-            MolecularFormulaManipulator.getMolecularFormula(elementFormula, builder);
-        List<IElement> elements = MolecularFormulaManipulator.elements(formula);
-        
-        // accumulate heavy atoms
-        elementSymbols = new ArrayList<String>();
-        for (IElement element : elements) {
-            String symbol = element.getSymbol();
-            int count = MolecularFormulaManipulator.getElementCount(formula, element);
-            if (!symbol.equals("H")) {
-                for (int i = 0; i < count; i++) {
-                    elementSymbols.add(symbol);
-                }
-            }
-        }
-        Collections.sort(elementSymbols);
+        FormulaParser formulaParser = new FormulaParser(elementFormula);
+        elementSymbols = formulaParser.getElementSymbols();
     }
 
     @Override
