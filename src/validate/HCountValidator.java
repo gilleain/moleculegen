@@ -52,7 +52,6 @@ public class HCountValidator extends BaseChildLister implements MoleculeValidato
     public HCountValidator(String formulaString) {
         List<String> elementSymbols = new ArrayList<String>();
         hCount = getHCount(formulaString, elementSymbols);
-        System.out.println(elementSymbols);
         this.setSymbols(elementSymbols);
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         matcher = CDKAtomTypeMatcher.getInstance(builder);

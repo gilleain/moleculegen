@@ -8,7 +8,6 @@ import appbranch.augment.StateSource;
 import appbranch.canonical.CanonicalChecker;
 import appbranch.canonical.NonExpandingCanonicalChecker;
 import appbranch.handler.Handler;
-import io.AtomContainerPrinter;
 import validate.HCountValidator;
 
 
@@ -43,7 +42,6 @@ public class AtomGenerator implements AugmentingGenerator {
     }
     
     private void augment(Augmentation<IAtomContainer, AtomExtension> parent, int index) {
-        System.out.println(AtomContainerPrinter.toString(parent.getBase()));
         if (index >= maxIndex) {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
