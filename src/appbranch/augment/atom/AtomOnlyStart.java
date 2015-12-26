@@ -9,9 +9,9 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import appbranch.FormulaParser;
-import appbranch.augment.StateSource;
+import appbranch.augment.InitialStateSource;
 
-public class AtomOnlyStart implements StateSource<IAtomContainer, String> {
+public class AtomOnlyStart implements InitialStateSource<IAtomContainer> {
     
     private final List<String> elementSymbols;
     
@@ -32,11 +32,4 @@ public class AtomOnlyStart implements StateSource<IAtomContainer, String> {
         singletonList.add(atomContainer);
         return singletonList;
     }
-
-    @Override
-    public String getNextExtension(IAtomContainer current) {
-        int nextIndex = current.getAtomCount();
-        return elementSymbols.get(nextIndex);
-    }
-
 }

@@ -11,6 +11,4 @@ import java.util.List;
 public interface Augmentor<T, S> {
     
     public List<Augmentation<T, S>> augment(Augmentation<T, S> parent); 
-
-    public Augmentation<T, S> getInitial();
 }

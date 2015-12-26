@@ -3,7 +3,7 @@ package appbranch.augment.bond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import appbranch.augment.Augmentation;
-import appbranch.augment.StateSource;
+import appbranch.augment.InitialStateSource;
 import appbranch.canonical.CanonicalChecker;
 import appbranch.handler.Handler;
 
@@ -13,12 +13,16 @@ public class BondGenerator {
     
     private BondAugmentor augmentor;
     
-    private StateSource<IAtomContainer, BondExtension> stateSource;
+    private InitialStateSource<IAtomContainer> initialStateSource;
     
     private CanonicalChecker<IAtomContainer, BondExtension> canonicalChecker;
     
+    public BondGenerator(String elementFormula, Handler handler) {
+        this.handler = handler;
+    }
+    
     public void run() {
-        for (IAtomContainer startingStructure : stateSource.get()) {
+        for (IAtomContainer startingStructure : initialStateSource.get()) {
             augment(new BondAugmentation(startingStructure, null));   // XXX null Bond Extension
         }
     }

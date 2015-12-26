@@ -11,8 +11,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import appbranch.augment.Augmentation;
 import appbranch.augment.Augmentor;
+import appbranch.augment.ExtensionSource;
 import appbranch.augment.SaturationCalculator;
-import appbranch.augment.StateSource;
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
@@ -28,36 +28,29 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
     
     private SaturationCalculator saturationCalculator;
     
-    private StateSource<IAtomContainer, String> stateSource;
+    private ExtensionSource<Integer, String> extensionSource;
     
-    public AtomAugmentor(String elementString, StateSource<IAtomContainer, String> stateSource) {
+    public AtomAugmentor(String elementString, ExtensionSource<Integer, String> extensionSource) {
         elementSymbols = new ArrayList<String>();
         for (int i = 0; i < elementString.length(); i++) {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
         }
         this.saturationCalculator = new SaturationCalculator(elementSymbols);
-        this.stateSource = stateSource;
+        this.extensionSource = extensionSource;
     }
     
-    public AtomAugmentor(List<String> elementSymbols, StateSource<IAtomContainer, String> stateSource) {
+    public AtomAugmentor(List<String> elementSymbols, ExtensionSource<Integer, String> extensionSource) {
         this.elementSymbols = elementSymbols;
         this.saturationCalculator = new SaturationCalculator(elementSymbols);
-        this.stateSource = stateSource;
+        this.extensionSource = extensionSource;
     }
     
-    /**
-     * @return the initial structure
-     */
-    public Augmentation<IAtomContainer, AtomExtension> getInitial() {
-        return new AtomAugmentation(stateSource.get().iterator().next());
-    }
-
     @Override
     public List<Augmentation<IAtomContainer, AtomExtension>> augment(Augmentation<IAtomContainer, AtomExtension> parent) {
         IAtomContainer atomContainer = parent.getBase();
         List<Augmentation<IAtomContainer, AtomExtension>> augmentations = 
                 new ArrayList<Augmentation<IAtomContainer, AtomExtension>>();
-        String elementSymbol = stateSource.getNextExtension(atomContainer);
+        String elementSymbol = extensionSource.getNext(atomContainer.getAtomCount());
         for (int[] bondOrders : getBondOrderArrays(atomContainer)) {
             IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);
             augmentations.add(new AtomAugmentation(atomContainer, atomToAdd, bondOrders));

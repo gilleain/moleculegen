@@ -11,11 +11,13 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import appbranch.FormulaParser;
 import appbranch.augment.Augmentation;
+import appbranch.augment.ExtensionSource;
 import appbranch.augment.atom.AtomAugmentation;
 import appbranch.augment.atom.AtomAugmentor;
 import appbranch.augment.atom.AtomExtension;
-import appbranch.augment.atom.AtomOnlyStart;
+import appbranch.augment.atom.ElementSymbolSource;
 import appbranch.canonical.CanonicalChecker;
 import appbranch.canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
@@ -25,7 +27,8 @@ public class TestAtomAugmentor {
     private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     private List<Augmentation<IAtomContainer, AtomExtension>> gen(String elementString, String startingGraph) {
-        AtomAugmentor augmentor = new AtomAugmentor(elementString, new AtomOnlyStart(elementString));
+        ExtensionSource<Integer, String> extensionSource = new ElementSymbolSource(new FormulaParser(elementString));
+        AtomAugmentor augmentor = new AtomAugmentor(elementString, extensionSource);
         AtomAugmentation start = new AtomAugmentation(AtomContainerPrinter.fromString(startingGraph, builder));
         return augmentor.augment(start);
     }

@@ -2,9 +2,11 @@ package appbranch.augment.atom;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import appbranch.FormulaParser;
 import appbranch.augment.Augmentation;
 import appbranch.augment.AugmentingGenerator;
-import appbranch.augment.StateSource;
+import appbranch.augment.ExtensionSource;
+import appbranch.augment.InitialStateSource;
 import appbranch.canonical.CanonicalChecker;
 import appbranch.canonical.NonExpandingCanonicalChecker;
 import appbranch.handler.Handler;
@@ -23,17 +25,25 @@ public class AtomGenerator implements AugmentingGenerator {
     
     private CanonicalChecker<IAtomContainer, AtomExtension> canonicalChecker;
     
+    private InitialStateSource<IAtomContainer> initialStateSource;
+    
     public AtomGenerator(String elementFormula, Handler handler) {
+        // XXX - make these once and pass them down!
+        FormulaParser formulaParser = new FormulaParser(elementFormula);
+        
         this.hCountValidator = new HCountValidator(elementFormula);
-        StateSource<IAtomContainer, String> stateSource = new AtomOnlyStart(elementFormula);
-        this.augmentor = new AtomAugmentor(hCountValidator.getElementSymbols(), stateSource);
+        initialStateSource = new AtomOnlyStart(elementFormula);
+        ExtensionSource<Integer, String> extensionSource = new ElementSymbolSource(formulaParser);
+        this.augmentor = new AtomAugmentor(hCountValidator.getElementSymbols(), extensionSource);
         this.canonicalChecker = new NonExpandingCanonicalChecker();
         this.handler = handler;
         this.maxIndex = hCountValidator.getElementSymbols().size() - 1;
     }
     
     public void run() {
-        augment(augmentor.getInitial(), 0);
+        for (IAtomContainer start : initialStateSource.get()) {
+            augment(new AtomAugmentation(start), 0);
+        }
     }
     
     public void run(IAtomContainer initial) {
@@ -46,6 +56,7 @@ public class AtomGenerator implements AugmentingGenerator {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
+                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }

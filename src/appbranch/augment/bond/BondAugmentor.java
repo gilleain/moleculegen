@@ -16,10 +16,4 @@ public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
         return null;
     }
 
-    @Override
-    public Augmentation<IAtomContainer, BondExtension> getInitial() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }
