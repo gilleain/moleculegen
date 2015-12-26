@@ -101,5 +101,18 @@ public class SaturationCalculator {
         }
         return satCap;
     }
+    
+    public List<Integer> getUndersaturatedSet(int atomCount, int[] saturationCapacity) {
+        List<Integer> baseSet = new ArrayList<Integer>();
+        
+        // get the amount each atom is under-saturated
+        for (int index = 0; index < atomCount; index++) {
+            if (saturationCapacity[index] > 0) {
+                baseSet.add(index);
+            }
+        }
+        return baseSet;
+    }
+    
 
 }

@@ -8,22 +8,21 @@ package appbranch.augment.bond;
  */
 public class BondExtension {
 
-    private final int startIndex;
+    private final IndexPair indexPair;
     
-    private final int endIndex;
-    
-    public BondExtension(int startIndex, int endIndex) {
-        super();
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
+    private final ElementPair elementPair;
+
+    public BondExtension(IndexPair indexPair, ElementPair elementPair) {
+        this.indexPair = indexPair;
+        this.elementPair = elementPair;
     }
 
-    public int getStartIndex() {
-        return startIndex;
+    public IndexPair getIndexPair() {
+        return indexPair;
     }
 
-    public int getEndIndex() {
-        return endIndex;
+    public ElementPair getElementPair() {
+        return elementPair;
     }
 
 }

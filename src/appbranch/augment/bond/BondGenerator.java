@@ -19,6 +19,7 @@ public class BondGenerator {
     
     public BondGenerator(String elementFormula, Handler handler) {
         this.handler = handler;
+        this.augmentor = new BondAugmentor(elementFormula);
     }
     
     public void run() {
