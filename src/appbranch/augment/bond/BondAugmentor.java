@@ -1,7 +1,10 @@
 package appbranch.augment.bond;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -10,6 +13,10 @@ import appbranch.augment.Augmentation;
 import appbranch.augment.Augmentor;
 import appbranch.augment.ExtensionSource;
 import appbranch.augment.SaturationCalculator;
+import group.AtomDiscretePartitionRefiner;
+import group.Partition;
+import group.Permutation;
+import group.PermutationGroup;
 
 public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
     
@@ -17,10 +24,17 @@ public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
     
     private SaturationCalculator saturationCalculator;
     
+    private FormulaParser formulaParser;
+    
     public BondAugmentor(String elementFormula) {
-        FormulaParser formulaParser = new FormulaParser(elementFormula);
+        formulaParser = new FormulaParser(elementFormula);
         this.extensionSource = new ElementSymbolPairSource(formulaParser);
         this.saturationCalculator = new SaturationCalculator(formulaParser.getElementSymbols());
+    }
+    
+    public boolean isComplete(Augmentation<IAtomContainer, BondExtension> augmentation) {
+        int maxSize = formulaParser.getElementSymbols().size();
+        return augmentation.getBase().getAtomCount() == maxSize;
     }
 
     @Override
@@ -38,11 +52,73 @@ public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
     }
 
     private List<IndexPair> getPositions(IAtomContainer atomContainer) {
+        List<IndexPair> positions = new ArrayList<IndexPair>();
+        
+        // TODO : only calculate these when necessary (number of unsaturated atoms > 2?)
+        AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
+        PermutationGroup autG = refiner.getAutomorphismGroup(atomContainer);
+        
         int atomCount = atomContainer.getAtomCount();
         int[] saturationCapacity = saturationCalculator.getSaturationCapacity(atomContainer);
-        List<Integer> baseSet = saturationCalculator.getUndersaturatedSet(atomCount, saturationCapacity);
         
-        return null;
+        // Get the external bonds if there is capacity
+        List<Integer> undersaturatedAtoms = saturationCalculator.getUndersaturatedAtoms(atomCount, saturationCapacity);
+        if (atomCount < formulaParser.getElementSymbols().size()) {
+            for (int rep : getSingleReps(undersaturatedAtoms, refiner)) {
+                positions.add(new IndexPair(rep, atomCount));
+            }
+        }
+        
+        // Get the internal bonds
+        if (undersaturatedAtoms.size() > 1) {
+            List<List<Integer>> undersaturatedBonds = 
+                    saturationCalculator.getUndersaturatedBonds(atomContainer, undersaturatedAtoms);
+            for (List<Integer> twoSubset : undersaturatedBonds) {
+                // XXX are k-subsets always ordered?
+                IndexPair pair = new IndexPair(twoSubset.get(0), twoSubset.get(1));
+                if (isMinimal(pair, autG)) {
+                    positions.add(pair);
+                }
+            }
+        }
+        return positions;
+    }
+    
+    private Set<Integer> getSingleReps(List<Integer> undersaturatedAtoms, AtomDiscretePartitionRefiner refiner) {
+        Set<Integer> singleReps = new HashSet<Integer>();
+        Partition partition = refiner.getAutomorphismPartition();
+        for (Integer undersaturatedIndex : undersaturatedAtoms) {
+            for (int cellIndex = 0; cellIndex < partition.size(); cellIndex++) {
+                SortedSet<Integer> cell = partition.getCell(cellIndex);
+                if (cell.contains(undersaturatedIndex)) {
+                    singleReps.add(cell.first());
+                    break;
+                }
+            }
+        }
+        return singleReps;
+    }
+
+    private boolean isMinimal(IndexPair pair, PermutationGroup autG) {
+        String oStr = pair.getStart() + ":" + pair.getEnd();
+        for (Permutation p : autG.all()) {
+            String pStr = getString(pair, p);
+            if (oStr.compareTo(pStr) > 0) {
+//                System.out.println("Comparing " + oStr + " to " + pStr);
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private String getString(IndexPair pair, Permutation p) {
+        int a = p.get(pair.getStart());
+        int b = p.get(pair.getEnd());
+        if (a < b) {
+            return a + ":" + b;
+        } else {
+            return b + ":" + a;
+        }
     }
 
 }

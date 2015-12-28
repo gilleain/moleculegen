@@ -8,7 +8,9 @@ import java.util.Map;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 
+import combinatorics.KSubsetLister;
 import combinatorics.MultiKSubsetLister;
 
 public class SaturationCalculator {
@@ -102,7 +104,7 @@ public class SaturationCalculator {
         return satCap;
     }
     
-    public List<Integer> getUndersaturatedSet(int atomCount, int[] saturationCapacity) {
+    public List<Integer> getUndersaturatedAtoms(int atomCount, int[] saturationCapacity) {
         List<Integer> baseSet = new ArrayList<Integer>();
         
         // get the amount each atom is under-saturated
@@ -113,6 +115,23 @@ public class SaturationCalculator {
         }
         return baseSet;
     }
-    
+
+    public List<List<Integer>> getUndersaturatedBonds(IAtomContainer atomContainer, List<Integer> undersaturatedAtoms) {
+        KSubsetLister<Integer> lister = new KSubsetLister<Integer>(2, undersaturatedAtoms);
+        List<List<Integer>> pairs = new ArrayList<List<Integer>>();
+        for (List<Integer> pair : lister) {
+            int first = pair.get(0);
+            int second = pair.get(1);
+            if (second >= atomContainer.getAtomCount()) {
+                pairs.add(pair);
+            } else {
+                IBond bond = atomContainer.getBond(atomContainer.getAtom(first), atomContainer.getAtom(second));
+                if (bond == null || bond.getOrder() == Order.SINGLE || bond.getOrder() == Order.DOUBLE) {
+                    pairs.add(pair);
+                }
+            }
+        }
+        return pairs;
+    }
 
 }

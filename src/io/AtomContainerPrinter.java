@@ -78,6 +78,7 @@ public class AtomContainerPrinter {
     }
     
     private static char bondOrderToChar(IBond.Order order) {
+        if (order == null) return '?';
         switch (order) {
             case SINGLE:     return '1';
             case DOUBLE:     return '2';

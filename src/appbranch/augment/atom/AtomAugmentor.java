@@ -66,7 +66,7 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
         
         // these are the atom indices that can have bonds added
         int[] saturationCapacity = saturationCalculator.getSaturationCapacity(atomContainer);
-        List<Integer> baseSet = saturationCalculator.getUndersaturatedSet(atomCount, saturationCapacity);
+        List<Integer> baseSet = saturationCalculator.getUndersaturatedAtoms(atomCount, saturationCapacity);
         
         int maxDegreeSumForCurrent = saturationCalculator.getMaxBondOrderSum(atomCount);
         int maxDegreeForCurrent = saturationCalculator.getMaxBondOrder(atomCount);

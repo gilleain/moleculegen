@@ -25,4 +25,8 @@ public class IndexPair {
     public int getEnd() {
         return end;
     }
+    
+    public String toString() {
+        return start + ":" + end;
+    }
 }
