@@ -14,7 +14,6 @@ public class ElementPair {
     private final String endSymbol;
 
     public ElementPair(String startSymbol, String endSymbol) {
-        super();
         this.startSymbol = startSymbol;
         this.endSymbol = endSymbol;
     }
@@ -25,5 +24,9 @@ public class ElementPair {
 
     public String getEndSymbol() {
         return endSymbol;
+    }
+    
+    public String toString() {
+        return "(" + startSymbol + "," + endSymbol + ")";
     }
 }

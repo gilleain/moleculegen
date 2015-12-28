@@ -65,22 +65,26 @@ public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
         List<Integer> undersaturatedAtoms = saturationCalculator.getUndersaturatedAtoms(atomCount, saturationCapacity);
         if (atomCount < formulaParser.getElementSymbols().size()) {
             for (int rep : getSingleReps(undersaturatedAtoms, refiner)) {
-                positions.add(new IndexPair(rep, atomCount));
+                // run through the possible bond orders from the maximum down to 1
+                for (int order = saturationCapacity[rep]; order > 0; order--) {
+                    positions.add(new IndexPair(rep, atomCount, order));
+                }
             }
         }
         
         // Get the internal bonds
         if (undersaturatedAtoms.size() > 1) {
-            List<List<Integer>> undersaturatedBonds = 
-                    saturationCalculator.getUndersaturatedBonds(atomContainer, undersaturatedAtoms);
-            for (List<Integer> twoSubset : undersaturatedBonds) {
+            List<IndexPair> undersaturatedBonds = 
+                    saturationCalculator.getUndersaturatedBonds(
+                            atomContainer, undersaturatedAtoms, saturationCapacity);
+            for (IndexPair pair : undersaturatedBonds) {
                 // XXX are k-subsets always ordered?
-                IndexPair pair = new IndexPair(twoSubset.get(0), twoSubset.get(1));
                 if (isMinimal(pair, autG)) {
                     positions.add(pair);
                 }
             }
         }
+//        System.out.println(io.AtomContainerPrinter.toString(atomContainer) + " + " + positions);
         return positions;
     }
     

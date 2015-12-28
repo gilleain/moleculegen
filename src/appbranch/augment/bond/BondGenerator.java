@@ -20,6 +20,8 @@ public class BondGenerator {
     
     private HCountValidator hCountValidator;
     
+    private int counter;
+    
     public BondGenerator(String elementFormula, Handler handler) {
         this(elementFormula, new BondOnlyStart(elementFormula), handler);
     }
@@ -37,25 +39,26 @@ public class BondGenerator {
         for (IAtomContainer startingStructure : initialStateSource.get()) {
             augment(new BondAugmentation(startingStructure));   // XXX null Bond Extension
         }
+        System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial) {
-        augment(new BondAugmentation(initial));  
+        augment(new BondAugmentation(initial));
     }
 
     private void augment(Augmentation<IAtomContainer, BondExtension> parent) {
-//        System.out.println("Augmenting " + io.AtomContainerPrinter.toString(parent.getBase()));
-        if (augmentor.isComplete(parent)) {
-            IAtomContainer atomContainer = parent.getBase();
-            if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
-                handler.handle(atomContainer);
+        counter++;
+        if (canonicalChecker.isCanonical(parent)) {
+            if (augmentor.isComplete(parent)) {
+                IAtomContainer atomContainer = parent.getBase();
+                if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
+                    handler.handle(atomContainer);
+                }
             }
         }
-        
+
         for (Augmentation<IAtomContainer, BondExtension> augmentation : augmentor.augment(parent)) {
-            if (canonicalChecker.isCanonical(augmentation)) {
-                augment(augmentation);
-            }
+            augment(augmentation);
         }
     }
 }

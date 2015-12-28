@@ -1,13 +1,13 @@
-package test.branch;
+package test.branch.bond;
 
-import appbranch.augment.atom.AtomGenerator;
+import appbranch.augment.bond.BondGenerator;
 import appbranch.handler.CountingHandler;
 
 public class FormulaTest {
     
     public int countNFromAtom(String elementFormula) {
         CountingHandler handler = new CountingHandler(false);
-        AtomGenerator gen = new AtomGenerator(elementFormula, handler);
+        BondGenerator gen = new BondGenerator(elementFormula, handler);
         gen.run();
         return handler.getCount(); 
     }

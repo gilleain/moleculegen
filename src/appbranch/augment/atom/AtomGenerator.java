@@ -27,6 +27,8 @@ public class AtomGenerator implements AugmentingGenerator {
     
     private InitialStateSource<IAtomContainer> initialStateSource;
     
+    private int counter;
+    
     public AtomGenerator(String elementFormula, Handler handler) {
         // XXX - make these once and pass them down!
         FormulaParser formulaParser = new FormulaParser(elementFormula);
@@ -44,6 +46,7 @@ public class AtomGenerator implements AugmentingGenerator {
         for (IAtomContainer start : initialStateSource.get()) {
             augment(new AtomAugmentation(start), 0);
         }
+        System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial) {
@@ -52,11 +55,12 @@ public class AtomGenerator implements AugmentingGenerator {
     }
     
     private void augment(Augmentation<IAtomContainer, AtomExtension> parent, int index) {
+        counter++;
         if (index >= maxIndex) {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
-                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
+//                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }

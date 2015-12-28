@@ -1,4 +1,4 @@
-package test.branch;
+package test.branch.bond;
 
 import org.junit.Test;
 

@@ -24,5 +24,9 @@ public class BondExtension {
     public ElementPair getElementPair() {
         return elementPair;
     }
+    
+    public String toString() {
+        return indexPair + ", " + elementPair;
+    }
 
 }

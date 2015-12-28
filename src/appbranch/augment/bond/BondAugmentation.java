@@ -42,30 +42,31 @@ public class BondAugmentation implements Augmentation<IAtomContainer, BondExtens
             if (position.getEnd() > parent.getAtomCount() - 1) {
                 String elementSymbol = bondExtension.getElementPair().getEndSymbol();
                 child.addAtom(builder.newInstance(IAtom.class, elementSymbol));
-                child.addBond(position.getStart(), position.getEnd(), IBond.Order.SINGLE);
+                child.addBond(position.getStart(), position.getEnd(), toBond(position.getOrder()));
             } else {
                 // oh how I wish there was a hasBond method...
                 IBond bond = child.getBond(
                         child.getAtom(position.getStart()), child.getAtom(position.getEnd()));
                 if (bond == null) {
-                    child.addBond(position.getStart(), position.getEnd(), IBond.Order.SINGLE);
+                    child.addBond(position.getStart(), position.getEnd(), toBond(position.getOrder()));
                 } else {
-                    bond.setOrder(incrementOrder(bond.getOrder()));
+                    // throw error?
+                    System.err.println("Shouldn't have a bond here!");
                 }
             }
             return child;
         } catch (CloneNotSupportedException cnse) {
-            // TODO
+            System.err.println(cnse);
             return null;
         }
     }
     
-    private IBond.Order incrementOrder(IBond.Order order) {
+    private IBond.Order toBond(int order) {
         switch (order) {
-            case SINGLE: return IBond.Order.DOUBLE;
-            case DOUBLE: return IBond.Order.TRIPLE;
-            case TRIPLE: return null;   // XXX
-            default: return null;
+            case 1: return IBond.Order.SINGLE;
+            case 2: return IBond.Order.DOUBLE;
+            case 3: return IBond.Order.TRIPLE;
+            default: return IBond.Order.UNSET;  // XXX?
         }
     }
     
@@ -77,5 +78,9 @@ public class BondAugmentation implements Augmentation<IAtomContainer, BondExtens
     @Override
     public BondExtension getExtension() {
         return bondExtension;
+    }
+    
+    public String toString() {
+        return io.AtomContainerPrinter.toString(augmentedMolecule) + " -> " + bondExtension;
     }
 }

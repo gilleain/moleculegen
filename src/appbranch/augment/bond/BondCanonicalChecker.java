@@ -8,10 +8,17 @@ import group.BondDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
+/**
+ * Check a bond-wise augmentation of an IAtomContainer for canonicity. 
+ * 
+ * @author maclean
+ *
+ */
 public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, BondExtension> {
 
     @Override
     public boolean isCanonical(Augmentation<IAtomContainer, BondExtension> augmentation) {
+//        return true;
         IAtomContainer augmentedMolecule = augmentation.getBase();
         if (augmentedMolecule.getAtomCount() <= 2 || augmentedMolecule.getBondCount() == 0) {
             return true;

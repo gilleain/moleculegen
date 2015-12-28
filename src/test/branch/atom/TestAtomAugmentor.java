@@ -1,4 +1,4 @@
-package test.branch;
+package test.branch.atom;
 
 import java.util.ArrayList;
 import java.util.HashMap;

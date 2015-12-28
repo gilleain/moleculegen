@@ -1,4 +1,4 @@
-package test.branch;
+package test.branch.atom;
 
 import org.junit.Test;
 
