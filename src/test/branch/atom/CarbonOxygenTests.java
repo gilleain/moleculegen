@@ -38,7 +38,7 @@ public class CarbonOxygenTests extends FormulaTest {
     
     @Test
     public void c2H4O2Test() {
-        Assert.assertEquals(3, countNFromAtom("C2H4O2"));
+        Assert.assertEquals(10, countNFromAtom("C2H4O2"));
     }
 
 }

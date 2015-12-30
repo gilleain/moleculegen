@@ -53,6 +53,7 @@ public class BondGenerator {
                 IAtomContainer atomContainer = parent.getBase();
                 if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
                     handler.handle(atomContainer);
+                    System.out.println(counter + " " + io.AtomContainerPrinter.toString(atomContainer));
                 }
             }
         }
