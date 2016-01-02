@@ -23,15 +23,12 @@ public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, Bo
         if (augmentedMolecule.getAtomCount() <= 2 || augmentedMolecule.getBondCount() == 0) {
             return true;
         }
-        if (!inOrder(augmentedMolecule)) {
-            return false;
-        }
         
         IBond addedBond = getAddedBondIndex(augmentedMolecule, augmentation.getExtension());
         
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup aut = refiner.getAutomorphismGroup(augmentedMolecule);
-        Permutation labelling = refiner.getBest();
+        Permutation labelling = refiner.getBest().invert();
 //        System.out.println("best = " + labelling);
         IBond canDelBond = getCanonicalDeletionBond(augmentedMolecule, labelling);
         int ai = augmentedMolecule.getAtomNumber(addedBond.getAtom(0));
@@ -40,25 +37,6 @@ public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, Bo
         int bj = augmentedMolecule.getAtomNumber(canDelBond.getAtom(1));
 //        System.out.println(ai + "," + aj + "," + bi + "," + bj);
         return inOrbit(ai, aj, bi, bj, aut);
-    }
-    
-    private boolean inOrder(IAtomContainer augmentedMolecule) {
-        String prev = null;
-        for (IBond bond : augmentedMolecule.bonds()) {
-            String current = toString(augmentedMolecule, bond);
-            if (prev == null || prev.compareTo(current) < 0) {
-                prev = current;
-                continue;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private String toString(IAtomContainer atomContainer, IBond bond) {
-        return atomContainer.getAtomNumber(bond.getAtom(0)) + ":" 
-              + atomContainer.getAtomNumber(bond.getAtom(1)); 
     }
     
     private boolean inOrbit(int addedBondI, int addedBondJ, int canDelBondI, int canDelBondJ, PermutationGroup aut) {
