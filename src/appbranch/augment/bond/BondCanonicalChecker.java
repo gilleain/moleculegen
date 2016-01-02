@@ -6,10 +6,8 @@ import org.openscience.cdk.interfaces.IBond;
 import appbranch.augment.Augmentation;
 import appbranch.canonical.CanonicalChecker;
 import group.AtomDiscretePartitionRefiner;
-import group.BondDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
-import validate.BondCanonicalValidator;
 
 /**
  * Check a bond-wise augmentation of an IAtomContainer for canonicity. 
@@ -29,22 +27,18 @@ public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, Bo
             return false;
         }
         
-//        BondDiscretePartitionRefiner bondRefiner = new BondDiscretePartitionRefiner();
-//        PermutationGroup autBondH = bondRefiner.getAutomorphismGroup(augmentedMolecule);
-//        System.out.println(io.AtomContainerPrinter.toString(augmentedMolecule) + " / " + bondRefiner.getFirst());
-//        System.out.println(bondRefiner.getAutomorphismPartition());
         IBond addedBond = getAddedBondIndex(augmentedMolecule, augmentation.getExtension());
-//        int canDelIndex = getCanonicalDeletionBondIndex(bondRefiner);
         
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup aut = refiner.getAutomorphismGroup(augmentedMolecule);
         Permutation labelling = refiner.getBest();
+//        System.out.println("best = " + labelling);
         IBond canDelBond = getCanonicalDeletionBond(augmentedMolecule, labelling);
-//        int canDelIndex = augmentedMolecule.getBondNumber(canDelBond);
         int ai = augmentedMolecule.getAtomNumber(addedBond.getAtom(0));
         int aj = augmentedMolecule.getAtomNumber(addedBond.getAtom(1));
         int bi = augmentedMolecule.getAtomNumber(canDelBond.getAtom(0));
         int bj = augmentedMolecule.getAtomNumber(canDelBond.getAtom(1));
+//        System.out.println(ai + "," + aj + "," + bi + "," + bj);
         return inOrbit(ai, aj, bi, bj, aut);
     }
     
@@ -97,36 +91,7 @@ public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, Bo
         }
         return largestBond;
     }
-    
-    private boolean inOrbit(int addedBondIndex, int canDelIndex, PermutationGroup autBondH) {
-        for (Permutation permutation : autBondH.all()) {
-            if (permutation.get(addedBondIndex) == canDelIndex) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private Permutation getBondLabelling(IAtomContainer augmentedMolecule) {
-        AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
-        Permutation atomLabelling = refiner.getBest();
-        int[] bondLabelling = new int[augmentedMolecule.getBondCount()];
-        for (IBond bond : augmentedMolecule.bonds()) {
-            int a0 = augmentedMolecule.getAtomNumber(bond.getAtom(0));
-            int a1 = augmentedMolecule.getAtomNumber(bond.getAtom(1));
-            int pA0 = atomLabelling.get(a0);
-            int pA1 = atomLabelling.get(a1);
-            
-        }
-        return new Permutation(0);  /// XXX todo
-    }
-
-    private int getCanonicalDeletionBondIndex(BondDiscretePartitionRefiner bondRefiner) {
-        Permutation labelling = bondRefiner.getBest();
-        // TODO : bridge edges
-        return labelling.get(labelling.size() - 1);
-    }
-
+   
     private IBond getAddedBondIndex(IAtomContainer augmentedMolecule, BondExtension extension) {
         return augmentedMolecule.getBond(
                 augmentedMolecule.getAtom(extension.getIndexPair().getStart()), 

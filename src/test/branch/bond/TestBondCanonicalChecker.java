@@ -22,22 +22,56 @@ public class TestBondCanonicalChecker {
     
     private BondCanonicalChecker checker = new BondCanonicalChecker();
     
-    @Test
-    public void testA() {
-        IAtomContainer ac = AtomContainerPrinter.fromString("C0C1C2C3 0:1(1),0:2(1),0:3(1)", builder);
-        BondExtension bondExtension = new BondExtension(new IndexPair(1, 2, 1), new ElementPair("C", "C"));
+    private boolean test(String acpString, int... params) {
+        return test(acpString, new BondExtension(
+                new IndexPair(params[0], params[1], params[2]), new ElementPair("C", "C")));
+    }
+    
+    private boolean test(String acpString, BondExtension bondExtension) {
+        IAtomContainer ac = AtomContainerPrinter.fromString(acpString, builder);
         Augmentation<IAtomContainer, BondExtension> augmentation = new BondAugmentation(ac, bondExtension);
-        boolean canon = checker.isCanonical(augmentation);
-        assertTrue(canon);
+        return checker.isCanonical(augmentation);
     }
     
     @Test
-    public void testB() {
-        IAtomContainer ac = AtomContainerPrinter.fromString("C0C1C2C3 0:1(1),0:2(1),1:2(1)", builder);
-        BondExtension bondExtension = new BondExtension(new IndexPair(0, 3, 1), new ElementPair("C", "C"));
-        Augmentation<IAtomContainer, BondExtension> augmentation = new BondAugmentation(ac, bondExtension);
-        boolean canon = checker.isCanonical(augmentation);
-        assertFalse(canon);
+    public void testAlkaneA() {
+        assertTrue(test("C0C1C2C3 0:1(1),0:2(1),0:3(1)", 1, 2, 1));
     }
+    
+    @Test
+    public void testAlkaneB() {
+        assertFalse(test("C0C1C2C3 0:1(1),0:2(1),1:2(1)", 0, 3, 1));
+    }
+    
+    @Test
+    public void testAlkeneA() {
+        assertTrue(test("C0C1C2 0:1(2),0:2(1)", 0, 3, 1));
+    }
+    
+    @Test
+    public void testAlkeneB() {
+        assertFalse(test("C0C1C2 0:1(1),0:2(2)", 0, 3, 1));
+    }
+    
+    @Test
+    public void testAlkeneC() {
+        assertTrue(test("C0C1C2 0:1(2)", 0, 2, 1));
+    }
+
+    @Test
+    public void testAlkeneD() {
+        assertFalse(test("C0C1 0:1(1)", 0, 2, 2));
+    }
+    
+    @Test
+    public void testAlkyneA() {
+        assertTrue(test("C0C1C2C3 0:1(1),0:2(1),0:3(1)", 1, 2, 2));
+    }
+    
+    @Test
+    public void testAlkyneB() {
+        assertFalse(test("C0C1C2C3 0:1(2),0:2(1),1:2(1)", 2, 3, 1));
+    }
+
 
 }
