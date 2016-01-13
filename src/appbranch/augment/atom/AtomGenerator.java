@@ -60,7 +60,7 @@ public class AtomGenerator implements AugmentingGenerator {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
-//                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
+                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }

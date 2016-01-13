@@ -24,15 +24,29 @@ public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, Bo
             return true;
         }
         
+        if (!inOrder(augmentedMolecule)) {
+            return false;
+        }
+        
+        BondExtension extension = augmentation.getExtension();
         IBond addedBond = getAddedBondIndex(augmentedMolecule, augmentation.getExtension());
+        if (addedBond == null) {
+//            System.out.println("disconnected is canonical");
+            return true;    // disconnected atoms
+        }
         
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup aut = refiner.getAutomorphismGroup(augmentedMolecule);
-        Permutation labelling = refiner.getBest().invert();
+        Permutation labelling = refiner.getBest();
+//        if (!labelling.isIdentity()) return false;
 //        System.out.println("best = " + labelling);
-        IBond canDelBond = getCanonicalDeletionBond(augmentedMolecule, labelling);
-        int ai = augmentedMolecule.getAtomNumber(addedBond.getAtom(0));
-        int aj = augmentedMolecule.getAtomNumber(addedBond.getAtom(1));
+        IBond canDelBond = getCanonicalDeletionBond(augmentedMolecule, labelling.invert());
+        // note that (ai, aj) are just (extension.start, extension.end)
+//        int ai = augmentedMolecule.getAtomNumber(addedBond.getAtom(0));
+//        int aj = augmentedMolecule.getAtomNumber(addedBond.getAtom(1));
+        int ai = extension.getIndexPair().getStart();
+        int aj = extension.getIndexPair().getEnd();
+
         int bi = augmentedMolecule.getAtomNumber(canDelBond.getAtom(0));
         int bj = augmentedMolecule.getAtomNumber(canDelBond.getAtom(1));
 //        System.out.println(ai + "," + aj + "," + bi + "," + bj);
@@ -74,6 +88,25 @@ public class BondCanonicalChecker implements CanonicalChecker<IAtomContainer, Bo
         return augmentedMolecule.getBond(
                 augmentedMolecule.getAtom(extension.getIndexPair().getStart()), 
                 augmentedMolecule.getAtom(extension.getIndexPair().getEnd()));
+    }
+
+    private boolean inOrder(IAtomContainer augmentedMolecule) {
+        String prev = null;
+        for (IBond bond : augmentedMolecule.bonds()) {
+            String current = toString(augmentedMolecule, bond);
+            if (prev == null || prev.compareTo(current) < 0) {
+                prev = current;
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String toString(IAtomContainer atomContainer, IBond bond) {
+        return atomContainer.getAtomNumber(bond.getAtom(0)) + ":" 
+                + atomContainer.getAtomNumber(bond.getAtom(1)); 
     }
 
 }

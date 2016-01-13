@@ -44,13 +44,13 @@ public class TestBondCanonicalChecker {
     }
     
     @Test
-    public void testAlkeneA() {
-        assertTrue(test("C0C1C2 0:1(2),0:2(1)", 0, 3, 1));
+    public void testAlkaneC() {
+        assertFalse(test("C0C1C2C3 0:2(1),0:3(1)", 1, 2, 1));
     }
     
     @Test
-    public void testAlkeneB() {
-        assertFalse(test("C0C1C2 0:1(1),0:2(2)", 0, 3, 1));
+    public void testAlkaneD() {
+        assertFalse(test("C0C1C2C3 0:1(1),1:2(1)", 0, 3, 1));
     }
     
     @Test
@@ -71,6 +71,11 @@ public class TestBondCanonicalChecker {
     @Test
     public void testAlkyneB() {
         assertFalse(test("C0C1C2C3 0:1(2),0:2(1),1:2(1)", 2, 3, 1));
+    }
+    
+    @Test
+    public void testCOC() {
+        assertTrue(test("C0O1C2 0:1(1)", 1, 2, 1));
     }
 
 

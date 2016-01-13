@@ -66,7 +66,8 @@ public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
         if (atomCount < formulaParser.getElementSymbols().size()) {
             for (int rep : getSingleReps(undersaturatedAtoms, refiner)) {
                 // run through the possible bond orders from the maximum down to 1
-                for (int order = saturationCapacity[rep]; order > 0; order--) {
+                int max = Math.min(3, saturationCapacity[rep]); // XXX carbon only!!!
+                for (int order = max; order > 0; order--) {
                     positions.add(new IndexPair(rep, atomCount, order));
                 }
             }
@@ -84,6 +85,12 @@ public class BondAugmentor implements Augmentor<IAtomContainer, BondExtension> {
                 }
             }
         }
+        
+        // Add a disconnected atom
+        if (atomCount < formulaParser.getElementSymbols().size()) {
+            positions.add(new IndexPair(0, atomCount, 0));    // nasty hack...
+        }
+        
 //        System.out.println(io.AtomContainerPrinter.toString(atomContainer) + " + " + positions);
         return positions;
     }

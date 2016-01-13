@@ -118,7 +118,11 @@ public class SaturationCalculator {
 
     public List<IndexPair> getUndersaturatedBonds(IAtomContainer atomContainer, List<Integer> undersaturatedAtoms, int[] saturationCapacity) {
         List<IndexPair> pairs = new ArrayList<IndexPair>();
-        KSubsetLister<Integer> lister = new KSubsetLister<Integer>(2, undersaturatedAtoms);
+        List<Integer> filtered = filterOutDisconnected(atomContainer, undersaturatedAtoms);
+//        System.out.println(filtered);
+        if (filtered.isEmpty() || filtered.size() == 1) return pairs;
+        KSubsetLister<Integer> lister = new KSubsetLister<Integer>(2, filtered);
+//        KSubsetLister<Integer> lister = new KSubsetLister<Integer>(2, undersaturatedAtoms);
         for (List<Integer> pair : lister) {
             int start = pair.get(0);
             int end = pair.get(1);
@@ -127,11 +131,23 @@ public class SaturationCalculator {
                 int startCapacity = saturationCapacity[start];
                 int endCapacity = saturationCapacity[end];
                 // run through the possible bond orders from the maximum down to 1
-                for (int order = Math.min(startCapacity, endCapacity); order > 0; order--) {
+                int maxOrder = Math.min(3, Math.min(startCapacity, endCapacity));
+                for (int order = maxOrder; order > 0; order--) {
                    pairs.add(new IndexPair(start, end, order)); 
                 }
             }
         }
         return pairs;
+    }
+    
+    private List<Integer> filterOutDisconnected(IAtomContainer atomContainer, List<Integer> indices) {
+        List<Integer> filtered = new ArrayList<Integer>();
+        for (int index : indices) {
+            if (index < atomContainer.getAtomCount() - 1
+                    || atomContainer.getConnectedAtomsCount(atomContainer.getAtom(index)) > 0) {
+                filtered.add(index);
+            }
+        }
+        return filtered;
     }
 }

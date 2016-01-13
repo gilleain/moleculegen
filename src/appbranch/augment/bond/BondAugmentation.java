@@ -39,7 +39,10 @@ public class BondAugmentation implements Augmentation<IAtomContainer, BondExtens
         try {
             IAtomContainer child = (IAtomContainer) parent.clone();
             IndexPair position = bondExtension.getIndexPair();
-            if (position.getEnd() > parent.getAtomCount() - 1) {
+            if (position.getOrder() == 0) { // special case of disconnected atom
+                String elementSymbol = bondExtension.getElementPair().getEndSymbol();
+                child.addAtom(builder.newInstance(IAtom.class, elementSymbol));
+            } else if (position.getEnd() > parent.getAtomCount() - 1) {
                 String elementSymbol = bondExtension.getElementPair().getEndSymbol();
                 child.addAtom(builder.newInstance(IAtom.class, elementSymbol));
                 child.addBond(position.getStart(), position.getEnd(), toBond(position.getOrder()));

@@ -49,16 +49,18 @@ public class BondGenerator {
     private void augment(Augmentation<IAtomContainer, BondExtension> parent) {
         counter++;
         if (canonicalChecker.isCanonical(parent)) {
-            System.out.println(counter + " C " + io.AtomContainerPrinter.toString(parent.getBase()));
+            System.out.println(counter + " C " + io.AtomContainerPrinter.toString(parent.getBase()) + " -> " + parent.getExtension());
             if (augmentor.isComplete(parent)) {
                 IAtomContainer atomContainer = parent.getBase();
                 if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
                     handler.handle(atomContainer);
-                    System.out.println(counter + " " + io.AtomContainerPrinter.toString(atomContainer));
+//                    System.out.println(counter + " " + io.AtomContainerPrinter.toString(atomContainer));
+                    System.out.println("SOLUTION -------- " + io.AtomContainerPrinter.toString(atomContainer));
+//                  System.out.println(io.AtomContainerPrinter.toString(atomContainer));
                 }
             }
         } else {
-            System.out.println(counter + " N " + io.AtomContainerPrinter.toString(parent.getBase()));
+            System.out.println(counter + " N " + io.AtomContainerPrinter.toString(parent.getBase()) + " -> " + parent.getExtension());
             return;
         }
 

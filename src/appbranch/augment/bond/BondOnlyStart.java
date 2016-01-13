@@ -27,11 +27,20 @@ public class BondOnlyStart implements InitialStateSource<IAtomContainer> {
     @Override
     public Iterable<IAtomContainer> get() {
         List<IAtomContainer> singletonList = new ArrayList<IAtomContainer>();
-        singletonList.add(makeBond(IBond.Order.SINGLE));
-        singletonList.add(makeBond(IBond.Order.DOUBLE));
-        singletonList.add(makeBond(IBond.Order.TRIPLE));
+//        singletonList.add(makeBond(IBond.Order.SINGLE));
+//        singletonList.add(makeBond(IBond.Order.DOUBLE));
+//        singletonList.add(makeBond(IBond.Order.TRIPLE));
+        singletonList.add(makeAtom());
         return singletonList;
     }
+    
+    private IAtomContainer makeAtom() {
+        IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
+        atomContainer.addAtom(builder.newInstance(IAtom.class, elementSymbols.get(0)));
+        atomContainer.setProperty("IS_CONNECTED", false);
+        return atomContainer;
+    }
+    
     
     private IAtomContainer makeBond(IBond.Order order) {
         IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
