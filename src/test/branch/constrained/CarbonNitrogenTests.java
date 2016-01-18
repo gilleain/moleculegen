@@ -40,5 +40,10 @@ public class CarbonNitrogenTests extends FormulaTest {
     public void cH4N2Test() {
         Assert.assertEquals(4, countNFromAtom("CH4N2"));
     }
+    
+    @Test
+    public void c3H9NTest() {
+        Assert.assertEquals(4, countNFromAtom("C3H9N"));
+    }
 
 }

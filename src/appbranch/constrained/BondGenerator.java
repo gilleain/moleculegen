@@ -36,7 +36,7 @@ public class BondGenerator {
             String symbol = startingStructure.getAtom(0).getSymbol();
             run(startingStructure, initialConstraints.minus(symbol));
         }
-        System.out.println("counter = " + counter);
+//        System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial, ElementConstraints constraints) {
@@ -48,15 +48,15 @@ public class BondGenerator {
         counter++;
         IAtomContainer atomContainer = parent.getBase();
         if (canonicalChecker.isCanonical(atomContainer, parent.getExtension())) {
-            System.out.println(counter + " C " + toString(parent));
+//            System.out.println(counter + " C " + toString(parent));
             if (augmentor.isComplete(atomContainer)) {
                 if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
-                    System.out.println("SOL "+ io.AtomContainerPrinter.toString(atomContainer));
+//                    System.out.println("SOL "+ io.AtomContainerPrinter.toString(atomContainer));
                     handler.handle(atomContainer);
                 }
             }
         } else {
-            System.out.println(counter + " N " + toString(parent));
+//            System.out.println(counter + " N " + toString(parent));
             return;
         }
         
