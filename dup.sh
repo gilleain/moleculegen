@@ -9,4 +9,4 @@ CLASSPATH=$CLASSPATH:/Users/maclean/.m2/repository/uk/ac/ebi/beam/beam-core/0.8/
 CLASSPATH=$CLASSPATH:/Users/maclean/.m2/repository/uk/ac/ebi/beam/beam-func/0.8/beam-func-0.8.jar
 CLASSPATH=$CLASSPATH:/Users/maclean/.m2/repository/com/google/collections/google-collections/1.0/google-collections-1.0.jar
 CLASSPATH=$CLASSPATH:/Users/maclean/.m2/repository//com/github/gilleain/signatures/signatures/1.1/signatures-1.1.jar
-java -cp ${CLASSPATH} app.DuplicateChecker $*
+java -cp ${CLASSPATH} appbranch.DuplicateChecker $*
