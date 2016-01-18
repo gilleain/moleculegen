@@ -33,6 +33,7 @@ public class BondGenerator {
         this.augmentor = new BondAugmentor(elementFormula);
         hCountValidator = new HCountValidator(elementFormula);
         canonicalChecker = new BondCanonicalChecker();
+        
     }
     
     public void run() {

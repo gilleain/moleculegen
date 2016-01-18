@@ -26,15 +26,20 @@ public class DuplicateCountingHandler implements Handler {
             if (dupMap.containsKey(canonicalSignature)) {
                 dupMap.get(canonicalSignature).add(atomContainer);
             } else {
-                IAtomContainer original = sigMap.get(canonicalSignature);
-                List<IAtomContainer> dups = new ArrayList<IAtomContainer>();
-                dups.add(original);
-                dups.add(atomContainer);
-                dupMap.put(canonicalSignature, dups);
+                addToDupMap(atomContainer, canonicalSignature);
             }
         } else {
             sigMap.put(canonicalSignature, atomContainer);
+            addToDupMap(atomContainer, canonicalSignature);
         }
+    }
+    
+    private void addToDupMap(IAtomContainer atomContainer, String canonicalSignature) {
+        IAtomContainer original = sigMap.get(canonicalSignature);
+        List<IAtomContainer> dups = new ArrayList<IAtomContainer>();
+        dups.add(original);
+        dups.add(atomContainer);
+        dupMap.put(canonicalSignature, dups);
     }
     
     public Map<String, List<IAtomContainer>> getDupMap() {
