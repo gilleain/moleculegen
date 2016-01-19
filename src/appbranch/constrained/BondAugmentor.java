@@ -50,8 +50,8 @@ public class BondAugmentor
                     new BondAugmentation(atomContainer, extension, constraints));
         }
         
-        for (IndexPair position : getExternalPositions(atomCount, undersaturatedAtoms, saturationCapacity, refiner)) {
-            for (String literal : constraints) {
+        for (String literal : constraints) {
+            for (IndexPair position : getExternalPositions(atomCount, undersaturatedAtoms, saturationCapacity, refiner, literal)) {
                 BondExtension extension = new BondExtension(position, literal);
                 augmentations.add(
                         new BondAugmentation(atomContainer, extension, constraints.minus(literal)));
@@ -83,13 +83,19 @@ public class BondAugmentor
         return positions;
     }
     
-    private List<IndexPair> getExternalPositions(int atomCount, List<Integer> undersaturatedAtoms, int[] saturationCapacity, AtomDiscretePartitionRefiner refiner) {
+    private List<IndexPair> getExternalPositions(
+            int atomCount, 
+            List<Integer> undersaturatedAtoms, 
+            int[] saturationCapacity, 
+            AtomDiscretePartitionRefiner refiner,
+            String elementSymbol) {
         List<IndexPair> positions = new ArrayList<IndexPair>();
         
         if (atomCount < formulaParser.getElementSymbols().size()) {
             for (int rep : getSingleReps(undersaturatedAtoms, refiner)) {
                 // run through the possible bond orders from the maximum down to 1
-                int max = Math.min(3, saturationCapacity[rep]); // XXX carbon only!!!
+                int addedSaturation = saturationCalculator.getMaxBondOrder(elementSymbol);
+                int max = Math.min(addedSaturation, saturationCapacity[rep]);
                 for (int order = max; order > 0; order--) {
                     positions.add(new IndexPair(rep, atomCount, order));
                 }
