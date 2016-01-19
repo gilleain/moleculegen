@@ -2,10 +2,11 @@ package appbranch.constrained;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import appbranch.Generator;
 import appbranch.handler.Handler;
 import validate.HCountValidator;
 
-public class BondGenerator {
+public class BondGenerator implements Generator {
     
     private ElementConstraints initialConstraints;
     

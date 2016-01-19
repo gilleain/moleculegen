@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-
-import appbranch.augment.atom.AtomGenerator;
+import appbranch.Generator;
+import appbranch.GeneratorFactory;
 import appbranch.handler.CountingHandler;
 
 /**
@@ -23,12 +22,11 @@ public class TestFromFile {
     
     public final static String filepath = "src/test/data/testformulae.txt";
     
-    @Test
-    public void runTest() throws IOException {
+    public void runTest(GeneratorFactory generatorFactory) throws IOException {
         Map<String, Integer> formulaeCounts = readFile(filepath);
         Map<String, Integer> fails = new HashMap<String, Integer>();
         for (String formula : formulaeCounts.keySet()) {
-            int observedCount = count(formula);
+            int observedCount = count(generatorFactory, formula);
             int expectedCount = formulaeCounts.get(formula);
             if (observedCount != expectedCount) {
                 fails.put(formula, expectedCount - observedCount);
@@ -47,9 +45,9 @@ public class TestFromFile {
         return stringBuilder.toString();
     }
     
-    private int count(String elementFormula) {
+    private int count(GeneratorFactory generatorFactory, String elementFormula) {
         CountingHandler handler = new CountingHandler(false);
-        AtomGenerator gen = new AtomGenerator(elementFormula, handler);
+        Generator gen = generatorFactory.createForFormula(elementFormula, handler);
         gen.run();
         return handler.getCount();
     }

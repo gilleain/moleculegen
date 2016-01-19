@@ -3,6 +3,7 @@ package appbranch.augment.atom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import appbranch.FormulaParser;
+import appbranch.Generator;
 import appbranch.augment.Augmentation;
 import appbranch.augment.AugmentingGenerator;
 import appbranch.augment.ExtensionSource;
@@ -13,7 +14,7 @@ import appbranch.handler.Handler;
 import validate.HCountValidator;
 
 
-public class AtomGenerator implements AugmentingGenerator {
+public class AtomGenerator implements AugmentingGenerator, Generator {
     
     private AtomAugmentor augmentor;
     
@@ -46,7 +47,7 @@ public class AtomGenerator implements AugmentingGenerator {
         for (IAtomContainer start : initialStateSource.get()) {
             augment(new AtomAugmentation(start), 0);
         }
-        System.out.println("counter = " + counter);
+//        System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial) {
@@ -60,7 +61,7 @@ public class AtomGenerator implements AugmentingGenerator {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
-                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
+//                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }
