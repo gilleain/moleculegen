@@ -1,4 +1,4 @@
-package appbranch.constrained;
+package appbranch.augment.constrained;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 

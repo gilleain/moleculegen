@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import appbranch.Generator;
 import appbranch.GeneratorFactory;
-import appbranch.constrained.BondGenerator;
+import appbranch.augment.constrained.BondGenerator;
 import appbranch.handler.Handler;
 import test.branch.TestFromFile;
 

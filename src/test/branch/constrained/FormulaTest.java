@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import appbranch.constrained.BondGenerator;
+import appbranch.augment.constrained.BondGenerator;
 import appbranch.handler.DuplicateCountingHandler;
 
 public class FormulaTest {
