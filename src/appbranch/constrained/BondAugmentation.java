@@ -6,8 +6,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import appbranch.augment.bond.IndexPair;
-
 /**
  * Augmentation of an atom container by adding a bond between two atoms, or 
  * incrementing the bond order if there is already a bond.

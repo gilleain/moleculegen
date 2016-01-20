@@ -1,4 +1,4 @@
-package appbranch.augment.bond;
+package appbranch.constrained;
 
 /**
  * The position to put a bond.

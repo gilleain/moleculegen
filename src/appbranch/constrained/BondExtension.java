@@ -1,7 +1,5 @@
 package appbranch.constrained;
 
-import appbranch.augment.bond.IndexPair;
-
 /**
  * Represents a single added bond.
  * 

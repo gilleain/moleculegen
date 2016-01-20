@@ -8,11 +8,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import appbranch.augment.bond.IndexPair;
 import appbranch.constrained.BondAugmentation;
 import appbranch.constrained.BondCanonicalChecker;
 import appbranch.constrained.BondExtension;
 import appbranch.constrained.ElementConstraints;
+import appbranch.constrained.IndexPair;
 
 public class TestBondCanonicalChecker {
     

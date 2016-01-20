@@ -10,7 +10,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import appbranch.FormulaParser;
 import appbranch.augment.SaturationCalculator;
-import appbranch.augment.bond.IndexPair;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;

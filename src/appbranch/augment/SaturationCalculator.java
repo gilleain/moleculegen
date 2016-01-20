@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
-import appbranch.augment.bond.IndexPair;
+import appbranch.constrained.IndexPair;
 import combinatorics.KSubsetLister;
 import combinatorics.MultiKSubsetLister;
 
