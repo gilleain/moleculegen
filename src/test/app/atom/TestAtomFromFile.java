@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import app.Generator;
 import app.GeneratorFactory;
-import app.augment.atom.AtomGenerator;
-import app.handler.Handler;
+import augment.atom.AtomGenerator;
+import handler.Handler;
 import test.app.TestFromFile;
 
 public class TestAtomFromFile extends TestFromFile {

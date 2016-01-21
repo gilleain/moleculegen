@@ -12,8 +12,8 @@ import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import app.augment.AugmentingGenerator;
-import app.handler.DataFormat;
+import augment.AugmentingGenerator;
+import handler.DataFormat;
 import io.IteratingACPReader;
 import io.IteratingSignatureReader;
 

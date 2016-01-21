@@ -13,7 +13,7 @@ import org.openscience.cdk.io.SDFWriter;
  * @author maclean
  *
  */
-public class SDFHandler implements GenerateHandler {
+public class SDFHandler implements Handler {
 	
 	private SDFWriter writer;
 	
@@ -26,9 +26,9 @@ public class SDFHandler implements GenerateHandler {
 	}
 
 	@Override
-	public void handle(IAtomContainer parent, IAtomContainer child) {
+	public void handle(IAtomContainer atomContainer) {
 	    try {
-            writer.write(child);
+            writer.write(atomContainer);
         } catch (CDKException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

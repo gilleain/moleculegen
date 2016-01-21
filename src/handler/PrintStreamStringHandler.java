@@ -1,13 +1,13 @@
 package handler;
 
-import io.AtomContainerPrinter;
-
 import java.io.PrintStream;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
+
+import io.AtomContainerPrinter;
 
 
 
@@ -18,7 +18,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
  * @author maclean
  *
  */
-public class PrintStreamStringHandler implements GenerateHandler {
+public class PrintStreamStringHandler implements Handler {
 	
 	private PrintStream printStream;
 	
@@ -30,20 +30,17 @@ public class PrintStreamStringHandler implements GenerateHandler {
 	
 	private boolean shouldNumberLines;
 	
-	private boolean showParent;
-	
 	public PrintStreamStringHandler() {
 		this(System.out, DataFormat.SMILES);
 	}
 	
 	public PrintStreamStringHandler(PrintStream printStream, DataFormat format) {
-	    this(printStream, format, false, false);
+	    this(printStream, format, false);
 	}
 	
 	public PrintStreamStringHandler(PrintStream printStream, 
 	                                DataFormat format, 
-	                                boolean numberLines,
-	                                boolean showParent) {
+	                                boolean numberLines) {
 		this.printStream = printStream;
 		this.format = format;
 		if (format == DataFormat.SMILES) {
@@ -51,22 +48,21 @@ public class PrintStreamStringHandler implements GenerateHandler {
 		}
 		count = 0;
 		this.shouldNumberLines = numberLines;
-		this.showParent = showParent;
 	}
 
 	@Override
-	public void handle(IAtomContainer parent, IAtomContainer child) {
-	    String childString = getStringForm(child);
+	public void handle(IAtomContainer atomContainer) {
+	    String stringForm;
+	    try {
+	        stringForm = getStringForm(atomContainer);
+	    } catch (CDKException cdke) {
+	        stringForm = "EXCEPTION";  // XXX
+	    }
 	  
-	    if (showParent) {
-	        String parentString = getStringForm(parent);
-            printStream.println(count + "\t" + parentString + "\t" + childString); 
+	    if (shouldNumberLines) { 
+	        printStream.println(count + "\t" + stringForm);
 	    } else {
-	        if (shouldNumberLines) { 
-                printStream.println(count + "\t" + childString);
-            } else {
-                printStream.println(childString);
-            }
+	        printStream.println(stringForm);
 	    }
 	    count++;
 	}
@@ -76,14 +72,9 @@ public class PrintStreamStringHandler implements GenerateHandler {
 	    printStream.close();
     }
 
-    private String getStringForm(IAtomContainer atomContainer) {
+    private String getStringForm(IAtomContainer atomContainer) throws CDKException {
 	    if (format == DataFormat.SMILES) {
-	        try {
-                return smilesGenerator.create(atomContainer);
-            } catch (CDKException e) {
-                e.printStackTrace();
-                return "";  // XXX
-            }
+	        return smilesGenerator.create(atomContainer);
 	    } else if (format == DataFormat.SIGNATURE) {
 	        MoleculeSignature childSignature = new MoleculeSignature(atomContainer);
 	        return childSignature.toCanonicalString();

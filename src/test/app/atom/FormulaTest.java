@@ -1,7 +1,7 @@
 package test.app.atom;
 
-import app.augment.atom.AtomGenerator;
-import app.handler.CountingHandler;
+import augment.atom.AtomGenerator;
+import handler.CountingHandler;
 
 public class FormulaTest {
     

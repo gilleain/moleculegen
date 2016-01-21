@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import app.augment.constrained.BondGenerator;
-import app.handler.DuplicateCountingHandler;
+import augment.constrained.BondGenerator;
+import handler.DuplicateCountingHandler;
 
 public class FormulaTest {
     

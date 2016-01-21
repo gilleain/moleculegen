@@ -12,14 +12,14 @@ import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import app.FormulaParser;
-import app.augment.Augmentation;
-import app.augment.ExtensionSource;
-import app.augment.atom.AtomAugmentation;
-import app.augment.atom.AtomAugmentor;
-import app.augment.atom.AtomExtension;
-import app.augment.atom.ElementSymbolSource;
-import app.canonical.CanonicalChecker;
-import app.canonical.NonExpandingCanonicalChecker;
+import augment.Augmentation;
+import augment.ExtensionSource;
+import augment.atom.AtomAugmentation;
+import augment.atom.AtomAugmentor;
+import augment.atom.AtomExtension;
+import augment.atom.ElementSymbolSource;
+import canonical.CanonicalChecker;
+import canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
 
 public class TestAtomAugmentor {

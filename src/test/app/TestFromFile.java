@@ -10,7 +10,7 @@ import java.util.Map;
 
 import app.Generator;
 import app.GeneratorFactory;
-import app.handler.CountingHandler;
+import handler.CountingHandler;
 
 /**
  * Test from a file list of formula-count pairs.

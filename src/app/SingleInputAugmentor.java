@@ -10,8 +10,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import app.augment.AugmentingGenerator;
-import app.handler.DataFormat;
+import augment.AugmentingGenerator;
+import handler.DataFormat;
 
 /**
  * For a single structure in an input file, augment up to the number of atoms remaining 

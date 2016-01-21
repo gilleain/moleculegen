@@ -19,7 +19,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
  * @author maclean
  *
  */
-public class ChecklistHandler implements GenerateHandler {
+public class ChecklistHandler implements Handler {
 	
 	/**
 	 * These are the ones we expect to see
@@ -50,9 +50,9 @@ public class ChecklistHandler implements GenerateHandler {
 	}
 
 	@Override
-	public void handle(IAtomContainer parent, IAtomContainer child) {
+	public void handle(IAtomContainer atomContainer) {
 		try {
-			String observed = smilesGenerator.create(child);
+			String observed = smilesGenerator.create(atomContainer);
 			int index = expectedList.indexOf(observed);
 			if (index == -1) {
 				surpriseList.add(observed);

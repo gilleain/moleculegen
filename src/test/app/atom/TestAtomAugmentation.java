@@ -9,10 +9,10 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import app.augment.atom.AtomAugmentation;
-import app.augment.atom.AtomExtension;
-import app.canonical.CanonicalChecker;
-import app.canonical.NonExpandingCanonicalChecker;
+import augment.atom.AtomAugmentation;
+import augment.atom.AtomExtension;
+import canonical.CanonicalChecker;
+import canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
 
 /**

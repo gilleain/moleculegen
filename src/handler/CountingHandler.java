@@ -2,7 +2,7 @@ package handler;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class CountingHandler implements GenerateHandler {
+public class CountingHandler implements Handler {
     
     private int count;
     
@@ -10,10 +10,6 @@ public class CountingHandler implements GenerateHandler {
     
     private long startTime;
     
-    public CountingHandler() {
-        this(false);
-    }
-
     public CountingHandler(boolean isTiming) {
         count = 0;
         this.isTiming = isTiming; 
@@ -21,9 +17,9 @@ public class CountingHandler implements GenerateHandler {
             startTime = System.currentTimeMillis();
         }
     }
-
+    
     @Override
-    public void handle(IAtomContainer parent, IAtomContainer child) {
+    public void handle(IAtomContainer atomContainer) {
         count++;
     }
     

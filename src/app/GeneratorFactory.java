@@ -1,6 +1,6 @@
 package app;
 
-import app.handler.Handler;
+import handler.Handler;
 
 public interface GeneratorFactory {
     

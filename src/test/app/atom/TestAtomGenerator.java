@@ -10,11 +10,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import app.augment.atom.AtomGenerator;
-import app.handler.CountingHandler;
-import app.handler.DuplicateHandler;
-import app.handler.Handler;
-import app.handler.PrintStreamHandler;
+import augment.atom.AtomGenerator;
+import handler.CountingHandler;
+import handler.DuplicateHandler;
+import handler.Handler;
+import handler.PrintStreamHandler;
 import io.AtomContainerPrinter;
 
 public class TestAtomGenerator {

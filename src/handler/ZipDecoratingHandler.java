@@ -8,7 +8,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class ZipDecoratingHandler implements GenerateHandler {
+public class ZipDecoratingHandler implements Handler {
 	
 	private final PrintStreamStringHandler delegate;
 	
@@ -17,17 +17,16 @@ public class ZipDecoratingHandler implements GenerateHandler {
 	public ZipDecoratingHandler(String zipFilePath, 
 							    String outputFilename, 
 							    DataFormat format, 
-							    boolean shouldNumberLines, 
-							    boolean shouldShowParent) throws IOException {
+							    boolean shouldNumberLines) throws IOException {
 		this.zip = new ZipOutputStream(new FileOutputStream(zipFilePath));
 		this.zip.putNextEntry(new ZipEntry(outputFilename));
 		this.delegate = new PrintStreamStringHandler(
-				new PrintStream(zip), format, shouldNumberLines, shouldShowParent);
+				new PrintStream(zip), format, shouldNumberLines);
 	}
 
 	@Override
-	public void handle(IAtomContainer parent, IAtomContainer child) {
-		this.delegate.handle(parent, child);
+	public void handle(IAtomContainer atomContainer) {
+		this.delegate.handle(atomContainer);
 	}
 
 	@Override

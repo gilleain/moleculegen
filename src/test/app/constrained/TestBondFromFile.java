@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import app.Generator;
 import app.GeneratorFactory;
-import app.augment.constrained.BondGenerator;
-import app.handler.Handler;
+import augment.constrained.BondGenerator;
+import handler.Handler;
 import test.app.TestFromFile;
 
 public class TestBondFromFile extends TestFromFile {
