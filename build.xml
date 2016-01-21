@@ -108,37 +108,37 @@
 		<delete dir="build"/>
 	</target>
 
-    <target name="test-sym" description="Run symmetry lister junit tests">
+    <target name="test-atom" description="Run by atom junit tests">
         <junit printsummary="yes">
             <classpath>
                 <pathelement location="build"/>
                 <pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>
             </classpath>
             <formatter type="plain"/>
-            <test name="test.generate.symmetry.AlkaneTests"/>
-            <test name="test.generate.symmetry.AlkeneTests"/>
-            <test name="test.generate.symmetry.AlkyneTests"/>
-            <test name="test.generate.symmetry.CarbonNitrogenTests"/>
-            <test name="test.generate.symmetry.CarbonOnlyTests"/>
-            <test name="test.generate.symmetry.CarbonOxygenTests"/>
-            <test name="test.generate.symmetry.SubAlkyneTests"/>
+            <test name="augment.atom.AlkaneTests"/>
+            <test name="augment.atom.AlkeneTests"/>
+            <test name="augment.atom.AlkyneTests"/>
+            <test name="augment.atom.CarbonNitrogenTests"/>
+            <test name="augment.atom.CarbonOnlyTests"/>
+            <test name="augment.atom.CarbonOxygenTests"/>
+            <test name="augment.atom.SubAlkyneTests"/>
         </junit>
     </target>
 
-    <target name="test-fil" description="Run filtering lister junit tests">
+    <target name="test-fil" description="Run by bond junit tests">
         <junit printsummary="yes">
             <classpath>
                 <pathelement location="build"/>
                 <pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>
             </classpath>
             <formatter type="plain"/>
-            <test name="test.generate.filter.AlkaneTests"/>
-            <test name="test.generate.filter.AlkeneTests"/>
-            <test name="test.generate.filter.AlkyneTests"/>
-            <test name="test.generate.filter.CarbonNitrogenTests"/>
-            <test name="test.generate.filter.CarbonOnlyTests"/>
-            <test name="test.generate.filter.CarbonOxygenTests"/>
-            <test name="test.generate.filter.SubAlkyneTests"/>
+            <test name="augment.bond.AlkaneTests"/>
+            <test name="augment.bond.AlkeneTests"/>
+            <test name="augment.bond.AlkyneTests"/>
+            <test name="augment.bond.CarbonNitrogenTests"/>
+            <test name="augment.bond.CarbonOnlyTests"/>
+            <test name="augment.bond.CarbonOxygenTests"/>
+            <test name="augment.bond.SubAlkyneTests"/>
         </junit>
     </target>
 
