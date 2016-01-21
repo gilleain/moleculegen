@@ -21,7 +21,7 @@ import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
-import appbranch.FormulaParser;
+import app.FormulaParser;
 
 /**
  * Validate a molecule as having the correct number of hydrogens.
