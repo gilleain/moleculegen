@@ -100,6 +100,7 @@ public class HCountValidator implements MoleculeValidator {
     }
     
     public HCountValidator(String formulaString) {
+        this();
         FormulaParser formulaParser = new FormulaParser(formulaString);
         hCount = formulaParser.getHydrogenCount();
         this.setSymbols(formulaParser.getElementSymbols());
