@@ -1,10 +1,10 @@
-package test.generate.filter;
+package test.branch.atom;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-public class SubAlkyneTests extends FilterTest {
+public class SubAlkyneTests extends FormulaTest {
     
     @Test
     public void c3H2Test() {

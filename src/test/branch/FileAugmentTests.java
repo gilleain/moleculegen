@@ -1,11 +1,11 @@
-package test.app;
+package test.branch;
 
 import java.io.File;
 
 import org.junit.Test;
 
-import app.AMG;
-import app.ArgumentHandler;
+import appbranch.AMG;
+import appbranch.ArgumentHandler;
 
 public class FileAugmentTests {
     

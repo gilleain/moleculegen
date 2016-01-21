@@ -11,10 +11,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import appbranch.handler.DataFormat;
-import generate.AugmentationMethod;
-import generate.LabellerMethod;
-import generate.ListerMethod;
-import generate.ValidatorMethod;
 
 public class ArgumentHandler {
     
@@ -93,21 +89,6 @@ public class ArgumentHandler {
      */
     private String rangeString;
   
-    /**
-     * The child listing method to use.
-     */
-    private ListerMethod listerMethod;
-    
-    /**
-     * The child listing labeller method to use.
-     */
-    private LabellerMethod labellerMethod;
-    
-    /**
-     * The canonical validation method to use.
-     */
-    private ValidatorMethod validatorMethod;
-    
     /**
      * Atom or Bond augmentation
      */
@@ -220,24 +201,6 @@ public class ArgumentHandler {
         
         if (line.hasOption('z')) {
         	setZipOutput(true);
-        }
-        
-        if (line.hasOption("lister")) {
-            ListerMethod chosenLister = 
-                ListerMethod.valueOf(line.getOptionValue("lister"));
-            setListerMethod(chosenLister);
-        }
-        
-        if (line.hasOption("labeller")) {
-            LabellerMethod chosenLabeller = 
-                LabellerMethod.valueOf(line.getOptionValue("labeller"));
-            setLabellerMethod(chosenLabeller);
-        }
-        
-        if (line.hasOption("validator")) {
-            ValidatorMethod chosenValidator = 
-                ValidatorMethod.valueOf(line.getOptionValue("validator"));
-            setValidatorMethod(chosenValidator);
         }
         
         if (line.hasOption("augmentation")) {
@@ -440,21 +403,6 @@ public class ArgumentHandler {
         this.rangeString = rangeString;
     }
 
-    public ListerMethod getListerMethod() {
-        return listerMethod;
-    }
-
-    public void setListerMethod(ListerMethod listerMethod) {
-        this.listerMethod = listerMethod;
-    }
-
-    public ValidatorMethod getValidatorMethod() {
-        return this.validatorMethod;
-    }
-
-    public void setValidatorMethod(ValidatorMethod validatorMethod) {
-        this.validatorMethod = validatorMethod;
-    }
 
     public AugmentationMethod getAugmentationMethod() {
         return augmentationMethod;
@@ -464,14 +412,6 @@ public class ArgumentHandler {
         this.augmentationMethod = augmentationMethod;
     }
     
-    public void setLabellerMethod(LabellerMethod labellerMethod) {
-        this.labellerMethod = labellerMethod;
-    }
-
-    public LabellerMethod getLabellerMethod() {
-        return labellerMethod;
-    }
-
 	public boolean isZipOutput() {
 		return isZipOutput;
 	}

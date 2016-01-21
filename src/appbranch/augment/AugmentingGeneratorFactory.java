@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import appbranch.ArgumentHandler;
+import appbranch.AugmentationMethod;
 import appbranch.augment.atom.AtomGenerator;
 import appbranch.handler.CountingHandler;
 import appbranch.handler.DataFormat;
@@ -12,7 +13,6 @@ import appbranch.handler.Handler;
 import appbranch.handler.PrintStreamStringHandler;
 import appbranch.handler.SDFHandler;
 import appbranch.handler.ZipDecoratingHandler;
-import generate.AugmentationMethod;
 
 public class AugmentingGeneratorFactory {
     
