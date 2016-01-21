@@ -162,9 +162,6 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
             SortedSet<Integer> cell = cellMap.get(key);
             bondPartition.addCell(cell);
         }
-//        System.out.println(bondStrings);
-//        System.out.println(bondPartition);
-//        bondPartition.order();
         return bondPartition;
     }
     
@@ -204,22 +201,12 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
                 if (bondIndexI == bondIndexJ) continue;
                 IBond bondJ = atomContainer.getBond(bondIndexJ);
                 if (bondI.isConnectedTo(bondJ)) {
-//                    System.out.println(
-//                            bondIndexI + "(" + toString(atomContainer, bondI) + ")" 
-//                            + " connected to "
-//                            + bondIndexJ + "(" + toString(atomContainer, bondJ) + ")");
                     connectionTable.get(bondIndexI).add(bondIndexJ);
                 }
             }
         }
-//        System.out.println(io.AtomContainerPrinter.toString(atomContainer) + " = " + connectionTable);
     }
     
-    private String toString(IAtomContainer atomContainer, IBond bond) {
-        return atomContainer.getAtomNumber(bond.getAtom(0)) + ":"
-                + atomContainer.getAtomNumber(bond.getAtom(1));
-    }
-
     @Override
     public int getVertexCount() {
         return connectionTable.size();

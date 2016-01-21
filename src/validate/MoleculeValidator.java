@@ -1,7 +1,5 @@
 package validate;
 
-import java.util.List;
-
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 public interface MoleculeValidator {

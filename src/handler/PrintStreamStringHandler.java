@@ -4,6 +4,7 @@ import io.AtomContainerPrinter;
 
 import java.io.PrintStream;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -77,7 +78,12 @@ public class PrintStreamStringHandler implements GenerateHandler {
 
     private String getStringForm(IAtomContainer atomContainer) {
 	    if (format == DataFormat.SMILES) {
-	        return smilesGenerator.createSMILES(atomContainer);
+	        try {
+                return smilesGenerator.create(atomContainer);
+            } catch (CDKException e) {
+                e.printStackTrace();
+                return "";  // XXX
+            }
 	    } else if (format == DataFormat.SIGNATURE) {
 	        MoleculeSignature childSignature = new MoleculeSignature(atomContainer);
 	        return childSignature.toCanonicalString();
