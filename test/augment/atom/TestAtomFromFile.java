@@ -4,10 +4,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import app.Generator;
 import app.GeneratorFactory;
 import app.TestFromFile;
-import augment.atom.AtomGenerator;
+import augment.AugmentingGenerator;
 import handler.Handler;
 
 public class TestAtomFromFile extends TestFromFile {
@@ -17,7 +16,7 @@ public class TestAtomFromFile extends TestFromFile {
         super.runTest(new GeneratorFactory() {
 
             @Override
-            public Generator createForFormula(String elementFormula, Handler handler) {
+            public AugmentingGenerator createForFormula(String elementFormula, Handler handler) {
                 return new AtomGenerator(elementFormula, handler);
             }
             

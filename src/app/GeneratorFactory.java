@@ -1,9 +1,10 @@
 package app;
 
+import augment.AugmentingGenerator;
 import handler.Handler;
 
 public interface GeneratorFactory {
     
-    public Generator createForFormula(String elementFormula, Handler handler);
+    public AugmentingGenerator createForFormula(String elementFormula, Handler handler);
 
 }

@@ -125,7 +125,7 @@
         </junit>
     </target>
 
-    <target name="test-fil" description="Run by bond junit tests">
+    <target name="test-bond" description="Run by bond junit tests">
         <junit printsummary="yes">
             <classpath>
                 <pathelement location="build"/>

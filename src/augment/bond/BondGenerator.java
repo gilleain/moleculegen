@@ -2,11 +2,11 @@ package augment.bond;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import app.Generator;
+import augment.AugmentingGenerator;
 import handler.Handler;
 import validate.HCountValidator;
 
-public class BondGenerator implements Generator {
+public class BondGenerator implements AugmentingGenerator {
     
     private ElementConstraints initialConstraints;
     
@@ -40,6 +40,12 @@ public class BondGenerator implements Generator {
 //        System.out.println("counter = " + counter);
     }
     
+    @Override
+    public void run(IAtomContainer initial) {
+        // TODO Auto-generated method stub
+        
+    }
+
     public void run(IAtomContainer initial, ElementConstraints constraints) {
         augment(new BondAugmentation(initial, constraints));
     }
@@ -69,5 +75,10 @@ public class BondGenerator implements Generator {
     
     private String toString(ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> aug) {
         return io.AtomContainerPrinter.toString(aug.getBase()) + " -> " + aug.getExtension() + ", " + aug.getConstraints();
+    }
+
+    @Override
+    public void finish() {
+        handler.finish();
     }
 }

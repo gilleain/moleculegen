@@ -114,9 +114,6 @@ public class ArgumentHandler {
         options.addOption(opt("z", "Compress (zip) the output"));
 
         // long options
-        options.addOption(lopt("lister", "method", "Lister method for children (FILTER, SYMMETRIC)"));
-        options.addOption(lopt("labeller", "method", "Labeller method for filtering children (REFINER, SIGNATURE)"));
-        options.addOption(lopt("validator", "method", "Validator method for canonical checking (REFINER, SIGNATURE)"));
         options.addOption(lopt("augmentation", "method", "Augmentation method (ATOM, BOND)"));
     }
     

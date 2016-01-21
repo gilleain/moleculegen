@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import augment.AugmentingGenerator;
 import handler.CountingHandler;
 
 /**
@@ -45,7 +46,7 @@ public class TestFromFile {
     
     private int count(GeneratorFactory generatorFactory, String elementFormula) {
         CountingHandler handler = new CountingHandler(false);
-        Generator gen = generatorFactory.createForFormula(elementFormula, handler);
+        AugmentingGenerator gen = generatorFactory.createForFormula(elementFormula, handler);
         gen.run();
         return handler.getCount();
     }

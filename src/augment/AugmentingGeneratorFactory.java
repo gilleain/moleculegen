@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import app.ArgumentHandler;
 import app.AugmentationMethod;
 import augment.atom.AtomGenerator;
+import augment.bond.BondGenerator;
 import handler.CountingHandler;
 import handler.DataFormat;
 import handler.Handler;
@@ -32,9 +33,7 @@ public class AugmentingGeneratorFactory {
         if (augmentationMethod == AugmentationMethod.ATOM) {
             return new AtomGenerator(formula, getHandler(argsH));
         } else {
-            // TODO
-            System.err.println("ERROR : augmentation method " + augmentationMethod + " not yet implemented");
-            return null;
+            return new BondGenerator(formula, getHandler(argsH));
         }
     }
     
