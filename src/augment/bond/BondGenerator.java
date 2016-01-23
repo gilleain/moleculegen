@@ -3,6 +3,7 @@ package augment.bond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
+import augment.ConstrainedAugmentation;
 import handler.Handler;
 import validate.HCountValidator;
 

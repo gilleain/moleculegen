@@ -9,6 +9,8 @@ import java.util.SortedSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import app.FormulaParser;
+import augment.ConstrainedAugmentation;
+import augment.ConstrainedAugmentor;
 import augment.SaturationCalculator;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
