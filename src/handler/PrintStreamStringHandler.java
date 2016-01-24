@@ -2,10 +2,15 @@ package handler;
 
 import java.io.PrintStream;
 
+import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import io.AtomContainerPrinter;
 
@@ -74,7 +79,7 @@ public class PrintStreamStringHandler implements Handler {
 
     private String getStringForm(IAtomContainer atomContainer) throws CDKException {
 	    if (format == DataFormat.SMILES) {
-	        return smilesGenerator.create(atomContainer);
+	        return smilesGenerator.create(addHydrogens(atomContainer));
 	    } else if (format == DataFormat.SIGNATURE) {
 	        MoleculeSignature childSignature = new MoleculeSignature(atomContainer);
 	        return childSignature.toCanonicalString();
@@ -84,4 +89,20 @@ public class PrintStreamStringHandler implements Handler {
             return "";  // XXX
         }
 	}
+    
+    private IAtomContainer addHydrogens(IAtomContainer mol) {
+        try {
+            CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
+            for (IAtom atom : mol.atoms()) {
+              IAtomType type;
+                type = matcher.findMatchingAtomType(mol, atom);
+              AtomTypeManipulator.configure(atom, type);
+            }
+            CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(mol.getBuilder());
+            adder.addImplicitHydrogens(mol); 
+        } catch (CDKException e) {
+            e.printStackTrace();
+        }
+        return mol;
+    }
 }
