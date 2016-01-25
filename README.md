@@ -5,7 +5,8 @@ Use maven to build a jar with dependencies:
 
 and then run :
 
-```` java -cp target/moleculegen-1.0-jar-with-dependencies.jar app.AMG -e "C4H11N" -O SMI
+````
+java -cp target/moleculegen-1.0-jar-with-dependencies.jar app.AMG -e "C4H11N" -O SMI
 NC(C)(C)C
 NCC(C)C
 NC(C)CC
@@ -18,7 +19,8 @@ N(C)(C)CC
 
 For a full list of commands, run with `-h` or no arguments:
 
-````java -cp target/moleculegen-1.0-jar-with-dependencies.jar app.AMG
+````
+java -cp target/moleculegen-1.0-jar-with-dependencies.jar app.AMG
 Usage: java -jar AMG.jar -e <formula>
 
 Basic options :
