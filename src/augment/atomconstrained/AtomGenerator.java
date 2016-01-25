@@ -2,13 +2,10 @@ package augment.atomconstrained;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import app.FormulaParser;
-import augment.Augmentation;
 import augment.AugmentingGenerator;
-import augment.ExtensionSource;
-import augment.InitialStateSource;
-import canonical.CanonicalChecker;
-import canonical.NonExpandingCanonicalChecker;
+import augment.ConstrainedAugmentation;
+import augment.bond.ElementConstraintSource;
+import augment.bond.ElementConstraints;
 import handler.Handler;
 import validate.HCountValidator;
 
@@ -23,49 +20,56 @@ public class AtomGenerator implements AugmentingGenerator {
     
     private HCountValidator hCountValidator;
     
-    private CanonicalChecker<IAtomContainer, AtomExtension> canonicalChecker;
+    private AtomCanonicalChecker canonicalChecker;
     
-    private InitialStateSource<IAtomContainer> initialStateSource;
+    private ElementConstraints initialConstraints;
+    
+    private ElementConstraintSource initialStateSource;
     
     private int counter;
     
     public AtomGenerator(String elementFormula, Handler handler) {
-        // XXX - make these once and pass them down!
-        FormulaParser formulaParser = new FormulaParser(elementFormula);
+        // XXX - parse the formula once and pass down the parser!
+        this.initialConstraints = new ElementConstraints(elementFormula);
         
         this.hCountValidator = new HCountValidator(elementFormula);
-        initialStateSource = new AtomOnlyStart(elementFormula);
-        ExtensionSource<Integer, String> extensionSource = new ElementSymbolSource(formulaParser);
-        this.augmentor = new AtomAugmentor(hCountValidator.getElementSymbols(), extensionSource);
-        this.canonicalChecker = new NonExpandingCanonicalChecker();
+        initialStateSource = new ElementConstraintSource(initialConstraints);
+        this.augmentor = new AtomAugmentor(hCountValidator.getElementSymbols());
+        this.canonicalChecker = new AtomCanonicalChecker();
         this.handler = handler;
         this.maxIndex = hCountValidator.getElementSymbols().size() - 1;
     }
     
     public void run() {
         for (IAtomContainer start : initialStateSource.get()) {
-            augment(new AtomAugmentation(start), 0);
+            String symbol = start.getAtom(0).getSymbol();
+            augment(new AtomAugmentation(start, initialConstraints.minus(symbol)), 0);
         }
 //        System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial) {
         // XXX index = atomCount?
-        augment(new AtomAugmentation(initial), initial.getAtomCount() - 1);  
+        ElementConstraints remaining = null;    // TODO
+        augment(new AtomAugmentation(initial, remaining), initial.getAtomCount() - 1);  
     }
     
-    private void augment(Augmentation<IAtomContainer, AtomExtension> parent, int index) {
+    private void augment(
+            ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> parent, int index) {
+        
         counter++;
         if (index >= maxIndex) {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
+                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }
         
-        for (Augmentation<IAtomContainer, AtomExtension> augmentation : augmentor.augment(parent)) {
-            if (canonicalChecker.isCanonical(augmentation)) {
+        for (ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : 
+            augmentor.augment(parent)) {
+            if (canonicalChecker.isCanonical(augmentation.getBase(), augmentation.getExtension())) {
                 augment(augmentation, index + 1);
             }
         }

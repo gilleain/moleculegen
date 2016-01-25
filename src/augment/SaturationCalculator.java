@@ -154,4 +154,8 @@ public class SaturationCalculator {
     public int getMaxBondOrder(String elementSymbol) {
         return maxBondOrderMap.get(elementSymbol);
     }
+
+    public int getMaxBondOrderSum(String symbol) {
+        return maxBondOrderSumMap.get(symbol);
+    }
 }
