@@ -1,5 +1,4 @@
 build/
-AMG*
 trials/
 .gradle
 src/test/data/
