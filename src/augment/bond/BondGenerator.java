@@ -59,7 +59,7 @@ public class BondGenerator implements AugmentingGenerator {
 //            System.out.println(counter + " C " + toString(parent));
             if (augmentor.isComplete(atomContainer)) {
                 if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
-//                    System.out.println("SOL "+ io.AtomContainerPrinter.toString(atomContainer));
+                    System.out.println("SOL "+ io.AtomContainerPrinter.toString(atomContainer));
                     handler.handle(atomContainer);
                 }
             }

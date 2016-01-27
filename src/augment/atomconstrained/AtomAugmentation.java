@@ -6,7 +6,6 @@ import org.openscience.cdk.interfaces.IBond.Order;
 
 import augment.Augmentation;
 import augment.ConstrainedAugmentation;
-import augment.bond.ElementConstraints;
 
 /**
  * An {@link Augmentation} of an atom container by atom.

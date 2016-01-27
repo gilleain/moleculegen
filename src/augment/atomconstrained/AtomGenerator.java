@@ -4,8 +4,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
 import augment.ConstrainedAugmentation;
-import augment.bond.ElementConstraintSource;
-import augment.bond.ElementConstraints;
 import handler.Handler;
 import validate.HCountValidator;
 
@@ -62,7 +60,7 @@ public class AtomGenerator implements AugmentingGenerator {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
-                System.out.println(io.AtomContainerPrinter.toString(atomContainer));
+                System.out.println("SOLN " + io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }
@@ -70,9 +68,18 @@ public class AtomGenerator implements AugmentingGenerator {
         for (ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : 
             augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation.getBase(), augmentation.getExtension())) {
+                report("C", augmentation);
                 augment(augmentation, index + 1);
+            } else {
+                report("N", augmentation);
             }
         }
+    }
+    
+    private void report(String cOrN, 
+            ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation) {
+        System.out.println(counter + " " + cOrN + " " 
+            + io.AtomContainerPrinter.toString(augmentation.getBase()));
     }
 
     @Override
