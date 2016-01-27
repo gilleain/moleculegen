@@ -9,10 +9,9 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.atom.AtomAugmentation;
-import augment.atom.AtomExtension;
-import canonical.CanonicalChecker;
-import canonical.NonExpandingCanonicalChecker;
+import augment.atomconstrained.AtomAugmentation;
+import augment.atomconstrained.AtomCanonicalChecker;
+import augment.atomconstrained.ElementConstraints;
 import io.AtomContainerPrinter;
 
 /**
@@ -30,7 +29,9 @@ public class TestAtomAugmentation {
     }
     
     private AtomAugmentation makeAugmentation(IAtomContainer mol, String elementSymbol, int... points) {
-        return new AtomAugmentation(mol, builder.newInstance(IAtom.class, elementSymbol), points);
+        IAtom atom = builder.newInstance(IAtom.class, elementSymbol);
+        ElementConstraints e = new ElementConstraints(elementSymbol);
+        return new AtomAugmentation(mol, atom, points, e);
     }
     
     @Test
@@ -59,12 +60,14 @@ public class TestAtomAugmentation {
         test("C0C1N2 0:2(2)", "N", 0, 2, 1);
     }
     
-    private void test(String start, String atom, int... points) {
-        CanonicalChecker<IAtomContainer, AtomExtension> checker = new NonExpandingCanonicalChecker();
+    private boolean test(String start, String atom, int... points) {
+        AtomCanonicalChecker checker = new AtomCanonicalChecker();
         IAtomContainer mol = make(start);
         AtomAugmentation aug = makeAugmentation(mol, atom, points);
         IAtomContainer augMol = aug.getBase();
-        System.out.println(checker.isCanonical(aug) + "\t" + AtomContainerPrinter.toString(augMol));
+        boolean isCanonical = checker.isCanonical(aug.getBase(), aug.getExtension());
+        System.out.println(isCanonical + "\t" + AtomContainerPrinter.toString(augMol));
+        return isCanonical;
     }
     
     @Test
@@ -77,6 +80,17 @@ public class TestAtomAugmentation {
     public void testFailingPair() {
         test("C0C1C2 0:1(1),0:2(1),1:2(1)", "C", 2, 0, 0);
         test("C0C1C2 0:1(2),0:2(1)", "C", 1, 0, 1);
+    }
+    
+    @Test
+    public void testCNO() {
+        test("C0O1 0:1(1)", "N", 0, 1);
+    }
+    
+    @Test
+    public void testCOCOPair() {
+        test("C0O1C2 0:1(1),1:2(1)", "O", 1, 0, 1);
+        test("C0O1O2 0:1(1),0:2(1)", "C", 0, 1, 1);
     }
     
     @Test

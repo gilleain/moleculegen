@@ -19,7 +19,11 @@ public class FormulaTest {
         gen.run();
         Map<String, List<IAtomContainer>> map = handler.getDupMap();
         if (printDupMap) { printDupMap(map); }
-        return map.keySet().size(); 
+        int total = 0;
+        for (String s : map.keySet()) {
+            total += map.get(s).size();
+        }
+        return total; 
     }
     
     private void printDupMap(Map<String, List<IAtomContainer>> map) {
