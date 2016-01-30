@@ -37,9 +37,9 @@ public class TestAtomAugmentor {
         int index = 0;
         CanonicalChecker<IAtomContainer, AtomExtension> checker = new NonExpandingCanonicalChecker();
         for (Augmentation<IAtomContainer, AtomExtension> augmentation : augmentations) {
-            System.out.print(index + "\t");
-            System.out.print(checker.isCanonical(augmentation) + "\t");
-            AtomContainerPrinter.print(augmentation.getBase());
+//            System.out.print(index + "\t");
+//            System.out.print(checker.isCanonical(augmentation) + "\t");
+//            AtomContainerPrinter.print(augmentation.getBase());
             index++;
         }
     }

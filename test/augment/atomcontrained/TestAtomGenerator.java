@@ -88,13 +88,6 @@ public class TestAtomGenerator {
         new AtomGenerator("C2H2N2", new PrintStreamHandler(System.out)).run();
     }
     
-    @Test
-    public void testC9H16Dups() {
-        DuplicateHandler handler = new DuplicateHandler();
-        new AtomGenerator("C9H16", handler).run();
-        printDups(handler);
-    }
-    
     private void printDups(DuplicateHandler handler) {
         Map<String, List<IAtomContainer>> map = handler.getDupMap();
         int count = 0;

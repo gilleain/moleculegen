@@ -13,7 +13,7 @@ public class CNOTests extends FormulaTest {
     
     @Test
     public void c3HNOTest() {
-        Assert.assertEquals(46, countNFromAtom("C3HNO", true));
+        Assert.assertEquals(46, countNFromAtom("C3HNO"));
     }
     
     @Test
