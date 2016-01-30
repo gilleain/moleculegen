@@ -11,7 +11,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 
 import augment.Augmentation;
-import augment.atom.AtomExtension;
+import augment.atomconstrained.AtomExtension;
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;

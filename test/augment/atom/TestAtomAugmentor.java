@@ -13,11 +13,13 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import app.FormulaParser;
 import augment.Augmentation;
+import augment.ConstrainedAugmentation;
 import augment.ExtensionSource;
-import augment.atom.AtomAugmentation;
-import augment.atom.AtomAugmentor;
-import augment.atom.AtomExtension;
-import augment.atom.ElementSymbolSource;
+import augment.atomconstrained.AtomAugmentation;
+import augment.atomconstrained.AtomAugmentor;
+import augment.atomconstrained.AtomExtension;
+import augment.atomconstrained.ElementConstraints;
+import augment.atomconstrained.ElementSymbolSource;
 import canonical.CanonicalChecker;
 import canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
@@ -26,17 +28,17 @@ public class TestAtomAugmentor {
     
     private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
-    private List<Augmentation<IAtomContainer, AtomExtension>> gen(String elementString, String startingGraph) {
-        ExtensionSource<Integer, String> extensionSource = new ElementSymbolSource(new FormulaParser(elementString));
-        AtomAugmentor augmentor = new AtomAugmentor(elementString, extensionSource);
-        AtomAugmentation start = new AtomAugmentation(AtomContainerPrinter.fromString(startingGraph, builder));
+    private List<ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>> gen(String elementString, String startingGraph) {
+        AtomAugmentor augmentor = new AtomAugmentor(elementString);
+        ElementConstraints elements = new ElementConstraints(elementString);
+        AtomAugmentation start = new AtomAugmentation(AtomContainerPrinter.fromString(startingGraph, builder), elements);
         return augmentor.augment(start);
     }
     
-    private void print(Iterable<Augmentation<IAtomContainer, AtomExtension>> augmentations) {
+    private void print(Iterable<ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>> augmentations) {
         int index = 0;
         CanonicalChecker<IAtomContainer, AtomExtension> checker = new NonExpandingCanonicalChecker();
-        for (Augmentation<IAtomContainer, AtomExtension> augmentation : augmentations) {
+        for (ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : augmentations) {
 //            System.out.print(index + "\t");
 //            System.out.print(checker.isCanonical(augmentation) + "\t");
 //            AtomContainerPrinter.print(augmentation.getBase());
@@ -59,28 +61,28 @@ public class TestAtomAugmentor {
         print(gen("CCC", "C0C1 0:1(3)"));
     }
     
-    private void findDups(List<Augmentation<IAtomContainer, AtomExtension>> augmentations) {
-        Map<String, Augmentation<IAtomContainer, AtomExtension>> canonical = 
-                new HashMap<String, Augmentation<IAtomContainer, AtomExtension>>();
+    private void findDups(List<ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>> augmentations) {
+        Map<String, ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>> canonical = 
+                new HashMap<String, ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>>();
         CanonicalChecker<IAtomContainer, AtomExtension> checker = new NonExpandingCanonicalChecker();
-        for (Augmentation<IAtomContainer, AtomExtension> augmentation : augmentations) {
-            if (checker.isCanonical(augmentation)) {
-                IAtomContainer mol = augmentation.getBase(); 
-                String sig = new MoleculeSignature(mol).toCanonicalString();
-                if (canonical.containsKey(sig)) {
-                    System.out.println("dup " + AtomContainerPrinter.toString(mol));
-                } else {
-                    canonical.put(sig, augmentation);
-                }
-            }
+        for (ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : augmentations) {
+//            if (checker.isCanonical(augmentation)) {
+//                IAtomContainer mol = augmentation.getBase(); 
+//                String sig = new MoleculeSignature(mol).toCanonicalString();
+//                if (canonical.containsKey(sig)) {
+//                    System.out.println("dup " + AtomContainerPrinter.toString(mol));
+//                } else {
+//                    canonical.put(sig, augmentation);
+//                }
+//            }
         }
         print(canonical.values());
     }
     
     @Test
     public void testThreesFromCCBonds() {
-        List<Augmentation<IAtomContainer, AtomExtension>> augmentations = 
-                new ArrayList<Augmentation<IAtomContainer, AtomExtension>>();
+        List<ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>> augmentations = 
+                new ArrayList<ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints>>();
         augmentations.addAll(gen("CCC", "C0C1 0:1(1)"));
         augmentations.addAll(gen("CCC", "C0C1 0:1(2)"));
         augmentations.addAll(gen("CCC", "C0C1 0:1(3)"));
