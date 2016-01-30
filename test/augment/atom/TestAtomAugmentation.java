@@ -9,9 +9,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.atomconstrained.AtomAugmentation;
-import augment.atomconstrained.AtomCanonicalChecker;
-import augment.atomconstrained.ElementConstraints;
 import io.AtomContainerPrinter;
 
 /**

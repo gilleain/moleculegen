@@ -1,4 +1,4 @@
-package augment.atomconstrained;
+package augment.atom;
 
 import app.FormulaParser;
 import augment.ExtensionSource;

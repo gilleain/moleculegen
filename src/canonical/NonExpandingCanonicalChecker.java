@@ -8,7 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import augment.Augmentation;
-import augment.atomconstrained.AtomExtension;
+import augment.atom.AtomExtension;
 import group.AtomDiscretePartitionRefiner;
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;

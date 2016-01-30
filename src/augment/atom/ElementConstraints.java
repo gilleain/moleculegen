@@ -1,4 +1,4 @@
-package augment.atomconstrained;
+package augment.atom;
 
 import java.util.HashMap;
 import java.util.Iterator;

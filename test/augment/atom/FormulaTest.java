@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import augment.atomconstrained.AtomGenerator;
 import handler.DuplicateCountingHandler;
 
 public class FormulaTest {

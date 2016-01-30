@@ -1,4 +1,4 @@
-package augment.atomconstrained;
+package augment.atom;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;

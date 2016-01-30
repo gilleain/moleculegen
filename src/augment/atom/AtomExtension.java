@@ -1,4 +1,4 @@
-package augment.atomconstrained;
+package augment.atom;
 
 /**
  * The atom and bond information to add when augmenting.
