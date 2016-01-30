@@ -7,7 +7,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
-import augment.ConstrainedAugmentation;
+import augment.Augmentation;
 import augment.atom.AtomExtension;
 import augment.atom.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
@@ -21,7 +21,7 @@ import setorbit.SetOrbit;
 public class NonExpandingCanonicalChecker implements CanonicalChecker<IAtomContainer, AtomExtension, ElementConstraints> {
 
     @Override
-    public boolean isCanonical(ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation) {
+    public boolean isCanonical(Augmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation) {
         IAtomContainer augmentedMolecule = augmentation.getBase();
         if (augmentedMolecule.getAtomCount() <= 2 || augmentedMolecule.getBondCount() == 0) {
             return true;

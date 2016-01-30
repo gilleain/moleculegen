@@ -7,7 +7,7 @@ package augment;
  * @author maclean
  *
  */
-public interface ConstrainedAugmentation<T, S, R> {
+public interface Augmentation<T, S, R> {
     
     /**
      * @return the base object that is augmented

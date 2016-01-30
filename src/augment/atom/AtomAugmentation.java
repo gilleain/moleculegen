@@ -4,7 +4,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond.Order;
 
-import augment.ConstrainedAugmentation;
+import augment.Augmentation;
 
 /**
  * An augmentation of an atom container by atom.
@@ -12,7 +12,7 @@ import augment.ConstrainedAugmentation;
  * @author maclean
  *
  */
-public class AtomAugmentation implements ConstrainedAugmentation<IAtomContainer,  AtomExtension, ElementConstraints> {
+public class AtomAugmentation implements Augmentation<IAtomContainer,  AtomExtension, ElementConstraints> {
     
     private final IAtomContainer augmentedMolecule;
     

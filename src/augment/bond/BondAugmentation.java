@@ -6,7 +6,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.ConstrainedAugmentation;
+import augment.Augmentation;
 
 /**
  * Augmentation of an atom container by adding a bond between two atoms, or 
@@ -15,7 +15,7 @@ import augment.ConstrainedAugmentation;
  * @author maclean
  *
  */
-public class BondAugmentation implements ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> {
+public class BondAugmentation implements Augmentation<IAtomContainer, BondExtension, ElementConstraints> {
     
     private final IAtomContainer augmentedMolecule;
     

@@ -3,7 +3,7 @@ package augment.bond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
-import augment.ConstrainedAugmentation;
+import augment.Augmentation;
 import handler.Handler;
 import validate.HCountValidator;
 
@@ -52,7 +52,7 @@ public class BondGenerator implements AugmentingGenerator {
     }
     
     private void augment(
-            ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> parent) {
+            Augmentation<IAtomContainer, BondExtension, ElementConstraints> parent) {
         counter++;
         IAtomContainer atomContainer = parent.getBase();
         if (canonicalChecker.isCanonical(atomContainer, parent.getExtension())) {
@@ -68,13 +68,13 @@ public class BondGenerator implements AugmentingGenerator {
             return;
         }
         
-        for (ConstrainedAugmentation<
+        for (Augmentation<
                 IAtomContainer, BondExtension, ElementConstraints> augmentation : augmentor.augment(parent)) {
             augment(augmentation);
         }
     }
     
-    private String toString(ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> aug) {
+    private String toString(Augmentation<IAtomContainer, BondExtension, ElementConstraints> aug) {
         return io.AtomContainerPrinter.toString(aug.getBase()) + " -> " + aug.getExtension() + ", " + aug.getConstraints();
     }
 

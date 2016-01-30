@@ -3,7 +3,7 @@ package augment.atom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
-import augment.ConstrainedAugmentation;
+import augment.Augmentation;
 import handler.Handler;
 import validate.HCountValidator;
 
@@ -53,7 +53,7 @@ public class AtomGenerator implements AugmentingGenerator {
     }
     
     private void augment(
-            ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> parent, int index) {
+            Augmentation<IAtomContainer, AtomExtension, ElementConstraints> parent, int index) {
         
         counter++;
         if (index >= maxIndex) {
@@ -65,7 +65,7 @@ public class AtomGenerator implements AugmentingGenerator {
             return;
         }
         
-        for (ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : 
+        for (Augmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : 
             augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation.getBase(), augmentation.getExtension())) {
 //                report("C", augmentation);
@@ -77,7 +77,7 @@ public class AtomGenerator implements AugmentingGenerator {
     }
     
     private void report(String cOrN, 
-            ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation) {
+            Augmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation) {
         System.out.println(counter + " " + cOrN + " " 
             + io.AtomContainerPrinter.toString(augmentation.getBase()));
     }
