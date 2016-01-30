@@ -89,6 +89,38 @@ public class ChainDecomposition {
         return bridges;
     }
     
+    // slightly wonky implementation here - should not have to pass in mol
+    public List<IAtom> getCutVertices(IAtomContainer mol) {
+        List<IAtom> cutVertices = new ArrayList<IAtom>();
+        for (IBond bridge : bridges) {
+            cutVertices.add(bridge.getAtom(0));
+            cutVertices.add(bridge.getAtom(1));
+        }
+        int root = getRoot();
+        if (root >= 0) { // silently ignoring failed getRoot - not great
+            IAtom rootAtom = mol.getAtom(root);
+            for (List<IBond> cycle : cycleChains) {
+                for (IBond bond : cycle) {
+                    // if the root vertex is in a cycle, then it is a cut vertex
+                    if (bond.contains(rootAtom)) {
+                        cutVertices.add(rootAtom);
+                        break;
+                    }
+                }
+            }
+        }
+        return cutVertices;
+    }
+    
+    private int getRoot() {
+        for (int index = 0; index < dfi.length; index++) {
+            if (dfi[index] == 0) {
+                return index;
+            }
+        }
+        return -1;
+    }
+    
     private void findBridges(IAtomContainer g) {
         int esize = g.getBondCount();
         BitSet visitedEdges = new BitSet(esize);
@@ -130,18 +162,18 @@ public class ChainDecomposition {
             } else {
                 IBond backedge = new Bond(g.getAtom(neighbour), g.getAtom(vertex));
                 // assumes that dfi[neighbour] is always lower than dfi[vertex]
-                int key = dfi[neighbour];
+                int neighbourDFI = dfi[neighbour];
                 List<IBond> edgesForVertex;
                 boolean addEdge = true;
-                if (backEdges.containsKey(key)) {
-                    edgesForVertex = backEdges.get(key);
+                if (backEdges.containsKey(neighbourDFI)) {
+                    edgesForVertex = backEdges.get(neighbourDFI);
                     // relies on (v, w) = (w, v)
                     if (edgesForVertex.contains(backedge)) {
                         addEdge = false;
                     }
                 } else {
                     edgesForVertex = new ArrayList<IBond>();
-                    backEdges.put(key, edgesForVertex);
+                    backEdges.put(neighbourDFI, edgesForVertex);
                 }
                     
                 if (backEdges.containsKey(dfi[vertex])) {

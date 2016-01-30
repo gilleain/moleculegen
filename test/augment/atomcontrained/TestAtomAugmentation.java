@@ -94,6 +94,11 @@ public class TestAtomAugmentation {
     }
     
     @Test
+    public void testC3H3N() {
+        test("C0C1N2 0:1(3),0:2(1),1:2(1)", "C", 0, 0, 1);
+    }
+    
+    @Test
     public void testGetAugmentedMolecule() {
         IAtomContainer mol = make("C0C1C2 0:1(1),0:2(1)");
         AtomAugmentation augmentation = makeAugmentation(mol, "C", 1, 0, 1);

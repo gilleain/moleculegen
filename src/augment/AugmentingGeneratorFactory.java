@@ -6,7 +6,7 @@ import java.io.PrintStream;
 
 import app.ArgumentHandler;
 import app.AugmentationMethod;
-import augment.atom.AtomGenerator;
+import augment.atomconstrained.AtomGenerator;
 import augment.bond.BondGenerator;
 import handler.CountingHandler;
 import handler.DataFormat;

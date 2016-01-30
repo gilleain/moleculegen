@@ -60,7 +60,7 @@ public class AtomGenerator implements AugmentingGenerator {
             IAtomContainer atomContainer = parent.getBase();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
-                System.out.println("SOLN " + io.AtomContainerPrinter.toString(atomContainer));
+//                System.out.println("SOLN " + io.AtomContainerPrinter.toString(atomContainer));
             }
             return;
         }
@@ -68,10 +68,10 @@ public class AtomGenerator implements AugmentingGenerator {
         for (ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation : 
             augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation.getBase(), augmentation.getExtension())) {
-                report("C", augmentation);
+//                report("C", augmentation);
                 augment(augmentation, index + 1);
             } else {
-                report("N", augmentation);
+//                report("N", augmentation);
             }
         }
     }

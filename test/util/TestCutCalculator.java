@@ -26,20 +26,38 @@ public class TestCutCalculator {
         }
     }
     
+    private void testEdges(String molString, int expectedCount) {
+        IAtomContainer mol = AtomContainerPrinter.fromString(molString, builder); 
+        List<Integer> indices = CutCalculator.getCutEdges(mol);
+        printBonds(indices, mol);
+        assertEquals(expectedCount, indices.size());
+    }
+    
+    private void testVertices(String molString, int expectedCount) {
+        IAtomContainer mol = AtomContainerPrinter.fromString(molString, builder); 
+        List<Integer> indices = CutCalculator.getCutVertices(mol);
+        System.out.println(indices);
+        assertEquals(expectedCount, indices.size());
+    }
+    
     @Test
     public void testTree() {
-        IAtomContainer mol = AtomContainerPrinter.fromString(
-                "C0C1C2C3C4C5C6 0:1(1),1:2(1),1:3(1),3:5(1),4:5(1),5:6(1)", builder);
-        printBonds(CutCalculator.getCutEdges(mol), mol);
+        testEdges("C0C1C2C3C4C5C6 0:1(1),1:2(1),1:3(1),3:5(1),4:5(1),5:6(1)", 6);
     }
     
     @Test
     public void bridgedRings() {
-        IAtomContainer mol = AtomContainerPrinter.fromString(
-                "C0C1C2C3C4C5C6 0:1(1),0:2(1),1:2(1),1:3(1),3:4(1),3:5(1),4:6(1),5:6(1)", builder);
-        List<Integer> indices = CutCalculator.getCutEdges(mol);
-        printBonds(indices, mol);
-        assertEquals(1, indices.size());
+        testEdges("C0C1C2C3C4C5C6 0:1(1),0:2(1),1:2(1),1:3(1),3:4(1),3:5(1),4:6(1),5:6(1)", 1);
+    }
+    
+    @Test
+    public void spiraRings() {
+        testVertices("C0C1C2C3C4C5C6 0:1(1),0:3(1),1:2(1),2:3(1),3:4(1),3:6(1),4:5(1),5:6(1)", 1);
+    }
+    
+    @Test
+    public void testCutVerticesInSingleRing() {
+        testVertices("C0C1N2C3 0:1(3),0:2(1),1:2(1),2:3(1)", 1);
     }
 
 }

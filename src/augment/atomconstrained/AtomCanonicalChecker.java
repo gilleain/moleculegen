@@ -19,6 +19,7 @@ public class AtomCanonicalChecker {
         }
         
         List<Integer> nonSeparatingAtoms = getNonSeparatingAtoms(augmentedMolecule);
+//        System.out.println(nonSeparatingAtoms);
         if (nonSeparatingAtoms.size() == 0) {
             return true;
         }
@@ -32,6 +33,7 @@ public class AtomCanonicalChecker {
     }
     
     private boolean inOrbit(int chosen, int last, Partition orbits) {
+//        System.out.println("chosen " + chosen + " last " + last + " " + orbits);
         for (int cellIndex = 0; cellIndex < orbits.size(); cellIndex++) {
             SortedSet<Integer> orbit = orbits.getCell(cellIndex);
             if (orbit.contains(chosen) && orbit.contains(last)) {
@@ -57,6 +59,7 @@ public class AtomCanonicalChecker {
     private List<Integer> getNonSeparatingAtoms(IAtomContainer mol) {
         List<Integer> nonSeparatingVertices = new ArrayList<Integer>(); 
         List<Integer> cutVertices = CutCalculator.getCutVertices(mol);
+//        System.out.println(cutVertices);
         for (int index = 0; index < mol.getAtomCount(); index++) {
             if (cutVertices.contains(index)) {
                 continue;
