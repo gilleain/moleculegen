@@ -51,8 +51,7 @@ public class BondGenerator implements AugmentingGenerator {
         augment(new BondAugmentation(initial, constraints));
     }
     
-    private void augment(
-            Augmentation<IAtomContainer, BondExtension, ElementConstraints> parent) {
+    private void augment(BondAugmentation parent) {
         counter++;
         IAtomContainer atomContainer = parent.getBase();
         if (canonicalChecker.isCanonical(atomContainer, parent.getExtension())) {
@@ -68,13 +67,12 @@ public class BondGenerator implements AugmentingGenerator {
             return;
         }
         
-        for (Augmentation<
-                IAtomContainer, BondExtension, ElementConstraints> augmentation : augmentor.augment(parent)) {
+        for (BondAugmentation augmentation : augmentor.augment(parent)) {
             augment(augmentation);
         }
     }
     
-    private String toString(Augmentation<IAtomContainer, BondExtension, ElementConstraints> aug) {
+    private String toString(BondAugmentation aug) {
         return io.AtomContainerPrinter.toString(aug.getBase()) + " -> " + aug.getExtension() + ", " + aug.getConstraints();
     }
 

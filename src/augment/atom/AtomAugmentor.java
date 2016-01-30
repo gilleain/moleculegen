@@ -9,14 +9,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.Augmentation;
 import augment.Augmentor;
 import augment.SaturationCalculator;
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
-public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension, ElementConstraints> {
+public class AtomAugmentor implements Augmentor<AtomAugmentation> {
     
     /**
      * The elements (in order) used to make molecules for this run.
@@ -41,11 +40,9 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension, E
     }
     
     @Override
-    public List<Augmentation<IAtomContainer, AtomExtension, ElementConstraints>> augment(
-            Augmentation<IAtomContainer, AtomExtension, ElementConstraints> parent) {
+    public List<AtomAugmentation> augment(AtomAugmentation parent) {
         IAtomContainer atomContainer = parent.getBase();
-        List<Augmentation<IAtomContainer, AtomExtension, ElementConstraints>> augmentations = 
-                new ArrayList<Augmentation<IAtomContainer, AtomExtension, ElementConstraints>>();
+        List<AtomAugmentation> augmentations = new ArrayList<AtomAugmentation>();
         ElementConstraints constraints = parent.getConstraints();
         for (String elementSymbol : constraints) {
             for (int[] bondOrders : getBondOrderArrays(atomContainer, elementSymbol)) {

@@ -2,8 +2,8 @@ package canonical;
 
 import augment.Augmentation;
 
-public interface CanonicalChecker<T, S, R> {
+public interface CanonicalChecker<T> {
     
-    public boolean isCanonical(Augmentation<T, S, R> augmentation);
+    public boolean isCanonical(Augmentation<T> augmentation);
 
 }

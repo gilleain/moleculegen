@@ -15,7 +15,7 @@ import augment.Augmentation;
  * @author maclean
  *
  */
-public class BondAugmentation implements Augmentation<IAtomContainer, BondExtension, ElementConstraints> {
+public class BondAugmentation implements Augmentation<IAtomContainer> {
     
     private final IAtomContainer augmentedMolecule;
     
@@ -79,7 +79,6 @@ public class BondAugmentation implements Augmentation<IAtomContainer, BondExtens
         return augmentedMolecule;
     }
 
-    @Override
     public BondExtension getExtension() {
         return bondExtension;
     }
@@ -88,7 +87,6 @@ public class BondAugmentation implements Augmentation<IAtomContainer, BondExtens
         return io.AtomContainerPrinter.toString(augmentedMolecule) + " -> " + bondExtension;
     }
 
-    @Override
     public ElementConstraints getConstraints() {
         return elementConstraints;
     }

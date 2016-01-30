@@ -12,7 +12,7 @@ import augment.Augmentation;
  * @author maclean
  *
  */
-public class AtomAugmentation implements Augmentation<IAtomContainer,  AtomExtension, ElementConstraints> {
+public class AtomAugmentation implements Augmentation<IAtomContainer> {
     
     private final IAtomContainer augmentedMolecule;
     
@@ -61,7 +61,6 @@ public class AtomAugmentation implements Augmentation<IAtomContainer,  AtomExten
         return augmentedMolecule;
     }
     
-    @Override
     public ElementConstraints getConstraints() {
         return elementConstraints;
     }
@@ -96,7 +95,6 @@ public class AtomAugmentation implements Augmentation<IAtomContainer,  AtomExten
         }
     }
 
-    @Override
     public AtomExtension getExtension() {
         return atomExtension;
     }

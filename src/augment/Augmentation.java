@@ -7,21 +7,11 @@ package augment;
  * @author maclean
  *
  */
-public interface Augmentation<T, S, R> {
+public interface Augmentation<T> {
     
     /**
      * @return the base object that is augmented
      */
     public T getBase();
-    
-    /**
-     * @return the extension to apply to the base object
-     */
-    public S getExtension();
-    
-    /**
-     * @return the constraints ... TODO
-     */
-    public R getConstraints();
 
 }

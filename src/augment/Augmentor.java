@@ -2,8 +2,8 @@ package augment;
 
 import java.util.List;
 
-public interface Augmentor<T, S, R> {
+public interface Augmentor<T> {
         
-    public List<Augmentation<T, S, R>> augment(Augmentation<T, S, R> parent);
+    public List<T> augment(T parent);
 
 }

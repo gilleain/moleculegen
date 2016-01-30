@@ -17,8 +17,7 @@ import group.Partition;
 import group.Permutation;
 import group.PermutationGroup;
 
-public class BondAugmentor 
-    implements Augmentor<IAtomContainer, BondExtension, ElementConstraints> {
+public class BondAugmentor implements Augmentor<BondAugmentation> {
    
     private SaturationCalculator saturationCalculator;
     
@@ -30,11 +29,8 @@ public class BondAugmentor
     }
 
     @Override
-    public List<Augmentation<IAtomContainer, BondExtension, ElementConstraints>> augment(
-            Augmentation<IAtomContainer, BondExtension, ElementConstraints> parent) {
-        List<Augmentation<IAtomContainer, BondExtension, ElementConstraints>> 
-            augmentations = new ArrayList<Augmentation
-                                            <IAtomContainer, BondExtension, ElementConstraints>>();
+    public List<BondAugmentation> augment(BondAugmentation parent) {
+        List<BondAugmentation> augmentations = new ArrayList<BondAugmentation>();
         
         IAtomContainer atomContainer = parent.getBase();
         int atomCount = atomContainer.getAtomCount();
