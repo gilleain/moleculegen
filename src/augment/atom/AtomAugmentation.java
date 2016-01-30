@@ -4,11 +4,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond.Order;
 
-import augment.Augmentation;
 import augment.ConstrainedAugmentation;
 
 /**
- * An {@link Augmentation} of an atom container by atom.
+ * An augmentation of an atom container by atom.
  * 
  * @author maclean
  *

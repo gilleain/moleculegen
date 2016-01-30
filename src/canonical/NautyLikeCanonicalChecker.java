@@ -10,8 +10,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 
-import augment.Augmentation;
+import augment.ConstrainedAugmentation;
 import augment.atom.AtomExtension;
+import augment.atom.ElementConstraints;
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
@@ -27,10 +28,10 @@ import setorbit.SetOrbit;
  * @author maclean
  *
  */
-public class NautyLikeCanonicalChecker implements CanonicalChecker<IAtomContainer, AtomExtension> {
+public class NautyLikeCanonicalChecker implements CanonicalChecker<IAtomContainer, AtomExtension, ElementConstraints> {
     
     @Override
-    public boolean isCanonical(Augmentation<IAtomContainer, AtomExtension> augmentation) {
+    public boolean isCanonical(ConstrainedAugmentation<IAtomContainer, AtomExtension, ElementConstraints> augmentation) {
         IAtomContainer augmentedMolecule = augmentation.getBase();
         return NautyLikeCanonicalChecker.isCanonical(augmentedMolecule, getLastAdded(augmentedMolecule));
     }

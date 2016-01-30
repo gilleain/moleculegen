@@ -1,9 +1,9 @@
 package canonical;
 
-import augment.Augmentation;
+import augment.ConstrainedAugmentation;
 
-public interface CanonicalChecker<T, S> {
+public interface CanonicalChecker<T, S, R> {
     
-    public boolean isCanonical(Augmentation<T, S> augmentation);
+    public boolean isCanonical(ConstrainedAugmentation<T, S, R> augmentation);
 
 }
