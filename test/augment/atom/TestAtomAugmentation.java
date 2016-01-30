@@ -1,4 +1,4 @@
-package augment.atomcontrained;
+package augment.atom;
 
 import static org.junit.Assert.assertEquals;
 

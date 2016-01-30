@@ -1,4 +1,4 @@
-package augment.atomcontrained;
+package augment.atom;
 
 import java.util.List;
 import java.util.Map;

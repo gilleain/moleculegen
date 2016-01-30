@@ -1,4 +1,4 @@
-package augment.atomcontrained;
+package augment.atom;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package augment.atomcontrained;
+package augment.atom;
 
 import static io.AtomContainerPrinter.fromString;
 
