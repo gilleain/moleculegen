@@ -38,7 +38,6 @@ public class HCountValidatorTest {
         IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
         setHydrogens(ac, 3, 3, 1);
         HCountValidator validator = new HCountValidator(formula);
-        validator.setHCount(hCount);
         Assert.assertTrue(validator.isValidMol(ac, size));
     }
 }
