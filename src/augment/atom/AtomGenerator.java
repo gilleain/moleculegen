@@ -9,7 +9,7 @@ import handler.Handler;
 import validate.HCountValidator;
 
 
-public class AtomGenerator implements AugmentingGenerator {
+public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private AtomAugmentor augmentor;
     

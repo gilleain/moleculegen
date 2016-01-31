@@ -8,7 +8,7 @@ import augment.constraints.ElementConstraints;
 import handler.Handler;
 import validate.HCountValidator;
 
-public class BondGenerator implements AugmentingGenerator {
+public class BondGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private ElementConstraints initialConstraints;
     
