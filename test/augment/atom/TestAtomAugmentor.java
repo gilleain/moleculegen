@@ -11,9 +11,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import augment.CanonicalChecker;
 import augment.constraints.ElementConstraints;
-import canonical.CanonicalChecker;
-import canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;
 
 public class TestAtomAugmentor {
@@ -29,7 +28,7 @@ public class TestAtomAugmentor {
     
     private void print(Iterable<AtomAugmentation> augmentations) {
         int index = 0;
-        CanonicalChecker<IAtomContainer> checker = new NonExpandingCanonicalChecker();
+        CanonicalChecker<AtomAugmentation> checker = new AtomCanonicalChecker();
         for (AtomAugmentation augmentation : augmentations) {
 //            System.out.print(index + "\t");
 //            System.out.print(checker.isCanonical(augmentation) + "\t");
@@ -54,9 +53,8 @@ public class TestAtomAugmentor {
     }
     
     private void findDups(List<AtomAugmentation> augmentations) {
-        Map<String, AtomAugmentation> canonical = 
-                new HashMap<String, AtomAugmentation>();
-        CanonicalChecker<IAtomContainer> checker = new NonExpandingCanonicalChecker();
+        Map<String, AtomAugmentation> canonical = new HashMap<String, AtomAugmentation>();
+        CanonicalChecker<AtomAugmentation> checker = new AtomCanonicalChecker();
         for (AtomAugmentation augmentation : augmentations) {
             if (checker.isCanonical(augmentation)) {
                 IAtomContainer mol = augmentation.getBase(); 

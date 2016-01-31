@@ -55,7 +55,7 @@ public class TestAtomAugmentation {
         IAtomContainer mol = make(start);
         AtomAugmentation aug = makeAugmentation(mol, atom, points);
         IAtomContainer augMol = aug.getBase();
-        boolean isCanonical = checker.isCanonical(aug.getBase(), aug.getExtension());
+        boolean isCanonical = checker.isCanonical(aug);
         System.out.println(isCanonical + "\t" + AtomContainerPrinter.toString(augMol));
         return isCanonical;
     }

@@ -66,7 +66,7 @@ public class AtomGenerator implements AugmentingGenerator {
         }
         
         for (AtomAugmentation augmentation : augmentor.augment(parent)) {
-            if (canonicalChecker.isCanonical(augmentation.getBase(), augmentation.getExtension())) {
+            if (canonicalChecker.isCanonical(augmentation)) {
 //                report("C", augmentation);
                 augment(augmentation, index + 1);
             } else {

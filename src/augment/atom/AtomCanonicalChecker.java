@@ -6,14 +6,17 @@ import java.util.SortedSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import augment.CanonicalChecker;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
 import util.CutCalculator;
 
-public class AtomCanonicalChecker {
+public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> {
 
-    public boolean isCanonical(IAtomContainer augmentedMolecule, AtomExtension augmentation) {
+    public boolean isCanonical(AtomAugmentation atomAugmentation) {
+        IAtomContainer augmentedMolecule = atomAugmentation.getBase();
+        
         if (augmentedMolecule.getAtomCount() <= 2) {
             return true;
         }
