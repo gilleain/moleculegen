@@ -1,19 +1,48 @@
 package model;
 
-public class Edge {
+import java.io.Serializable;
 
-    public Edge(int current, int next) {
-        // TODO Auto-generated constructor stub
+public class Edge implements Serializable {
+    
+    /**
+     * Generated ID
+     */
+    private static final long serialVersionUID = -5476736566377239477L;
+
+    private final int vertexZero;
+    
+    private final int vertexOne;
+    
+    public Edge(int vertexZero, int vertexOne) {
+        this.vertexZero = vertexZero;
+        this.vertexOne = vertexOne;
+    }
+    
+    public Edge(Edge other) {
+        this.vertexZero = other.vertexZero;
+        this.vertexOne = other.vertexOne;
     }
 
     public int getVertex(int vertexIndex) {
-        // TODO Auto-generated method stub
-        return 0;
+        return vertexIndex == 0? vertexZero : vertexOne;
     }
 
     public boolean contains(int vertex) {
-        // TODO Auto-generated method stub
-        return false;
+        return vertexZero == vertex || vertexOne == vertex;
     }
+    
+    public int getAdjacent(int vertex) {
+        if (vertex == vertexZero) {
+            return vertexOne;
+        } else if (vertex == vertexOne) {
+            return vertexZero;
+        } else {
+            return -1;
+        }
+    }
+    
+    public String toString() {
+        return "(" + vertexZero + ", " + vertexOne + ")";
+     }
 
 }

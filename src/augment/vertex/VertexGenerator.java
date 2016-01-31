@@ -46,7 +46,7 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     
     public void run() {
         for (Graph start : initialStateSource.get()) {
-            String symbol = start.getColorForVertex(0);
+            String symbol = start.getVertexColor(0);
             augment(new ByVertexAugmentation(start, initialConstraints.minus(symbol)), 0);
         }
 //        System.out.println("counter = " + counter);
@@ -59,12 +59,12 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     }
     
     private void augment(ByVertexAugmentation parent, int index) {
-        
+//        System.out.println("augmenting " + parent.getAugmentedObject());
         counter++;
         if (index >= maxIndex) {
-            Graph atomContainer = parent.getAugmentedObject();
-            handler.handle(atomContainer);
-//                System.out.println("SOLN " + io.AtomContainerPrinter.toString(atomContainer));
+            Graph graph = parent.getAugmentedObject();
+            handler.handle(graph);
+//            System.out.println("SOLN " + graph);
             return;
         }
         

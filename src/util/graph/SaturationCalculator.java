@@ -106,7 +106,7 @@ public class SaturationCalculator {
         int vCount = parent.getVertexCount();
         int[] satCap = new int[vCount];
         for (int index = 0; index < vCount; index++) {
-            String color = parent.getColorForVertex(index);
+            String color = parent.getVertexColor(index);
             int maxDegree = maxBondOrderSumMap.get(color);
             int degree = 0;
             for (int neighbour : parent.getConnected(index)) {

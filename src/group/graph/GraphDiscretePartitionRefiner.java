@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 import group.AbstractDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
@@ -72,7 +70,7 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
                 new HashMap<String, SortedSet<Integer>>();
         int numberOfVertices = graph.getVertexCount();
         for (int vertexIndex = 0; vertexIndex < numberOfVertices; vertexIndex++) {
-            String color = graph.getColorForVertex(vertexIndex);
+            String color = graph.getVertexColor(vertexIndex);
             SortedSet<Integer> cell;
             if (cellMap.containsKey(color)) {
                 cell = cellMap.get(color);
@@ -200,7 +198,7 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
         int numberOfAtoms = graph.getVertexCount(); 
         for (int index = 0; index < numberOfAtoms; index++) {
             if (index >= 0) {
-                String symbol = graph.getColorForVertex(index);
+                String symbol = graph.getVertexColor(index);
                 SortedSet<Integer> cell;
                 if (cellMap.containsKey(symbol)) {
                     cell = cellMap.get(symbol);

@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,63 +10,139 @@ import java.util.List;
  * @author maclean
  *
  */
-public class Graph {
+public class Graph implements Serializable {
+    
+    /**
+     * Generated ID
+     */
+    private static final long serialVersionUID = 8149801109375825404L;
+    
+    private final List<Edge> edges;
+    
+    private final List<String> vertexColors;
+    
+    private final List<Integer> edgeColors;
     
     public Graph() {
-        // TODO Auto-generated constructor stub
+        this.vertexColors = new ArrayList<String>();
+        this.edges = new ArrayList<Edge>();
+        this.edgeColors = new ArrayList<Integer>();
     }
 
-    public Graph(Graph initialGraph) {
-        // TODO Auto-generated constructor stub
+    public Graph(Graph other) {
+        this();
+        this.vertexColors.addAll(other.vertexColors);
+        for (Edge otherEdge : other.edges) {
+            this.edges.add(new Edge(otherEdge));
+        }
+        this.edgeColors.addAll(other.edgeColors);
     }
 
-    public void addVertex(String initialVertexColor) {
-        // TODO Auto-generated method stub
-        
+    public void addVertex(String vertexColor) {
+        this.vertexColors.add(vertexColor);
     }
     
     public void addEdge(int startIndex, int endIndex, int color) {
-        // TODO
+        edges.add(new Edge(startIndex, endIndex));
+        edgeColors.add(color);
     }
 
     public int getVertexCount() {
-        // TODO Auto-generated method stub
-        return 0;
+        return vertexColors.size();
     }
 
-    public String getColorForVertex(int vertexIndex) {
-        // TODO Auto-generated method stub
+    public String getVertexColor(int vertexIndex) {
+        return vertexColors.get(vertexIndex);
+    }
+
+    public List<Integer> getConnected(int vertexIndex) {
+        List<Integer> connected = new ArrayList<Integer>();
+        for (Edge edge : edges) {
+            int adjacent = edge.getAdjacent(vertexIndex);
+            if (adjacent != -1) {
+                connected.add(adjacent);
+            }
+        }
+        return connected;
+    }
+    
+    public Edge getEdge(int vertexIndex, int otherVertexIndex) {
+        for (Edge edge : edges) {
+            if (edge.contains(vertexIndex) && edge.contains(otherVertexIndex)) {
+                return edge;
+            }
+        }
         return null;
     }
 
-    public List<Integer> getConnected(int i) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public int getEdgeColor(int vertexIndex, int connectedVertex) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int getEdgeColor(int vertexIndex, int otherVertexIndex) {
+        int edgeIndex = getEdgeNumber(getEdge(vertexIndex, otherVertexIndex));
+//        System.out.println("looking up " + vertexIndex + " " + otherVertexIndex + " in"
+//                + edges + " eindex " + edgeIndex + " in " + edgeColors);
+        return edgeColors.get(edgeIndex);
     }
 
     public int getEdgeCount() {
-        // TODO Auto-generated method stub
-        return 0;
+        return edges.size();
     }
 
-    public Edge getEdge(int bondIndex) {
-        // TODO Auto-generated method stub
-        return null;
+    public Edge getEdge(int index) {
+        return edges.get(index);
     }
 
-    public int getConnectedVertexCount(int x) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int getConnectedVertexCount(int vertexIndex) {
+        int count = 0;
+        for (Edge edge : edges) {
+            int adjacent = edge.getAdjacent(vertexIndex);
+            if (adjacent != -1) {
+                count++;
+            }
+        }
+        return count;
     }
 
-    public int getEdgeNumber(Edge e) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int getEdgeNumber(Edge other) {
+        int index = edges.indexOf(other);
+        if (index == -1) {
+            for (int edgeIndex = 0; edgeIndex < edges.size(); edgeIndex++) {
+                Edge edge = edges.get(edgeIndex);
+                if (edge.equals(other)) {
+                    return edgeIndex;
+                }
+            }
+            return -1;
+        } else {
+            return index;
+        }
+    }
+
+    public List<Edge> edges() {
+        return edges;
+    }
+    
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (int vertexIndex = 0; vertexIndex < getVertexCount(); vertexIndex++) {
+            sb.append(getVertexColor(vertexIndex)).append(vertexIndex);
+        }
+        sb.append(" ");
+        
+        int edgeCounter = 0;
+        for (Edge edge : edges()) {
+            int pA0 = edge.getVertex(0);
+            int pA1 = edge.getVertex(1);
+            int o = getEdgeColor(pA0, pA1);
+            if (pA0 < pA1) {
+                sb.append(pA0 + ":" + pA1 + "(" + o + ")");
+            } else {
+                sb.append(pA1 + ":" + pA0 + "(" + o + ")");
+            }
+            if (edgeCounter < getEdgeCount() - 1) {
+                sb.append(",");
+            }
+            edgeCounter++;
+        }
+        return sb.toString();
     }
 
 }
