@@ -54,7 +54,7 @@ public class TestAtomAugmentation {
         AtomCanonicalChecker checker = new AtomCanonicalChecker();
         IAtomContainer mol = make(start);
         AtomAugmentation aug = makeAugmentation(mol, atom, points);
-        IAtomContainer augMol = aug.getBase();
+        IAtomContainer augMol = aug.getAugmentedObject();
         boolean isCanonical = checker.isCanonical(aug);
         System.out.println(isCanonical + "\t" + AtomContainerPrinter.toString(augMol));
         return isCanonical;
@@ -92,7 +92,7 @@ public class TestAtomAugmentation {
     public void testGetAugmentedMolecule() {
         IAtomContainer mol = make("C0C1C2 0:1(1),0:2(1)");
         AtomAugmentation augmentation = makeAugmentation(mol, "C", 1, 0, 1);
-        IAtomContainer augmentedMol = augmentation.getBase();
+        IAtomContainer augmentedMol = augmentation.getAugmentedObject();
         AtomContainerPrinter.print(augmentedMol);
         IBond addedBond = augmentedMol.getBond(2);
         assertEquals("Added bond 1", IBond.Order.SINGLE, addedBond.getOrder());

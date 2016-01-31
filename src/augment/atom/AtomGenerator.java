@@ -57,7 +57,7 @@ public class AtomGenerator implements AugmentingGenerator {
         
         counter++;
         if (index >= maxIndex) {
-            IAtomContainer atomContainer = parent.getBase();
+            IAtomContainer atomContainer = parent.getAugmentedObject();
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
 //                System.out.println("SOLN " + io.AtomContainerPrinter.toString(atomContainer));
@@ -77,7 +77,7 @@ public class AtomGenerator implements AugmentingGenerator {
     
     private void report(String cOrN, AtomAugmentation augmentation) {
         System.out.println(counter + " " + cOrN + " " 
-            + io.AtomContainerPrinter.toString(augmentation.getBase()));
+            + io.AtomContainerPrinter.toString(augmentation.getAugmentedObject()));
     }
 
     @Override

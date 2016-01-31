@@ -12,6 +12,6 @@ public interface Augmentation<T> {
     /**
      * @return the base object that is augmented
      */
-    public T getBase();
+    public T getAugmentedObject();
 
 }

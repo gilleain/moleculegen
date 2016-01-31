@@ -42,7 +42,7 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
     
     @Override
     public List<AtomAugmentation> augment(AtomAugmentation parent) {
-        IAtomContainer atomContainer = parent.getBase();
+        IAtomContainer atomContainer = parent.getAugmentedObject();
         List<AtomAugmentation> augmentations = new ArrayList<AtomAugmentation>();
         ElementConstraints constraints = parent.getConstraints();
         for (String elementSymbol : constraints) {

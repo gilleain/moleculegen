@@ -30,7 +30,6 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
     public AtomAugmentation(IAtom initialAtom, ElementConstraints elementConstraints) {
         augmentedMolecule = initialAtom.getBuilder().newInstance(IAtomContainer.class);
         augmentedMolecule.addAtom(initialAtom);
-        augmentedMolecule.setProperty("IS_CONNECTED", false);
         
         // XXX TODO - wrong way round!
         this.atomExtension = new AtomExtension(initialAtom.getSymbol(), new int[] {});
@@ -58,7 +57,7 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
         this.elementConstraints = elementConstraints;
     }
     
-    public IAtomContainer getBase() {
+    public IAtomContainer getAugmentedObject() {
         return augmentedMolecule;
     }
     

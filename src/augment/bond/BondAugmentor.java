@@ -33,7 +33,7 @@ public class BondAugmentor implements Augmentor<BondAugmentation> {
     public List<BondAugmentation> augment(BondAugmentation parent) {
         List<BondAugmentation> augmentations = new ArrayList<BondAugmentation>();
         
-        IAtomContainer atomContainer = parent.getBase();
+        IAtomContainer atomContainer = parent.getAugmentedObject();
         int atomCount = atomContainer.getAtomCount();
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup autG = refiner.getAutomorphismGroup(atomContainer);

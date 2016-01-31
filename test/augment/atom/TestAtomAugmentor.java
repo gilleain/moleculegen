@@ -57,7 +57,7 @@ public class TestAtomAugmentor {
         CanonicalChecker<AtomAugmentation> checker = new AtomCanonicalChecker();
         for (AtomAugmentation augmentation : augmentations) {
             if (checker.isCanonical(augmentation)) {
-                IAtomContainer mol = augmentation.getBase(); 
+                IAtomContainer mol = augmentation.getAugmentedObject(); 
                 String sig = new MoleculeSignature(mol).toCanonicalString();
                 if (canonical.containsKey(sig)) {
                     System.out.println("dup " + AtomContainerPrinter.toString(mol));

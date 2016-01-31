@@ -30,7 +30,6 @@ public class ElementConstraintSource {
     private IAtomContainer makeAtom(String symbol) {
         IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
         atomContainer.addAtom(builder.newInstance(IAtom.class, symbol));
-        atomContainer.setProperty("IS_CONNECTED", false);
         return atomContainer;
     }
 

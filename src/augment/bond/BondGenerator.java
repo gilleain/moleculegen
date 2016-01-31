@@ -55,7 +55,7 @@ public class BondGenerator implements AugmentingGenerator {
     private void augment(BondAugmentation parent) {
         counter++;
         if (canonicalChecker.isCanonical(parent)) {
-            IAtomContainer atomContainer = parent.getBase();
+            IAtomContainer atomContainer = parent.getAugmentedObject();
 //            System.out.println(counter + " C " + toString(parent));
             if (augmentor.isComplete(atomContainer)) {
                 if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
@@ -74,7 +74,7 @@ public class BondGenerator implements AugmentingGenerator {
     }
     
     private String toString(BondAugmentation aug) {
-        return io.AtomContainerPrinter.toString(aug.getBase()) + " -> " + aug.getExtension() + ", " + aug.getConstraints();
+        return io.AtomContainerPrinter.toString(aug.getAugmentedObject()) + " -> " + aug.getExtension() + ", " + aug.getConstraints();
     }
 
     @Override

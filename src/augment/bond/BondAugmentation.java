@@ -76,7 +76,7 @@ public class BondAugmentation implements Augmentation<IAtomContainer> {
     }
     
     @Override
-    public IAtomContainer getBase() {
+    public IAtomContainer getAugmentedObject() {
         return augmentedMolecule;
     }
 

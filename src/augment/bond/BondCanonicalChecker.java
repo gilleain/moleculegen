@@ -20,7 +20,7 @@ import util.CutCalculator;
 public class BondCanonicalChecker {
 
     public boolean isCanonical(BondAugmentation bondAugmentation) {
-        IAtomContainer augmentedMolecule = bondAugmentation.getBase();
+        IAtomContainer augmentedMolecule = bondAugmentation.getAugmentedObject();
         BondExtension augmentation = bondAugmentation.getExtension();
         if (augmentedMolecule.getAtomCount() <= 2 || augmentedMolecule.getBondCount() == 0) {
             return true;

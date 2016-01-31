@@ -15,7 +15,7 @@ import util.CutCalculator;
 public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> {
 
     public boolean isCanonical(AtomAugmentation atomAugmentation) {
-        IAtomContainer augmentedMolecule = atomAugmentation.getBase();
+        IAtomContainer augmentedMolecule = atomAugmentation.getAugmentedObject();
         
         if (augmentedMolecule.getAtomCount() <= 2) {
             return true;
