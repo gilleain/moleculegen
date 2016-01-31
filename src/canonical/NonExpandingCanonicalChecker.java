@@ -9,8 +9,6 @@ import org.openscience.cdk.interfaces.IBond;
 
 import augment.Augmentation;
 import augment.atom.AtomAugmentation;
-import augment.atom.AtomExtension;
-import augment.atom.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
 import group.BondDiscretePartitionRefiner;
 import group.Permutation;

@@ -5,6 +5,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond.Order;
 
 import augment.Augmentation;
+import augment.constraints.ElementConstraints;
 
 /**
  * An augmentation of an atom container by atom.

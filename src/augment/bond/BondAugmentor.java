@@ -12,6 +12,7 @@ import app.FormulaParser;
 import augment.Augmentation;
 import augment.Augmentor;
 import augment.SaturationCalculator;
+import augment.constraints.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;

@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import augment.constraints.ElementConstraints;
 import io.AtomContainerPrinter;
 
 public class TestBondCanonicalChecker {

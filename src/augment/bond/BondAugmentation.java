@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.Augmentation;
+import augment.constraints.ElementConstraints;
 
 /**
  * Augmentation of an atom container by adding a bond between two atoms, or 

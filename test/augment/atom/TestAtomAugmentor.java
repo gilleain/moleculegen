@@ -11,7 +11,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.Augmentation;
+import augment.constraints.ElementConstraints;
 import canonical.CanonicalChecker;
 import canonical.NonExpandingCanonicalChecker;
 import io.AtomContainerPrinter;

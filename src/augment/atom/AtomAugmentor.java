@@ -11,6 +11,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.Augmentor;
 import augment.SaturationCalculator;
+import augment.constraints.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
