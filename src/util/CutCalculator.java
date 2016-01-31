@@ -3,6 +3,7 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
@@ -68,16 +69,27 @@ public class CutCalculator {
     }
     
     private static List<Integer> getVerticesForCyclic(IAtomContainer graph) {
+//        List<Integer> cutVertices = new ArrayList<Integer>();
+//        List<Integer> leaves = getLeaves(graph);
+//        ChainDecomposition chainDecomposition = new ChainDecomposition(graph);
+//        List<IBond> bridges = chainDecomposition.getBridges();
+//        for (int x = 0; x < graph.getAtomCount(); x++) {
+//            if (!leaves.contains(x) && inBridges(x, graph, bridges)) {
+//                cutVertices.add(x);
+//            }
+//        }
+//        return cutVertices;
+        return new CutVertexCalculator().getCutVertices(graph);
+    }
+    
+    private static List<Integer> getVerticesForCyclicFromCD(IAtomContainer graph) {
+        List<IAtom> cutVertexAtoms = 
+                new ChainDecomposition(graph).getCutVertices(graph);
         List<Integer> cutVertices = new ArrayList<Integer>();
-        List<Integer> leaves = getLeaves(graph);
-        ChainDecomposition chainDecomposition = new ChainDecomposition(graph);
-        List<IBond> bridges = chainDecomposition.getBridges();
-        for (int x = 0; x < graph.getAtomCount(); x++) {
-            if (!leaves.contains(x) && inBridges(x, graph, bridges)) {
-                cutVertices.add(x);
-            }
+        for (IAtom atom : cutVertexAtoms) {
+            cutVertices.add(graph.getAtomNumber(atom));
         }
-        return cutVertices;
+        return cutVertices; 
     }
     
     private static boolean isTree(IAtomContainer graph) {

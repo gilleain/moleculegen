@@ -5,18 +5,21 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond.Order;
 
 import augment.Augmentation;
+import augment.constraints.ElementConstraints;
 
 /**
- * An {@link Augmentation} of an atom container by atom.
+ * An augmentation of an atom container by atom.
  * 
  * @author maclean
  *
  */
-public class AtomAugmentation implements Augmentation<IAtomContainer, AtomExtension> {
+public class AtomAugmentation implements Augmentation<IAtomContainer> {
     
     private final IAtomContainer augmentedMolecule;
     
     private final AtomExtension atomExtension;
+    
+    private final ElementConstraints elementConstraints;
     
    
     /**
@@ -24,18 +27,20 @@ public class AtomAugmentation implements Augmentation<IAtomContainer, AtomExtens
      * 
      * @param initialAtom
      */
-    public AtomAugmentation(IAtom initialAtom) {
+    public AtomAugmentation(IAtom initialAtom, ElementConstraints elementConstraints) {
         augmentedMolecule = initialAtom.getBuilder().newInstance(IAtomContainer.class);
         augmentedMolecule.addAtom(initialAtom);
         augmentedMolecule.setProperty("IS_CONNECTED", false);
         
         // XXX TODO - wrong way round!
         this.atomExtension = new AtomExtension(initialAtom.getSymbol(), new int[] {});
+        this.elementConstraints = elementConstraints;
     }
     
-    public AtomAugmentation(IAtomContainer initialContainer) {
+    public AtomAugmentation(IAtomContainer initialContainer, ElementConstraints elementConstraints) {
         augmentedMolecule = initialContainer;   // TODO : could clone...
         this.atomExtension = null;  // XXX!
+        this.elementConstraints = elementConstraints;
     }
     
     /**
@@ -47,13 +52,18 @@ public class AtomAugmentation implements Augmentation<IAtomContainer, AtomExtens
      * @param atomToAdd the additional atom
      * @param augmentation a list of bond orders to augment
      */
-    public AtomAugmentation(IAtomContainer parent, IAtom atomToAdd, int[] bondOrders) {
+    public AtomAugmentation(IAtomContainer parent, IAtom atomToAdd, int[] bondOrders, ElementConstraints elementConstraints) {
         this.atomExtension = new AtomExtension(atomToAdd.getSymbol(), bondOrders);
         this.augmentedMolecule = make(parent, atomToAdd, bondOrders);
+        this.elementConstraints = elementConstraints;
     }
     
     public IAtomContainer getBase() {
         return augmentedMolecule;
+    }
+    
+    public ElementConstraints getConstraints() {
+        return elementConstraints;
     }
 
     private IAtomContainer make(IAtomContainer parent, IAtom atomToAdd, int[] augmentation) {
@@ -86,7 +96,6 @@ public class AtomAugmentation implements Augmentation<IAtomContainer, AtomExtens
         }
     }
 
-    @Override
     public AtomExtension getExtension() {
         return atomExtension;
     }

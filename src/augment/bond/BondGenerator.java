@@ -3,7 +3,8 @@ package augment.bond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
-import augment.ConstrainedAugmentation;
+import augment.constraints.ElementConstraintSource;
+import augment.constraints.ElementConstraints;
 import handler.Handler;
 import validate.HCountValidator;
 
@@ -51,11 +52,10 @@ public class BondGenerator implements AugmentingGenerator {
         augment(new BondAugmentation(initial, constraints));
     }
     
-    private void augment(
-            ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> parent) {
+    private void augment(BondAugmentation parent) {
         counter++;
-        IAtomContainer atomContainer = parent.getBase();
-        if (canonicalChecker.isCanonical(atomContainer, parent.getExtension())) {
+        if (canonicalChecker.isCanonical(parent)) {
+            IAtomContainer atomContainer = parent.getBase();
 //            System.out.println(counter + " C " + toString(parent));
             if (augmentor.isComplete(atomContainer)) {
                 if (hCountValidator.isValidMol(atomContainer, atomContainer.getAtomCount())) {
@@ -68,13 +68,12 @@ public class BondGenerator implements AugmentingGenerator {
             return;
         }
         
-        for (ConstrainedAugmentation<
-                IAtomContainer, BondExtension, ElementConstraints> augmentation : augmentor.augment(parent)) {
+        for (BondAugmentation augmentation : augmentor.augment(parent)) {
             augment(augmentation);
         }
     }
     
-    private String toString(ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> aug) {
+    private String toString(BondAugmentation aug) {
         return io.AtomContainerPrinter.toString(aug.getBase()) + " -> " + aug.getExtension() + ", " + aug.getConstraints();
     }
 

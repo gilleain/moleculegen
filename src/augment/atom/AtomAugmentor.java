@@ -9,15 +9,14 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.Augmentation;
 import augment.Augmentor;
-import augment.ExtensionSource;
 import augment.SaturationCalculator;
+import augment.constraints.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
 
-public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
+public class AtomAugmentor implements Augmentor<AtomAugmentation> {
     
     /**
      * The elements (in order) used to make molecules for this run.
@@ -28,38 +27,36 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
     
     private SaturationCalculator saturationCalculator;
     
-    private ExtensionSource<Integer, String> extensionSource;
-    
-    public AtomAugmentor(String elementString, ExtensionSource<Integer, String> extensionSource) {
+    public AtomAugmentor(String elementString) {
         elementSymbols = new ArrayList<String>();
         for (int i = 0; i < elementString.length(); i++) {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
         }
         this.saturationCalculator = new SaturationCalculator(elementSymbols);
-        this.extensionSource = extensionSource;
     }
     
-    public AtomAugmentor(List<String> elementSymbols, ExtensionSource<Integer, String> extensionSource) {
+    public AtomAugmentor(List<String> elementSymbols) {
         this.elementSymbols = elementSymbols;
         this.saturationCalculator = new SaturationCalculator(elementSymbols);
-        this.extensionSource = extensionSource;
     }
     
     @Override
-    public List<Augmentation<IAtomContainer, AtomExtension>> augment(Augmentation<IAtomContainer, AtomExtension> parent) {
+    public List<AtomAugmentation> augment(AtomAugmentation parent) {
         IAtomContainer atomContainer = parent.getBase();
-        List<Augmentation<IAtomContainer, AtomExtension>> augmentations = 
-                new ArrayList<Augmentation<IAtomContainer, AtomExtension>>();
-        String elementSymbol = extensionSource.getNext(atomContainer.getAtomCount());
-        for (int[] bondOrders : getBondOrderArrays(atomContainer)) {
-            IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);
-            augmentations.add(new AtomAugmentation(atomContainer, atomToAdd, bondOrders));
+        List<AtomAugmentation> augmentations = new ArrayList<AtomAugmentation>();
+        ElementConstraints constraints = parent.getConstraints();
+        for (String elementSymbol : constraints) {
+            for (int[] bondOrders : getBondOrderArrays(atomContainer, elementSymbol)) {
+                IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);
+                augmentations.add(
+                        new AtomAugmentation(atomContainer, atomToAdd, bondOrders, constraints.minus(elementSymbol)));
+            }
         }
         
         return augmentations;
     }
     
-    private List<int[]> getBondOrderArrays(IAtomContainer atomContainer) {
+    private List<int[]> getBondOrderArrays(IAtomContainer atomContainer, String symbol) {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup autG = refiner.getAutomorphismGroup(atomContainer);
         int atomCount = atomContainer.getAtomCount();
@@ -68,8 +65,8 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
         int[] saturationCapacity = saturationCalculator.getSaturationCapacity(atomContainer);
         List<Integer> baseSet = saturationCalculator.getUndersaturatedAtoms(atomCount, saturationCapacity);
         
-        int maxDegreeSumForCurrent = saturationCalculator.getMaxBondOrderSum(atomCount);
-        int maxDegreeForCurrent = saturationCalculator.getMaxBondOrder(atomCount);
+        int maxDegreeSumForCurrent = saturationCalculator.getMaxBondOrderSum(symbol);
+        int maxDegreeForCurrent = saturationCalculator.getMaxBondOrder(symbol);
         
         List<int[]> representatives = new ArrayList<int[]>();
         for (int[] bondOrderArray : saturationCalculator.getBondOrderArrays(
@@ -78,8 +75,9 @@ public class AtomAugmentor implements Augmentor<IAtomContainer, AtomExtension> {
                 representatives.add(bondOrderArray);
             }
         }
-        int[] emptySet = new int[atomCount];
-        representatives.add(emptySet);
+        // for disconnected graphs
+//        int[] emptySet = new int[atomCount];
+//        representatives.add(emptySet);
         return representatives;
     }
     

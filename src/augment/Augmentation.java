@@ -2,21 +2,16 @@ package augment;
 
 
 /**
- * An augmentation of base T by extension S.
+ * An augmentation of base T by extension S constrained by R.
  * 
  * @author maclean
  *
  */
-public interface Augmentation<T, S> {
+public interface Augmentation<T> {
     
     /**
      * @return the base object that is augmented
      */
     public T getBase();
-    
-    /**
-     * @return the extension to apply to the base object
-     */
-    public S getExtension();
 
 }

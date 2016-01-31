@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import augment.constraints.ElementConstraints;
 import io.AtomContainerPrinter;
 
 public class TestBondCanonicalChecker {
@@ -23,7 +24,7 @@ public class TestBondCanonicalChecker {
     private boolean test(String acpString, BondExtension bondExtension) {
         IAtomContainer ac = AtomContainerPrinter.fromString(acpString, builder);
         BondAugmentation augmentation = new BondAugmentation(ac, bondExtension, new ElementConstraints("C"));
-        return checker.isCanonical(augmentation.getBase(), augmentation.getExtension());
+        return checker.isCanonical(augmentation);
     }
     
     @Test

@@ -9,16 +9,16 @@ import java.util.SortedSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import app.FormulaParser;
-import augment.ConstrainedAugmentation;
-import augment.ConstrainedAugmentor;
+import augment.Augmentation;
+import augment.Augmentor;
 import augment.SaturationCalculator;
+import augment.constraints.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
 import group.PermutationGroup;
 
-public class BondAugmentor 
-    implements ConstrainedAugmentor<IAtomContainer, BondExtension, ElementConstraints> {
+public class BondAugmentor implements Augmentor<BondAugmentation> {
    
     private SaturationCalculator saturationCalculator;
     
@@ -30,11 +30,8 @@ public class BondAugmentor
     }
 
     @Override
-    public List<ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints>> augment(
-            ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> parent) {
-        List<ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints>> 
-            augmentations = new ArrayList<ConstrainedAugmentation
-                                            <IAtomContainer, BondExtension, ElementConstraints>>();
+    public List<BondAugmentation> augment(BondAugmentation parent) {
+        List<BondAugmentation> augmentations = new ArrayList<BondAugmentation>();
         
         IAtomContainer atomContainer = parent.getBase();
         int atomCount = atomContainer.getAtomCount();

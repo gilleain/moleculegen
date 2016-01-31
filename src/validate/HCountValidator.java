@@ -1,6 +1,5 @@
 package validate;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +15,6 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.SaturationChecker;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import app.FormulaParser;
 
@@ -31,7 +26,7 @@ import app.FormulaParser;
  * @author maclean
  *
  */
-public class HCountValidator implements MoleculeValidator {
+public class HCountValidator {
     
     private int hCount;
     
@@ -106,8 +101,6 @@ public class HCountValidator implements MoleculeValidator {
         this.setSymbols(formulaParser.getElementSymbols());
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         matcher = CDKAtomTypeMatcher.getInstance(builder);
-        hAdder = CDKHydrogenAdder.getInstance(builder);
-        satCheck = new SaturationChecker();
     }
     
     public List<String> getElementSymbols() {
@@ -163,41 +156,13 @@ public class HCountValidator implements MoleculeValidator {
             }
         }
     }
-    
-    public void checkConnectivity(IAtomContainer atomContainer) {
-        isConnected(atomContainer);
-    }
-
+  
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
-//        System.out.print("validating " + test.AtomContainerPrinter.toString(atomContainer));
         boolean valid = atomContainer.getAtomCount() == size
-            && isConnected(atomContainer)
-            && hydrogensCorrect(atomContainer)
-//            && omgHCorrect(atomContainer);
-            ;
-//        System.out.println(valid);
+            && hydrogensCorrect(atomContainer);
         return valid;
     }
     
-    private CDKHydrogenAdder hAdder;
-	private SaturationChecker satCheck;
-    
-    private boolean omgHCorrect(IAtomContainer acprotonate) {
-		try {
-			for (IAtom atom : acprotonate.atoms()) {
-				AtomTypeManipulator.configure(atom, matcher.findMatchingAtomType(acprotonate, atom));
-			}
-			hAdder.addImplicitHydrogens(acprotonate);
-			if (AtomContainerManipulator.getTotalHydrogenCount(acprotonate) == hCount) {
-				return satCheck.isSaturated(acprotonate);
-			}
-		} catch (CDKException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
-    }
-
     private boolean hydrogensCorrect(IAtomContainer atomContainer) {
         try {
             int actualCount = 0;
@@ -227,21 +192,14 @@ public class HCountValidator implements MoleculeValidator {
                 }
             }
 
-//            System.out.println("count for " + AtomContainerPrinter.toString(atomContainer) + " = " + actualCount);
             return actualCount == hCount;
         } catch (CDKException e) {
             // TODO Auto-generated catch block
-//            e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
-    
-    @Override
-    public void setHCount(int hCount) {
-        this.hCount = hCount;
-    }
 
-    @Override
     public boolean canExtend(IAtomContainer atomContainer) {
         int implH = 0;
         for (IAtom atom : atomContainer.atoms()) {
@@ -266,7 +224,6 @@ public class HCountValidator implements MoleculeValidator {
         return extensible;
     }
 
-    @Override
     public void setImplicitHydrogens(IAtomContainer parent) {
         for (IAtom atom : parent.atoms()) {
             int maxBos = getMaxBondOrderSum(atom.getSymbol());

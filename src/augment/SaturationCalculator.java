@@ -38,11 +38,23 @@ public class SaturationCalculator {
         maxBondOrderSumMap.put("C", 4);
         maxBondOrderSumMap.put("O", 2);
         maxBondOrderSumMap.put("N", 3);
+        maxBondOrderSumMap.put("S", 6);
+        maxBondOrderSumMap.put("P", 5);
+        maxBondOrderSumMap.put("Br", 1);
+        maxBondOrderSumMap.put("F", 1);
+        maxBondOrderSumMap.put("I", 1);
+        maxBondOrderSumMap.put("Cl", 1);
         
         maxBondOrderMap = new HashMap<String, Integer>();
         maxBondOrderMap.put("C", 3);
         maxBondOrderMap.put("O", 2);
         maxBondOrderMap.put("N", 3);
+        maxBondOrderMap.put("S", 2);
+        maxBondOrderMap.put("P", 2);
+        maxBondOrderMap.put("Br", 1);
+        maxBondOrderMap.put("F", 1);
+        maxBondOrderMap.put("I", 1);
+        maxBondOrderMap.put("Cl", 1);
     }
     
     public int getMaxBondOrderSum(int index) {
@@ -153,5 +165,9 @@ public class SaturationCalculator {
 
     public int getMaxBondOrder(String elementSymbol) {
         return maxBondOrderMap.get(elementSymbol);
+    }
+
+    public int getMaxBondOrderSum(String symbol) {
+        return maxBondOrderSumMap.get(symbol);
     }
 }

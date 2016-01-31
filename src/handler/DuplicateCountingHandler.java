@@ -38,7 +38,6 @@ public class DuplicateCountingHandler implements Handler {
         IAtomContainer original = sigMap.get(canonicalSignature);
         List<IAtomContainer> dups = new ArrayList<IAtomContainer>();
         dups.add(original);
-        dups.add(atomContainer);
         dupMap.put(canonicalSignature, dups);
     }
     

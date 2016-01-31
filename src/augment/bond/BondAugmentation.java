@@ -6,7 +6,8 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.ConstrainedAugmentation;
+import augment.Augmentation;
+import augment.constraints.ElementConstraints;
 
 /**
  * Augmentation of an atom container by adding a bond between two atoms, or 
@@ -15,7 +16,7 @@ import augment.ConstrainedAugmentation;
  * @author maclean
  *
  */
-public class BondAugmentation implements ConstrainedAugmentation<IAtomContainer, BondExtension, ElementConstraints> {
+public class BondAugmentation implements Augmentation<IAtomContainer> {
     
     private final IAtomContainer augmentedMolecule;
     
@@ -79,7 +80,6 @@ public class BondAugmentation implements ConstrainedAugmentation<IAtomContainer,
         return augmentedMolecule;
     }
 
-    @Override
     public BondExtension getExtension() {
         return bondExtension;
     }
@@ -88,7 +88,6 @@ public class BondAugmentation implements ConstrainedAugmentation<IAtomContainer,
         return io.AtomContainerPrinter.toString(augmentedMolecule) + " -> " + bondExtension;
     }
 
-    @Override
     public ElementConstraints getConstraints() {
         return elementConstraints;
     }

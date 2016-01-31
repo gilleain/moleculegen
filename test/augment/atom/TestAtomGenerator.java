@@ -10,7 +10,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import augment.atom.AtomGenerator;
 import handler.CountingHandler;
 import handler.DuplicateHandler;
 import handler.Handler;
@@ -86,13 +85,6 @@ public class TestAtomGenerator {
     @Test
     public void testC2H2N2FromAtom() {
         new AtomGenerator("C2H2N2", new PrintStreamHandler(System.out)).run();
-    }
-    
-    @Test
-    public void testC9H16Dups() {
-        DuplicateHandler handler = new DuplicateHandler();
-        new AtomGenerator("C9H16", handler).run();
-        printDups(handler);
     }
     
     private void printDups(DuplicateHandler handler) {
