@@ -1,4 +1,4 @@
-package augment;
+package app;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -6,8 +6,7 @@ import java.io.PrintStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import app.ArgumentHandler;
-import app.AugmentationMethod;
+import augment.AugmentingGenerator;
 import augment.bond.BondGenerator;
 import augment.vertex.VertexGenerator;
 import handler.Handler;

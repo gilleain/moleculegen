@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 import augment.AugmentingGenerator;
-import augment.AugmentingGeneratorFactory;
 import handler.molecule.DataFormat;
 
 public class AMG {
@@ -21,10 +20,12 @@ public class AMG {
     }
     
     public static void run(ArgumentHandler argsH) throws CDKException, IOException {
+        
+        @SuppressWarnings("rawtypes")
         AugmentingGenerator generator = AugmentingGeneratorFactory.build(argsH);
-	if (generator == null) {
-		return;
-	}
+        if (generator == null) {
+            return;
+        }
         
         if (argsH.isAugmentingFile() || argsH.isComparingToFile()) {
             String inputFile = argsH.getInputFilepath();
