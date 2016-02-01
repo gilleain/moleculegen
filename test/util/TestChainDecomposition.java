@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import io.AtomContainerPrinter;
+import util.molecule.ChainDecomposition;
 
 public class TestChainDecomposition {
     

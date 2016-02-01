@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IBond;
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
-import util.CutCalculator;
+import util.molecule.CutCalculator;
 
 /**
  * Check a bond-wise augmentation of an IAtomContainer for canonicity. 

@@ -10,7 +10,7 @@ import augment.CanonicalChecker;
 import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
-import util.CutCalculator;
+import util.molecule.CutCalculator;
 
 public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> {
 
