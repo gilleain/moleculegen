@@ -12,8 +12,8 @@ public class HBondCheckingHandler implements Handler<IAtomContainer> {
     private Handler<IAtomContainer> delegate;
     
     public HBondCheckingHandler(String elementFormula, Handler<IAtomContainer> delegate) {
-        this.hCountValidator = new HCountValidator(elementFormula);
         this.delegate = delegate;
+        this.hCountValidator = new HCountValidator(elementFormula);
     }
 
     @Override
@@ -26,8 +26,7 @@ public class HBondCheckingHandler implements Handler<IAtomContainer> {
 
     @Override
     public void finish() {
-        // TODO Auto-generated method stub
-        
+        delegate.finish();
     }
 
 }

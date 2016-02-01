@@ -67,7 +67,7 @@ public class MoleculeAdaptor implements Handler<Graph> {
 
     @Override
     public void finish() {
-        // no-op
+        delegate.finish();
     }
 
 }
