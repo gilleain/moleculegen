@@ -9,8 +9,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import graphhandler.GraphHandler;
 import graphhandler.MoleculeAdaptor;
-import handler.DuplicateCountingHandler;
-import handler.HBondCheckingHandler;
+import handler.molecule.DuplicateCountingHandler;
+import handler.molecule.HBondCheckingHandler;
 
 public class FormulaTest {
     

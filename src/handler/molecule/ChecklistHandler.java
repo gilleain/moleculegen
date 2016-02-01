@@ -1,4 +1,4 @@
-package handler;
+package handler.molecule;
 
 
 import java.io.BufferedReader;
@@ -11,6 +11,8 @@ import java.util.List;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.SmilesGenerator;
+
+import handler.Handler;
 
 /**
  * Check each generated structure against a list of expected structures -

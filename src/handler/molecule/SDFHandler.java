@@ -1,4 +1,4 @@
-package handler;
+package handler.molecule;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SDFWriter;
+
+import handler.Handler;
 
 /**
  * Prints the generated molecules to a print stream, defaulting to System out. 

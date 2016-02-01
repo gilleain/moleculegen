@@ -1,4 +1,4 @@
-package handler;
+package handler.molecule;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import handler.Handler;
 
 public class ZipDecoratingHandler implements Handler<IAtomContainer> {
 	

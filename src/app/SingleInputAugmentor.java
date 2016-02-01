@@ -11,7 +11,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.AugmentingGenerator;
-import handler.DataFormat;
+import handler.molecule.DataFormat;
 
 /**
  * For a single structure in an input file, augment up to the number of atoms remaining 

@@ -1,4 +1,4 @@
-package handler;
+package handler.molecule;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import handler.Handler;
 import io.AtomContainerPrinter;
 
 public class PrintStreamHandler implements Handler<IAtomContainer> {

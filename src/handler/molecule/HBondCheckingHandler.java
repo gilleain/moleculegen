@@ -1,7 +1,8 @@
-package handler;
+package handler.molecule;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import handler.Handler;
 import validate.HCountValidator;
 
 public class HBondCheckingHandler implements Handler<IAtomContainer> {

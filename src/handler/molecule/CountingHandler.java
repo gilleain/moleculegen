@@ -1,6 +1,8 @@
-package handler;
+package handler.molecule;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import handler.Handler;
 
 public class CountingHandler implements Handler<IAtomContainer> {
     

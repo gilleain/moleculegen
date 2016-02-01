@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import augment.AugmentingGenerator;
-import handler.CountingHandler;
+import handler.molecule.CountingHandler;
 
 /**
  * Test from a file list of formula-count pairs.

@@ -8,12 +8,12 @@ import app.ArgumentHandler;
 import app.AugmentationMethod;
 import augment.atom.AtomGenerator;
 import augment.bond.BondGenerator;
-import handler.CountingHandler;
-import handler.DataFormat;
 import handler.Handler;
-import handler.PrintStreamStringHandler;
-import handler.SDFHandler;
-import handler.ZipDecoratingHandler;
+import handler.molecule.CountingHandler;
+import handler.molecule.DataFormat;
+import handler.molecule.PrintStreamStringHandler;
+import handler.molecule.SDFHandler;
+import handler.molecule.ZipDecoratingHandler;
 
 public class AugmentingGeneratorFactory {
     

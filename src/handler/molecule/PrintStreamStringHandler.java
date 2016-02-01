@@ -1,4 +1,4 @@
-package handler;
+package handler.molecule;
 
 import java.io.PrintStream;
 
@@ -12,6 +12,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
+import handler.Handler;
 import io.AtomContainerPrinter;
 
 

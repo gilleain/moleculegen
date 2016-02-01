@@ -13,7 +13,7 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.AugmentingGenerator;
-import handler.DataFormat;
+import handler.molecule.DataFormat;
 import io.IteratingACPReader;
 import io.IteratingSignatureReader;
 

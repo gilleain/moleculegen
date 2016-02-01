@@ -1,13 +1,12 @@
 package app;
 
-import handler.DataFormat;
-
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
 import augment.AugmentingGenerator;
 import augment.AugmentingGeneratorFactory;
+import handler.molecule.DataFormat;
 
 public class AMG {
     

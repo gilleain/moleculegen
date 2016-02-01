@@ -10,7 +10,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-import handler.DataFormat;
+import handler.molecule.DataFormat;
 
 public class ArgumentHandler {
     

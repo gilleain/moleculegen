@@ -1,4 +1,4 @@
-package handler;
+package handler.molecule;
 
 /**
  * The format of input or output molecules - SMILES, SDF, signatures, etc.
