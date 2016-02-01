@@ -11,7 +11,6 @@ import app.AugmentationMethod;
 import augment.bond.BondGenerator;
 import augment.vertex.VertexGenerator;
 import handler.Handler;
-import handler.graph.GraphCountingHandler;
 import handler.graph.MoleculeAdaptor;
 import handler.molecule.CountingHandler;
 import handler.molecule.DataFormat;
@@ -23,6 +22,7 @@ import model.Graph;
 
 public class AugmentingGeneratorFactory {
     
+    @SuppressWarnings("rawtypes")   // not sure how we could avoid this...
     public static AugmentingGenerator build(ArgumentHandler argsH) throws IOException {
         if (argsH.isHelp()) {
             argsH.printHelp();
@@ -51,12 +51,8 @@ public class AugmentingGeneratorFactory {
     }
     
     private static Handler<Graph> getGraphHandler(ArgumentHandler argsH) throws IOException {
-        if (isCounting(argsH)) {
-            return new GraphCountingHandler(argsH.isTiming());
-        } else {
-            return new MoleculeAdaptor(
-                    new HBondCheckingHandler(argsH.getFormula(), getHandler(argsH)));
-        }
+        return new MoleculeAdaptor(
+                new HBondCheckingHandler(argsH.getFormula(), getHandler(argsH)));
     }
     
     private static Handler<IAtomContainer> getHandler(ArgumentHandler argsH) throws IOException {
