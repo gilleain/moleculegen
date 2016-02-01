@@ -13,7 +13,7 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private AtomAugmentor augmentor;
     
-    private Handler handler;
+    private Handler<IAtomContainer> handler;
     
     private int maxIndex;
     
@@ -27,7 +27,7 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private int counter;
     
-    public AtomGenerator(String elementFormula, Handler handler) {
+    public AtomGenerator(String elementFormula, Handler<IAtomContainer> handler) {
         // XXX - parse the formula once and pass down the parser!
         this.initialConstraints = new ElementConstraints(elementFormula);
         

@@ -3,7 +3,7 @@ package augment.vertex;
 import augment.AugmentingGenerator;
 import augment.constraints.VertexColorConstraintSource;
 import augment.constraints.VertexColorConstraints;
-import graphhandler.GraphHandler;
+import handler.Handler;
 import model.Graph;
 import validate.HCountValidator;
 
@@ -18,7 +18,7 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     
     private VertexAugmentor augmentor;
     
-    private GraphHandler handler;
+    private Handler<Graph> handler;
     
     private int maxIndex;
     
@@ -32,7 +32,7 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     
     private int counter;
     
-    public VertexGenerator(String elementFormula, GraphHandler handler) {
+    public VertexGenerator(String elementFormula, Handler<Graph> handler) {
         // XXX - parse the formula once and pass down the parser!
         this.initialConstraints = new VertexColorConstraints(elementFormula);
         

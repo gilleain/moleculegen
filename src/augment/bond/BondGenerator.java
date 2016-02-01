@@ -12,7 +12,7 @@ public class BondGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private ElementConstraints initialConstraints;
     
-    private Handler handler;
+    private Handler<IAtomContainer> handler;
     
     private BondAugmentor augmentor;
 
@@ -24,7 +24,7 @@ public class BondGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private int counter;
     
-    public BondGenerator(String elementFormula, Handler handler) {
+    public BondGenerator(String elementFormula, Handler<IAtomContainer> handler) {
         this.initialConstraints = new ElementConstraints(elementFormula); 
         this.augmentor = new BondAugmentor(elementFormula);
         this.handler = handler;

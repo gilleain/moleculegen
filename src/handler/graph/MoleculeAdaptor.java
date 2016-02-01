@@ -1,4 +1,4 @@
-package graphhandler;
+package handler.graph;
 
 import static org.openscience.cdk.interfaces.IBond.Order.DOUBLE;
 import static org.openscience.cdk.interfaces.IBond.Order.SINGLE;
@@ -20,13 +20,13 @@ import model.Graph;
  * @author maclean
  *
  */
-public class MoleculeAdaptor implements GraphHandler {
+public class MoleculeAdaptor implements Handler<Graph> {
     
     private IChemObjectBuilder builder;
     
-    private Handler delegate;
+    private Handler<IAtomContainer> delegate;
     
-    public MoleculeAdaptor(IChemObjectBuilder builder, Handler delegate) {
+    public MoleculeAdaptor(IChemObjectBuilder builder, Handler<IAtomContainer> delegate) {
         this.builder = builder;
         this.delegate = delegate;
     }

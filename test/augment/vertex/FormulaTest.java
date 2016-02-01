@@ -7,10 +7,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import graphhandler.GraphHandler;
-import graphhandler.MoleculeAdaptor;
+import handler.Handler;
+import handler.graph.MoleculeAdaptor;
 import handler.molecule.DuplicateCountingHandler;
 import handler.molecule.HBondCheckingHandler;
+import model.Graph;
 
 public class FormulaTest {
     
@@ -23,7 +24,7 @@ public class FormulaTest {
         HBondCheckingHandler hBondCheckingHandler = 
                 new HBondCheckingHandler(elementFormula, moleculeHandler);
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-        GraphHandler moleculeAdaptor = new MoleculeAdaptor(builder, hBondCheckingHandler);
+        Handler<Graph> moleculeAdaptor = new MoleculeAdaptor(builder, hBondCheckingHandler);
         VertexGenerator gen = new VertexGenerator(elementFormula, moleculeAdaptor);
         gen.run();
         Map<String, List<IAtomContainer>> map = moleculeHandler.getDupMap();
