@@ -1,5 +1,7 @@
 package augment;
 
+import handler.Handler;
+
 /**
  * Runs an {@link Augmentor}.
  * 
@@ -13,5 +15,7 @@ public interface AugmentingGenerator<T> {
     public void run(T initial);
 
     public void finish();
+    
+    public Handler<T> getHandler();
 
 }

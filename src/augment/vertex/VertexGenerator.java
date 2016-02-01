@@ -85,4 +85,9 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     public void finish() {
         handler.finish();
     }
+
+    @Override
+    public Handler<Graph> getHandler() {
+        return handler;
+    }
 }

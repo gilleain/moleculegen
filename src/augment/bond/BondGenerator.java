@@ -81,4 +81,9 @@ public class BondGenerator implements AugmentingGenerator<IAtomContainer> {
     public void finish() {
         handler.finish();
     }
+
+    @Override
+    public Handler<IAtomContainer> getHandler() {
+        return handler;
+    }
 }
