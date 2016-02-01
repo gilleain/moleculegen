@@ -1,10 +1,8 @@
 package handler;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
-public interface Handler {
+public interface Handler<T> {
     
-    public void handle(IAtomContainer atomContainer);
+    public void handle(T object);
     
     public void finish();
 

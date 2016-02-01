@@ -8,7 +8,7 @@ import java.util.Map;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.signature.MoleculeSignature;
 
-public class DuplicateCountingHandler implements Handler {
+public class DuplicateCountingHandler implements Handler<IAtomContainer> {
     
     private Map<String, IAtomContainer> sigMap;
     

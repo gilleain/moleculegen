@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import io.AtomContainerPrinter;
 
-public class PrintStreamHandler implements Handler {
+public class PrintStreamHandler implements Handler<IAtomContainer> {
     
     private BufferedWriter out;
     

@@ -4,13 +4,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import validate.HCountValidator;
 
-public class HBondCheckingHandler implements Handler {
+public class HBondCheckingHandler implements Handler<IAtomContainer> {
     
     private HCountValidator hCountValidator;
     
-    private Handler delegate;
+    private Handler<IAtomContainer> delegate;
     
-    public HBondCheckingHandler(String elementFormula, Handler delegate) {
+    public HBondCheckingHandler(String elementFormula, Handler<IAtomContainer> delegate) {
         this.hCountValidator = new HCountValidator(elementFormula);
         this.delegate = delegate;
     }

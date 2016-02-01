@@ -2,7 +2,7 @@ package handler;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class CountingHandler implements Handler {
+public class CountingHandler implements Handler<IAtomContainer> {
     
     private int count;
     

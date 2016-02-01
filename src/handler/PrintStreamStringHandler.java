@@ -23,7 +23,7 @@ import io.AtomContainerPrinter;
  * @author maclean
  *
  */
-public class PrintStreamStringHandler implements Handler {
+public class PrintStreamStringHandler implements Handler<IAtomContainer> {
 	
 	private PrintStream printStream;
 	

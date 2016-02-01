@@ -13,7 +13,7 @@ import org.openscience.cdk.io.SDFWriter;
  * @author maclean
  *
  */
-public class SDFHandler implements Handler {
+public class SDFHandler implements Handler<IAtomContainer> {
 	
 	private SDFWriter writer;
 	

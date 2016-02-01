@@ -19,7 +19,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
  * @author maclean
  *
  */
-public class ChecklistHandler implements Handler {
+public class ChecklistHandler implements Handler<IAtomContainer> {
 	
 	/**
 	 * These are the ones we expect to see
