@@ -4,16 +4,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import app.ArgumentHandler;
 import app.AugmentationMethod;
-import augment.atom.AtomGenerator;
 import augment.bond.BondGenerator;
+import augment.vertex.VertexGenerator;
 import handler.Handler;
+import handler.graph.GraphCountingHandler;
+import handler.graph.MoleculeAdaptor;
 import handler.molecule.CountingHandler;
 import handler.molecule.DataFormat;
+import handler.molecule.HBondCheckingHandler;
 import handler.molecule.PrintStreamStringHandler;
 import handler.molecule.SDFHandler;
 import handler.molecule.ZipDecoratingHandler;
+import model.Graph;
 
 public class AugmentingGeneratorFactory {
     
@@ -29,18 +35,34 @@ public class AugmentingGeneratorFactory {
             return null;
         }
         
-        AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? AugmentationMethod.ATOM : argsH.getAugmentationMethod();
+        AugmentationMethod augmentationMethod = (argsH.getAugmentationMethod() == null)? 
+                AugmentationMethod.ATOM : argsH.getAugmentationMethod();
+        
         if (augmentationMethod == AugmentationMethod.ATOM) {
-            return new AtomGenerator(formula, getHandler(argsH));
+//            return new AtomGenerator(formula, getHandler(argsH));
+            return new VertexGenerator(formula, getGraphHandler(argsH));
         } else {
             return new BondGenerator(formula, getHandler(argsH));
         }
     }
     
-    private static Handler getHandler(ArgumentHandler argsH) throws IOException {
+    private static boolean isCounting(ArgumentHandler argsH) {
+        return argsH.getOutputFormat() == DataFormat.NONE && !argsH.isComparingToFile();
+    }
+    
+    private static Handler<Graph> getGraphHandler(ArgumentHandler argsH) throws IOException {
+        if (isCounting(argsH)) {
+            return new GraphCountingHandler(argsH.isTiming());
+        } else {
+            return new MoleculeAdaptor(
+                    new HBondCheckingHandler(argsH.getFormula(), getHandler(argsH)));
+        }
+    }
+    
+    private static Handler<IAtomContainer> getHandler(ArgumentHandler argsH) throws IOException {
         DataFormat format = argsH.getOutputFormat();
         
-        if (format == DataFormat.NONE && ! argsH.isComparingToFile()) {
+        if (isCounting(argsH)) {
             return new CountingHandler(argsH.isTiming());
         } else {
             PrintStream outStream;

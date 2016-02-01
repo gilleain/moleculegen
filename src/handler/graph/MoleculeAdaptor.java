@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import handler.Handler;
 import model.Edge;
@@ -25,6 +26,10 @@ public class MoleculeAdaptor implements Handler<Graph> {
     private IChemObjectBuilder builder;
     
     private Handler<IAtomContainer> delegate;
+    
+    public MoleculeAdaptor(Handler<IAtomContainer> delegate) {
+        this(SilentChemObjectBuilder.getInstance(), delegate);
+    }
     
     public MoleculeAdaptor(IChemObjectBuilder builder, Handler<IAtomContainer> delegate) {
         this.builder = builder;

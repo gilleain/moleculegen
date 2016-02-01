@@ -59,7 +59,6 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     }
     
     private void augment(ByVertexAugmentation parent, int index) {
-//        System.out.println("augmenting " + parent.getAugmentedObject());
         counter++;
         if (index >= maxIndex) {
             Graph graph = parent.getAugmentedObject();
