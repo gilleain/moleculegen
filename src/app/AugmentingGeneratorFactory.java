@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
+import augment.atom.AtomGenerator;
 import augment.bond.BondGenerator;
 import augment.vertex.VertexGenerator;
 import handler.Handler;
@@ -38,7 +39,8 @@ public class AugmentingGeneratorFactory {
                 AugmentationMethod.ATOM : argsH.getAugmentationMethod();
         
         if (augmentationMethod == AugmentationMethod.ATOM) {
-//            return new AtomGenerator(formula, getHandler(argsH));
+            return new AtomGenerator(formula, getHandler(argsH));
+        } else if (augmentationMethod == AugmentationMethod.VERTEX) {
             return new VertexGenerator(formula, getGraphHandler(argsH));
         } else {
             return new BondGenerator(formula, getHandler(argsH));

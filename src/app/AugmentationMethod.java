@@ -3,5 +3,6 @@ package app;
 
 public enum AugmentationMethod {
     ATOM,
-    BOND
+    BOND,
+    VERTEX
 }
