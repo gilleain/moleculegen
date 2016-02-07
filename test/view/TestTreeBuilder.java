@@ -7,6 +7,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.atom.AtomGenerator;
 import handler.molecule.CountingHandler;
+import view.tree.PrintingTreeWalker;
+import view.tree.TreeBuilder;
 
 public class TestTreeBuilder {
     

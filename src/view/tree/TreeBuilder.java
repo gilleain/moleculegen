@@ -1,4 +1,4 @@
-package view;
+package view.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,17 +31,21 @@ public class TreeBuilder {
         public IAtomContainer atomContainer;
         public boolean isCanonical;
         public int level;
+        public int index;
         
-        public Node(IAtomContainer atomContainer, boolean isCanonical, int level) {
+        public Node(IAtomContainer atomContainer, boolean isCanonical, int level, int index) {
             this.atomContainer = atomContainer;
             this.children = new ArrayList<Node>();
             this.isCanonical = isCanonical;
             this.level = level;
+            this.index = index;
         }
         
     }
     
     public class TreeCanonicalHandler implements CanonicalHandler<IAtomContainer> {
+        
+        private int index;
 
         @Override
         public void handle(IAtomContainer parent, IAtomContainer child, boolean isCanonical) {
@@ -52,7 +56,7 @@ public class TreeBuilder {
             if (nodeKeys.containsKey(key)) {
                 parentNode = nodeKeys.get(key);
             } else {
-                parentNode = new Node(parent, true, 0);
+                parentNode = new Node(parent, true, 0, 0);
                 if (root == null) {
                     root = parentNode; 
                 }
@@ -60,7 +64,7 @@ public class TreeBuilder {
             }
             
             String childKey = new MoleculeSignature(child).toCanonicalString();
-            Node childNode = new Node(child, isCanonical, parentNode.level + 1);
+            Node childNode = new Node(child, isCanonical, parentNode.level + 1, ++index);
             nodeKeys.put(childKey, childNode);
             parentNode.children.add(childNode);
         }
@@ -82,13 +86,13 @@ public class TreeBuilder {
     }
     
     public void walkTree(TreeWalker walker) {
-        walk(root, walker);
+        walk(null, root, walker);
     }
     
-    private void walk(Node current, TreeWalker walker) {
-        walker.walk(current);
+    private void walk(Node parent, Node current, TreeWalker walker) {
+        walker.walk(parent, current);
         for (Node child : current.children) {
-            walk(child, walker);
+            walk(current, child, walker);
         }
     }
 

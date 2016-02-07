@@ -1,11 +1,11 @@
-package view;
+package view.tree;
 
-import view.TreeBuilder.Node;
+import view.tree.TreeBuilder.Node;
 
 public class PrintingTreeWalker implements TreeWalker {
 
     @Override
-    public void walk(Node current) {
+    public void walk(Node parent, Node current) {
         int level = current.level;
         String tabs = "";
         for (int index = 0; index < level; index++) {
