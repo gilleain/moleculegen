@@ -17,6 +17,8 @@ public class TreeBuilder {
      */
     private final TreeCanonicalHandler handler;
     
+    private final boolean canonicalOnly;
+    
     /**
      * A lookup for nodes, so that we can add children to the right parents.
      */
@@ -24,14 +26,17 @@ public class TreeBuilder {
     
     private Node root;
     
-    private class Node {
+    public class Node {
         public List<Node> children;
         public IAtomContainer atomContainer;
         public boolean isCanonical;
-        public Node(IAtomContainer atomContainer, boolean isCanonical) {
+        public int level;
+        
+        public Node(IAtomContainer atomContainer, boolean isCanonical, int level) {
             this.atomContainer = atomContainer;
             this.children = new ArrayList<Node>();
             this.isCanonical = isCanonical;
+            this.level = level;
         }
         
     }
@@ -40,12 +45,14 @@ public class TreeBuilder {
 
         @Override
         public void handle(IAtomContainer parent, IAtomContainer child, boolean isCanonical) {
+            if (canonicalOnly && !isCanonical) return;
+            
             String key = new MoleculeSignature(parent).toCanonicalString();
             Node parentNode; 
             if (nodeKeys.containsKey(key)) {
                 parentNode = nodeKeys.get(key);
             } else {
-                parentNode = new Node(parent, true);
+                parentNode = new Node(parent, true, 0);
                 if (root == null) {
                     root = parentNode; 
                 }
@@ -53,7 +60,7 @@ public class TreeBuilder {
             }
             
             String childKey = new MoleculeSignature(child).toCanonicalString();
-            Node childNode = new Node(child, isCanonical);
+            Node childNode = new Node(child, isCanonical, parentNode.level + 1);
             nodeKeys.put(childKey, childNode);
             parentNode.children.add(childNode);
         }
@@ -61,6 +68,11 @@ public class TreeBuilder {
     }
     
     public TreeBuilder() {
+        this(false);
+    }
+    
+    public TreeBuilder(boolean canonicalOnly) {
+        this.canonicalOnly = canonicalOnly;
         this.handler = new TreeCanonicalHandler();
         this.nodeKeys = new HashMap<String, Node>();
     }
@@ -69,19 +81,14 @@ public class TreeBuilder {
         return this.handler;
     }
     
-    public void printTree() {
-        walk(0, root);
+    public void walkTree(TreeWalker walker) {
+        walk(root, walker);
     }
     
-    private void walk(int level, Node current) {
-        String tabs = "";
-        for (int index = 0; index < level; index++) {
-            tabs += "\t";
-        }
-        String acp =io.AtomContainerPrinter.toString(current.atomContainer);
-        System.out.println(tabs + acp + " " + (current.isCanonical? "C" : "N"));
+    private void walk(Node current, TreeWalker walker) {
+        walker.walk(current);
         for (Node child : current.children) {
-            walk(level + 1, child);
+            walk(child, walker);
         }
     }
 

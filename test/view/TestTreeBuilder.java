@@ -28,18 +28,18 @@ public class TestTreeBuilder {
         handler.handle(root, m1, true);
         handler.handle(m1, m11, true);
         handler.handle(root, m2, true);
-        handler.handle(m2, m21, true);
-        builder.printTree();
+        handler.handle(m2, m21, false);
+        builder.walkTree(new PrintingTreeWalker());
     }
     
     @Test
     public void buildFromGenerator() {
-        TreeBuilder builder = new TreeBuilder();
+        TreeBuilder builder = new TreeBuilder(true);
         TreeBuilder.TreeCanonicalHandler handler = builder.getHandler();
         AtomGenerator generator = new AtomGenerator("C4H10", new CountingHandler(false));
         generator.setCanonicalHandler(handler);
         generator.run();
-        builder.printTree();
+        builder.walkTree(new PrintingTreeWalker());
     }
 
 }
