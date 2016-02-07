@@ -1,5 +1,7 @@
 package augment.atom;
 
+import java.io.Serializable;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond.Order;
@@ -13,7 +15,7 @@ import augment.constraints.ElementConstraints;
  * @author maclean
  *
  */
-public class AtomAugmentation implements Augmentation<IAtomContainer> {
+public class AtomAugmentation implements Augmentation<IAtomContainer>, Serializable {
     
     private final IAtomContainer augmentedMolecule;
     

@@ -5,6 +5,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import augment.AugmentingGenerator;
 import augment.constraints.ElementConstraintSource;
 import augment.constraints.ElementConstraints;
+import handler.CanonicalHandler;
 import handler.Handler;
 import validate.HCountValidator;
 
@@ -25,6 +26,8 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private ElementConstraintSource initialStateSource;
     
+    private CanonicalHandler<IAtomContainer> canonicalHandler;
+    
     private int counter;
     
     public AtomGenerator(String elementFormula, Handler<IAtomContainer> handler) {
@@ -37,6 +40,10 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
         this.canonicalChecker = new AtomCanonicalChecker();
         this.handler = handler;
         this.maxIndex = hCountValidator.getElementSymbols().size() - 1;
+    }
+    
+    public void setCanonicalHandler(CanonicalHandler<IAtomContainer> canonicalHandler) {
+        this.canonicalHandler = canonicalHandler;
     }
     
     public void run() {
@@ -67,17 +74,22 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
         
         for (AtomAugmentation augmentation : augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation)) {
-//                report("C", augmentation);
+                report(true, parent, augmentation);
                 augment(augmentation, index + 1);
             } else {
-//                report("N", augmentation);
+                report(false, parent, augmentation);
             }
         }
     }
     
-    private void report(String cOrN, AtomAugmentation augmentation) {
-        System.out.println(counter + " " + cOrN + " " 
-            + io.AtomContainerPrinter.toString(augmentation.getAugmentedObject()));
+    private void report(boolean isCanonical, 
+            AtomAugmentation parentAugmentation, AtomAugmentation childAugmentation) {
+        if (canonicalHandler != null) {
+            canonicalHandler.handle(
+                    parentAugmentation.getAugmentedObject(), 
+                    childAugmentation.getAugmentedObject(), 
+                    isCanonical);
+        }
     }
 
     @Override
