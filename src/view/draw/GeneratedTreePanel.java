@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
@@ -31,7 +32,10 @@ public class GeneratedTreePanel extends JPanel {
     private AtomContainerRenderer renderer;
     
     private final double boxW = 50;
-    private final double boxH = 50;    
+    private final double boxH = 50;
+    
+    private boolean isDirty;
+    private Image image;
     
     public GeneratedTreePanel(int screenWidth, int screenHeight) {
         this.setPreferredSize(new Dimension(screenWidth, screenWidth));
@@ -49,13 +53,16 @@ public class GeneratedTreePanel extends JPanel {
         model.set(BasicAtomGenerator.CompactShape.class, BasicAtomGenerator.Shape.OVAL);
         model.set(BasicAtomGenerator.KekuleStructure.class, true);
         model.set(BasicBondGenerator.BondWidth.class, 2.0);
+        model.set(BasicSceneGenerator.ForegroundColor.class, Color.GRAY);
+        isDirty = false;
     }
     
     public void setTree(DrawNode root, int treeWidth, int treeHeight) {
         int maxDepth = root.getHeight();
-        new TreeLayout(maxDepth).layoutTree(root, treeWidth, treeHeight);
+        new TreeLayout(maxDepth).layoutTree(root, boxW, boxH, treeWidth, treeHeight);
         System.out.println("setting tree " + root);
         this.root = root;
+        isDirty = true;
     }
     
     public void paint(Graphics g) {
@@ -63,12 +70,17 @@ public class GeneratedTreePanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         if (root == null) return;
         
-        g.setColor(Color.BLACK);
-        paint(g, root);
+        if (isDirty) {
+            image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            paint(image.getGraphics(), root);
+            isDirty = false;
+        }
+        g.drawImage(image, 0, 0, null);
     }
     
     public void paint(Graphics g, DrawNode node) {
         for (DrawNode child : node.children) {
+            g.setColor(Color.BLACK);
             g.drawLine(node.x, node.y, child.x, child.y);
             paint(g, child);
         }

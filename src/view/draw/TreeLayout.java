@@ -4,9 +4,9 @@ public class TreeLayout {
     
     public int totalLeafCount = 0;
     
-    public int xSep;
+    public double xSep;
     
-    public int ySep;
+    public double ySep;
     
     public final int maxDepth;
     
@@ -14,19 +14,21 @@ public class TreeLayout {
         this.maxDepth = maxDepth;
     }
     
-    public void layoutTree(DrawNode root, int width, int height) {
+    public void layoutTree(DrawNode root, double canvasW, double canvasH, int width, int height) {
         int leafCount = root.countLeaves();
-        this.xSep = width / (leafCount + 1);
-        this.ySep = height / (maxDepth + 1);
+//        this.xSep = width / (leafCount + 1);
+//        this.ySep = height / (maxDepth + 1);
+        this.xSep = canvasW;
+        this.ySep = canvasH;
         System.out.println("xSep " + xSep + " ySep " + ySep + " leafCount " + leafCount);
         layout(root);
     }
     
     private int layout(DrawNode node) {
-        node.y  = node.depth * ySep;
+        node.y  = (int)(node.depth * ySep);
         if (node.isLeaf()) {
             totalLeafCount += 1;
-            node.x = totalLeafCount * xSep;
+            node.x = (int) (totalLeafCount * xSep);
             System.out.println("setting node pos to (" + node.x + ", " + node.y + ") " + node.depth);
             return node.x;
         } else {

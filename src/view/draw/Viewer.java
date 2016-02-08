@@ -1,16 +1,18 @@
 package view.draw;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import augment.atom.AtomGenerator;
-import handler.molecule.CountingHandler;
 import handler.molecule.PrintStreamHandler;
 import view.tree.DrawingTreeWalker;
 import view.tree.TreeBuilder;
@@ -27,7 +29,7 @@ public class Viewer extends JPanel implements ActionListener {
     
     private JButton showButton;
     
-    private final int TREE_PANEL_WIDTH = 1200;
+    private final int TREE_PANEL_WIDTH = 800;
     
     private final int TREE_PANEL_HEIGHT = 400;
     
@@ -37,7 +39,11 @@ public class Viewer extends JPanel implements ActionListener {
         this.setLayout(new BorderLayout());
         
         treePanel = new GeneratedTreePanel(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT);
-        this.add(treePanel, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(treePanel);
+        scrollPane.setPreferredSize(new Dimension(TREE_PANEL_WIDTH, TREE_PANEL_HEIGHT));
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.add(scrollPane, BorderLayout.CENTER);
         
         JPanel controlPanel = new JPanel();
         formulaField = new JTextField("C3H8", 12);
