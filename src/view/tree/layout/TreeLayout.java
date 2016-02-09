@@ -1,6 +1,8 @@
-package view.draw;
+package view.tree.layout;
 
 import java.awt.geom.Rectangle2D;
+
+import view.draw.DrawNode;
 
 public class TreeLayout {
     
@@ -28,30 +30,30 @@ public class TreeLayout {
         return new Rectangle2D.Double(0, 0, xSep * leafCount, ySep * root.getHeight());
     }
     
-    private int layout(DrawNode node) {
-        node.y  = (int)(node.depth * ySep);
+    private double layout(DrawNode node) {
+        node.setY(node.getDepth() * ySep);
         if (node.isLeaf()) {
             totalLeafCount += 1;
-            node.x = (int) (totalLeafCount * xSep);
-            System.out.println("setting node pos to (" + node.x + ", " + node.y + ") " + node.depth);
-            return node.x;
+            node.setX(totalLeafCount * xSep);
+            System.out.println("setting node pos to " + node.getPosString() + " " + node.getDepth());
+            return node.getX();
         } else {
-            int min = 0;
-            int max = 0;
-            for (DrawNode child : node.children) {
-                int childCenter = layout(child);
+            double min = 0;
+            double max = 0;
+            for (DrawNode child : node.children()) {
+                double childCenter = layout(child);
                 if (min == 0) {
                     min = childCenter;
                 }
                 max = childCenter;
             }
             if (min == max) {
-                node.x = min;
+                node.setX(min);
             } else {
-                node.x = min + (max - min) / 2;
+                node.setX(min + (max - min) / 2);
             }
-            System.out.println("setting node pos to (" + node.x + ", " + node.y);
-            return node.x;
+            System.out.println("setting node pos to " + node.getPosString());
+            return node.getX();
         }
     }
     

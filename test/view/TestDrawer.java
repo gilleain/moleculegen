@@ -13,15 +13,15 @@ import augment.atom.AtomGenerator;
 import handler.molecule.PrintStreamHandler;
 import view.draw.DrawNode;
 import view.draw.Drawer;
-import view.draw.TreeLayout;
 import view.tree.DrawingTreeWalker;
 import view.tree.TreeBuilder;
+import view.tree.layout.TreeLayout;
 
 public class TestDrawer {
     
     @Test
     public void testC4H11N() {
-        drawTree(getTree("C2H8NO", true));
+        drawTree(getTree("C2NO", true));
     }
     
     private DrawNode getTree(String formula, boolean canonicalOnly) {

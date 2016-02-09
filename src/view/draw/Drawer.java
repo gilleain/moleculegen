@@ -49,7 +49,7 @@ public class Drawer {
     private void paint(Graphics g, double boxW, double boxH, DrawNode node) {
         for (DrawNode child : node.children) {
             g.setColor(Color.BLACK);
-            g.drawLine(node.x, node.y, child.x, child.y);
+            g.drawLine((int)node.getX(), (int)node.getY(), (int)child.getX(), (int)child.getY());
             paint(g, boxW, boxH, child);
         }
         paintAtomContainer(g, boxW, boxH, node);

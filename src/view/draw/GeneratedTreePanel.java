@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import view.tree.layout.TreeLayout;
+
 public class GeneratedTreePanel extends JPanel {
     
 	private static final long serialVersionUID = 2144237936253828531L;
@@ -55,17 +57,17 @@ public class GeneratedTreePanel extends JPanel {
         Rectangle2D r = g.getFontMetrics().getStringBounds(label, g);
         int rw = (int)r.getWidth();
         int rh = (int)r.getHeight();
-        int textX = node.x - (rw / 2);
-        int textY = node.y + (rh / 2);
+        double textX = node.getX() - (rw / 2);
+        double textY = node.getY() + (rh / 2);
         int border = 3;
-        int boundX = textX - border;
-        int boundY = node.y - (rh / 2) - border;
+        double boundX = textX - border;
+        double boundY = node.y - (rh / 2) - border;
         int boundW = rw + (2 * border);
         int boundH = rh + (2 * border);
-        g.fillRect(boundX, boundY, boundW, boundH);
+        g.fillRect((int)boundX, (int)boundY, (int)boundW, (int)boundH);
         g.setColor(Color.BLACK);
-        g.drawRect(boundX, boundY, boundW, boundH);
-        g.drawString(label, textX, textY); 
+        g.drawRect((int)boundX, (int)boundY, (int)boundW, (int)boundH);
+        g.drawString(label, (int)textX, (int)textY); 
     }
 
 
