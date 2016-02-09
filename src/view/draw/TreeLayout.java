@@ -1,5 +1,7 @@
 package view.draw;
 
+import java.awt.geom.Rectangle2D;
+
 public class TreeLayout {
     
     public int totalLeafCount = 0;
@@ -14,7 +16,8 @@ public class TreeLayout {
         this.maxDepth = maxDepth;
     }
     
-    public void layoutTree(DrawNode root, double canvasW, double canvasH, int width, int height) {
+//    public Rectangle2D layoutTree(DrawNode root, double canvasW, double canvasH, int width, int height) {
+    public Rectangle2D layoutTree(DrawNode root, double canvasW, double canvasH) {
         int leafCount = root.countLeaves();
 //        this.xSep = width / (leafCount + 1);
 //        this.ySep = height / (maxDepth + 1);
@@ -22,6 +25,7 @@ public class TreeLayout {
         this.ySep = canvasH;
         System.out.println("xSep " + xSep + " ySep " + ySep + " leafCount " + leafCount);
         layout(root);
+        return new Rectangle2D.Double(0, 0, xSep * leafCount, ySep * root.getHeight());
     }
     
     private int layout(DrawNode node) {
