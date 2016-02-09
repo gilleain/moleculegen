@@ -18,7 +18,6 @@ public class TreeLayout {
         this.maxDepth = maxDepth;
     }
     
-//    public Rectangle2D layoutTree(DrawNode root, double canvasW, double canvasH, int width, int height) {
     public Rectangle2D layoutTree(DrawNode root, double canvasW, double canvasH) {
         int leafCount = root.countLeaves();
 //        this.xSep = width / (leafCount + 1);

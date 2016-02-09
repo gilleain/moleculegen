@@ -15,6 +15,7 @@ import view.draw.DrawNode;
 import view.draw.Drawer;
 import view.tree.DrawingTreeWalker;
 import view.tree.TreeBuilder;
+import view.tree.layout.CircularTreeLayout;
 import view.tree.layout.TreeLayout;
 
 public class TestDrawer {
@@ -42,7 +43,8 @@ public class TestDrawer {
         double boxW = 50;
         double boxH = 50;
         Rectangle2D bounds = 
-                new TreeLayout(root.getHeight()).layoutTree(root, boxW, boxH);
+//                new TreeLayout(root.getHeight()).layoutTree(root, boxW, boxH);
+                new CircularTreeLayout().layoutTree(root, boxW, boxH);
         int w = (int)bounds.getWidth();
         int h = (int)bounds.getHeight();
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
