@@ -21,11 +21,11 @@ public class TestDrawer {
     
     @Test
     public void testC4H11N() {
-        drawTree(getTree("C4H8"));
+        drawTree(getTree("C2H8NO", true));
     }
     
-    private DrawNode getTree(String formula) {
-        TreeBuilder builder = new TreeBuilder();
+    private DrawNode getTree(String formula, boolean canonicalOnly) {
+        TreeBuilder builder = new TreeBuilder(canonicalOnly);
         AtomGenerator generator = new AtomGenerator(formula, new PrintStreamHandler(System.out));
         generator.setCanonicalHandler(builder.getHandler());
         generator.run();

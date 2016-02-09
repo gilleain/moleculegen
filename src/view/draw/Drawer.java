@@ -32,7 +32,7 @@ public class Drawer {
         
         RendererModel model = renderer.getRenderer2DModel(); 
         model.set(BasicAtomGenerator.CompactAtom.class, true);
-        model.set(BasicAtomGenerator.AtomRadius.class, 3.0);
+        model.set(BasicAtomGenerator.AtomRadius.class, 4.0);
         model.set(BasicAtomGenerator.CompactShape.class, BasicAtomGenerator.Shape.OVAL);
         model.set(BasicAtomGenerator.KekuleStructure.class, true);
         model.set(BasicBondGenerator.BondWidth.class, 2.0);
