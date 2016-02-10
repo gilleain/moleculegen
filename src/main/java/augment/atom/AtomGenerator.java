@@ -1,5 +1,7 @@
 package augment.atom;
 
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
@@ -12,6 +14,8 @@ import validate.HCountValidator;
 
 public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
+    private static final long serialVersionUID = -5861481514308795440L;
+
     private AtomAugmentor augmentor;
     
     private Handler<IAtomContainer> handler;
@@ -44,14 +48,16 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     public void setCanonicalHandler(CanonicalHandler<IAtomContainer> canonicalHandler) {
         this.canonicalHandler = canonicalHandler;
-    }
+     }
     
     public void run() {
         for (IAtomContainer start : initialStateSource.get()) {
             String symbol = start.getAtom(0).getSymbol();
-            augment(new AtomAugmentation(start, initialConstraints.minus(symbol)), 0);
+            ElementConstraints minus = initialConstraints.minus(symbol);
+            AtomAugmentation parent = new AtomAugmentation(start, minus);
+            augment(parent, 0);
         }
-//        System.out.println("counter = " + counter);
+        // System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial) {
@@ -72,7 +78,8 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
             return;
         }
         
-        for (AtomAugmentation augmentation : augmentor.augment(parent)) {
+        List<AtomAugmentation> augment = augmentor.augment(parent);
+        for (AtomAugmentation augmentation : augment) {
             if (canonicalChecker.isCanonical(augmentation)) {
                 report(true, parent, augmentation);
                 augment(augmentation, index + 1);
@@ -82,8 +89,7 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
         }
     }
     
-    private void report(boolean isCanonical, 
-            AtomAugmentation parentAugmentation, AtomAugmentation childAugmentation) {
+    private void report(boolean isCanonical, AtomAugmentation parentAugmentation, AtomAugmentation childAugmentation) {
         if (canonicalHandler != null) {
             canonicalHandler.handle(
                     parentAugmentation.getAugmentedObject(), 

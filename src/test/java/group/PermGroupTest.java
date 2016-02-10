@@ -9,9 +9,9 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 public class PermGroupTest {
     
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     private IAtomContainer getAtomContainer(String elements, int[][] bonds) {
+        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         IAtomContainer ac = builder.newInstance(IAtomContainer.class); 
         for (int i = 0; i < elements.length(); i++) {
             String eS = String.valueOf(elements.charAt(i));

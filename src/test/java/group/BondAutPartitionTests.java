@@ -17,8 +17,10 @@ import io.AtomContainerPrinter;
 
 
 public class BondAutPartitionTests {
-    
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
     
     public void sort(IAtomContainer ac) {
         for (IBond bond : ac.bonds()) {
@@ -33,7 +35,7 @@ public class BondAutPartitionTests {
     
     public void testFile(String filename) throws IOException {
         IIteratingChemObjectReader<IAtomContainer> reader = 
-            new IteratingSMILESReader(new FileReader(filename), builder);
+            new IteratingSMILESReader(new FileReader(filename), getBuilder());
 //        SmilesGenerator smilesGen = new SmilesGenerator();
         while (reader.hasNext()) {
             IAtomContainer ac = reader.next();

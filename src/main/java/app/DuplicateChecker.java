@@ -1,8 +1,5 @@
 package app;
 
-import io.AtomContainerPrinter;
-import io.IteratingACPReader;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,18 +14,23 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import io.AtomContainerPrinter;
+import io.IteratingACPReader;
+
 
 
 public class DuplicateChecker {
-    
-    private static final IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-    
+
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
+
     public static void main(String[] args) throws FileNotFoundException, IOException {
         if (args.length != 1) return;   // TODO
         
         String filename = args[0];
         InputStream in = new FileInputStream(filename);
-        IteratingACPReader reader = new IteratingACPReader(in, builder);
+        IteratingACPReader reader = new IteratingACPReader(in, getBuilder());
         
         // map signature strings to lists of atom containers
         Map<String, List<IAtomContainer>> duplicateMap = 

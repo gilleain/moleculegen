@@ -1,5 +1,6 @@
 package augment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,10 @@ import augment.bond.IndexPair;
 import combinatorics.KSubsetLister;
 import combinatorics.MultiKSubsetLister;
 
-public class SaturationCalculator {
+public class SaturationCalculator implements Serializable {
     
+    private static final long serialVersionUID = 4524718660608857274L;
+
     /**
      * TODO : this is a very crude method
      * The max BOS is the maximum sum of bond orders of the bonds 

@@ -1,6 +1,8 @@
 package augment;
 
-public interface CanonicalChecker<T> {
+import java.io.Serializable;
+
+public interface CanonicalChecker<T> extends Serializable {
     
     public boolean isCanonical(T t);
 

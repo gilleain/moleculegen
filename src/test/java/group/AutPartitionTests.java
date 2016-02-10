@@ -17,12 +17,12 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import io.AtomContainerPrinter;
 
-
-
 public class AutPartitionTests {
     
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-    
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
+
     public void sort(IAtomContainer ac) {
         for (IBond bond : ac.bonds()) {
             IAtom a0 = bond.getAtom(0);
@@ -36,7 +36,7 @@ public class AutPartitionTests {
     
     public void testFile(String filename) throws IOException {
         IIteratingChemObjectReader<IAtomContainer> reader = 
-            new IteratingSMILESReader(new FileReader(filename), builder);
+            new IteratingSMILESReader(new FileReader(filename), getBuilder());
         
         while (reader.hasNext()) {
             IAtomContainer ac = reader.next();
@@ -65,7 +65,7 @@ public class AutPartitionTests {
     }
     
     public void testDisconnectedStructure(String acp) {
-        IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
+        IAtomContainer ac = AtomContainerPrinter.fromString(acp, getBuilder());
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner(true);
         PermutationGroup group = refiner.getAutomorphismGroup(ac);
         Partition autPartition = refiner.getAutomorphismPartition();

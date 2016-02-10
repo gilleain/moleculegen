@@ -1,5 +1,7 @@
 package augment;
 
+import java.io.Serializable;
+
 import handler.Handler;
 
 /**
@@ -8,7 +10,7 @@ import handler.Handler;
  * @author maclean
  *
  */
-public interface AugmentingGenerator<T> {
+public interface AugmentingGenerator<T> extends Serializable {
     
     public void run();
     

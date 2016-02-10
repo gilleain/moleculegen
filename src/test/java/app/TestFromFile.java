@@ -19,7 +19,7 @@ import handler.molecule.CountingHandler;
  */
 public class TestFromFile {
     
-    public final static String filepath = "test/data/testformulae.txt";
+    public final static String filepath = "src/test/resources/testformulae.txt";
     
     public void runTest(GeneratorFactory generatorFactory) throws IOException {
         Map<String, Integer> formulaeCounts = readFile(filepath);

@@ -1,5 +1,6 @@
 package app;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,8 +18,10 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
  * @author maclean
  *
  */
-public class FormulaParser {
+public class FormulaParser implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+
     /**
      * Sorted list of element symbols, expanded to the number of atoms.
      */

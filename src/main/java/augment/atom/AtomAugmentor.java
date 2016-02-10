@@ -18,12 +18,16 @@ import group.PermutationGroup;
 
 public class AtomAugmentor implements Augmentor<AtomAugmentation> {
     
+    private static final long serialVersionUID = -1795216862782671835L;
+
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
+    
     /**
      * The elements (in order) used to make molecules for this run.
      */
     private List<String> elementSymbols;
-    
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     private SaturationCalculator saturationCalculator;
     
@@ -45,6 +49,9 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
         IAtomContainer atomContainer = parent.getAugmentedObject();
         List<AtomAugmentation> augmentations = new ArrayList<AtomAugmentation>();
         ElementConstraints constraints = parent.getConstraints();
+        if (constraints == null)
+            throw new UnsupportedOperationException("Fix This"); // ToDo
+        IChemObjectBuilder builder = getBuilder();
         for (String elementSymbol : constraints) {
             for (int[] bondOrders : getBondOrderArrays(atomContainer, elementSymbol)) {
                 IAtom atomToAdd = builder.newInstance(IAtom.class, elementSymbol);

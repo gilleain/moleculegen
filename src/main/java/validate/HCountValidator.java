@@ -1,5 +1,6 @@
 package validate;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +25,11 @@ import app.FormulaParser;
  * XXX it extends base child lister to get access to the BOS stuff - not nice design...
  * 
  * @author maclean
- *
  */
-public class HCountValidator {
+public class HCountValidator implements Serializable {
     
+    private static final long serialVersionUID = -1097301781318130707L;
+
     private int hCount;
     
     private int maxBOS;
@@ -42,7 +44,6 @@ public class HCountValidator {
      */
     private int[] maxHRem;
     
-    private IAtomTypeMatcher matcher;
     
     /**
      * TODO : this is a very crude method
@@ -99,8 +100,6 @@ public class HCountValidator {
         FormulaParser formulaParser = new FormulaParser(formulaString);
         hCount = formulaParser.getHydrogenCount();
         this.setSymbols(formulaParser.getElementSymbols());
-        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-        matcher = CDKAtomTypeMatcher.getInstance(builder);
     }
     
     public List<String> getElementSymbols() {
@@ -142,14 +141,17 @@ public class HCountValidator {
         Object connectedProperty = atomContainer.getProperty("IS_CONNECTED");
         if (connectedProperty == null) {
             return true; // assume connected
-        } else {
+        }
+        else {
             if ((Boolean) connectedProperty) {
                 return true;
-            } else {
+            }
+            else {
                 boolean connected = ConnectivityChecker.isConnected(atomContainer);
                 if (connected) {
                     atomContainer.setProperty("IS_CONNECTED", true);    
-                } else {
+                }
+                else {
                     atomContainer.setProperty("IS_CONNECTED", false);
                 }
                 return connected;
@@ -157,17 +159,45 @@ public class HCountValidator {
         }
     }
   
+
+    public static int HydrogensIncorrectCount = 0;
+    public static int CountIncorrectCount = 0;
+    public static int MoleculeCorrectCount = 0;
+
     public boolean isValidMol(IAtomContainer atomContainer, int size) {
-        boolean valid = atomContainer.getAtomCount() == size
-            && hydrogensCorrect(atomContainer);
-        return valid;
+        boolean b = hydrogensCorrect(atomContainer);
+        if (!b) {
+            HydrogensIncorrectCount++;
+            return false;
+        }
+        boolean b1 = atomContainer.getAtomCount() == size;
+        if (!b1) {
+            CountIncorrectCount++;
+            return false;
+        }
+        MoleculeCorrectCount++;
+        return true;
+    }
+
+    private IAtomTypeMatcher getMatcher() {
+        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+        return CDKAtomTypeMatcher.getInstance(builder);
     }
     
-    private boolean hydrogensCorrect(IAtomContainer atomContainer) {
+    public boolean hydrogensCorrect(IAtomContainer atomContainer) {
         try {
+            IAtomTypeMatcher matcher = getMatcher();
             int actualCount = 0;
+          //  System.out.println("=========================");
             for (IAtom atom : atomContainer.atoms()) {
-                IAtomType atomType = matcher.findMatchingAtomType(atomContainer, atom);
+                IAtomType atomType = null;
+                try {
+                    atomType = matcher.findMatchingAtomType(atomContainer, atom);
+           //         System.out.println(CDKUtilities.atomContainerToString(atomContainer) + "=>" + CDKUtilities.atomToString(atomType));
+                } catch (CDKException pE) {
+                    atomType = matcher.findMatchingAtomType(atomContainer, atom);
+                    throw new RuntimeException(pE);
+                }
                 if (atomType == null || atomType.getAtomTypeName().equals("X")) {
 //                	System.out.println(
 //                			"+ 0 NULL " 
@@ -194,11 +224,14 @@ public class HCountValidator {
 
             return actualCount == hCount;
         } catch (CDKException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
+
+            // TODO Auto-generated catch block
+            //     return false;
         }
     }
+
 
     public boolean canExtend(IAtomContainer atomContainer) {
         int implH = 0;

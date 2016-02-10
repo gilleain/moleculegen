@@ -3,8 +3,6 @@ package util.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 import model.Graph;
 
 public class CutVertexCalculator {

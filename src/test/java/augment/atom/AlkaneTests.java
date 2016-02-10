@@ -14,12 +14,14 @@ public class AlkaneTests extends FormulaTest {
     
     @Test
     public void c3H8Test() {
-        Assert.assertEquals(1, countNFromAtom("C3H8"));
+        int c3H8 = countNFromAtom("C3H8");
+        Assert.assertEquals(1, c3H8);
     }
     
     @Test
     public void c4H10Test() {
-        Assert.assertEquals(2, countNFromAtom("C4H10"));
+        int c4H10 = countNFromAtom("C4H10");
+        Assert.assertEquals(2, c4H10);
     }
     
     @Test
@@ -36,4 +38,17 @@ public class AlkaneTests extends FormulaTest {
     public void c7H16Test() {
         Assert.assertEquals(9, countNFromAtom("C7H16"));
     }
+
+//    @Test
+//    public void c8H14Test() {
+//        int c8H14 = countNFromAtom("C8H14");
+//        Assert.assertEquals(654, c8H14);
+//    }
+//    
+//    @Test
+//    public void c10H18Test() {
+//        int c8H14 = countNFromAtom("C10H18");
+//        Assert.assertEquals(5572, c8H14);
+//    }
+
 }

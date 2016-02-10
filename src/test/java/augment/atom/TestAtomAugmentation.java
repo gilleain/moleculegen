@@ -20,14 +20,16 @@ import io.AtomContainerPrinter;
  */
 public class TestAtomAugmentation {
     
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
     
     private IAtomContainer make(String acpString) {
-        return AtomContainerPrinter.fromString(acpString, builder);
+        return AtomContainerPrinter.fromString(acpString, getBuilder());
     }
     
     private AtomAugmentation makeAugmentation(IAtomContainer mol, String elementSymbol, int... points) {
-        IAtom atom = builder.newInstance(IAtom.class, elementSymbol);
+        IAtom atom = getBuilder().newInstance(IAtom.class, elementSymbol);
         ElementConstraints e = new ElementConstraints(elementSymbol);
         return new AtomAugmentation(mol, atom, points, e);
     }

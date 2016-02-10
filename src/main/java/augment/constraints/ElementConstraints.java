@@ -1,12 +1,14 @@
 package augment.constraints;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import app.FormulaParser;
 
-public class ElementConstraints implements Iterable<String> {
+public class ElementConstraints implements Iterable<String>, Serializable {
+    private static final long serialVersionUID = 636691183652463986L;
     
     private Map<String, Integer> elementCounts;
     

@@ -1,7 +1,5 @@
 package app;
 
-import io.AtomContainerPrinter;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,11 +18,13 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-
+import io.AtomContainerPrinter;
 
 public class DiffTool {
     
-    private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
 
     public static void main(String[] args) throws IOException {
         if (args.length < 3) return;
@@ -79,7 +79,7 @@ public class DiffTool {
         List<IAtomContainer> list = new ArrayList<IAtomContainer>();
         while ((line = in.readLine()) != null) {
             String s = line.trim();
-            list.add(AtomContainerPrinter.fromString(s, builder));
+            list.add(AtomContainerPrinter.fromString(s, getBuilder()));
         }
         in.close();
         return list;
@@ -88,7 +88,7 @@ public class DiffTool {
     private static List<IAtomContainer> readSmiles(String filename) throws IOException {
         Reader in = new FileReader(filename);
         IIteratingChemObjectReader<IAtomContainer> reader = 
-                new IteratingSMILESReader(in, builder);
+                new IteratingSMILESReader(in, getBuilder());
         List<IAtomContainer> list = new ArrayList<IAtomContainer>();
         while (reader.hasNext()) {
             IAtomContainer ac = reader.next();

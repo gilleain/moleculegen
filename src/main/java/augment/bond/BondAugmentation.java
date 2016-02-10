@@ -14,28 +14,30 @@ import augment.constraints.ElementConstraints;
  * incrementing the bond order if there is already a bond.
  *  
  * @author maclean
- *
  */
 public class BondAugmentation implements Augmentation<IAtomContainer> {
     
+    private static final long serialVersionUID = 3351098953211663257L;
+
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
+
     private final IAtomContainer augmentedMolecule;
     
     private final BondExtension bondExtension;
     
-    private final IChemObjectBuilder builder;
     
     private final ElementConstraints elementConstraints;
 
     public BondAugmentation(IAtomContainer parent, ElementConstraints elementConstraints) {
         this.augmentedMolecule = parent; // TODO : could clone...
         this.bondExtension = null;  // XXX
-        this.builder = SilentChemObjectBuilder.getInstance();
         this.elementConstraints = elementConstraints;
     }
     
     public BondAugmentation(IAtomContainer parent, BondExtension bondExtension, ElementConstraints elementConstraints) {
         this.bondExtension = bondExtension;
-        this.builder = SilentChemObjectBuilder.getInstance();
         this.augmentedMolecule = extend(parent, bondExtension);
         this.elementConstraints = elementConstraints;
     }
@@ -46,7 +48,7 @@ public class BondAugmentation implements Augmentation<IAtomContainer> {
             IndexPair position = bondExtension.getIndexPair();
             if (position.getEnd() > parent.getAtomCount() - 1) {
                 String elementSymbol = bondExtension.getElementSymbol();
-                child.addAtom(builder.newInstance(IAtom.class, elementSymbol));
+                child.addAtom(getBuilder().newInstance(IAtom.class, elementSymbol));
                 child.addBond(position.getStart(), position.getEnd(), toBond(position.getOrder()));
             } else {
                 // oh how I wish there was a hasBond method...
@@ -60,7 +62,8 @@ public class BondAugmentation implements Augmentation<IAtomContainer> {
                 }
             }
             return child;
-        } catch (CloneNotSupportedException cnse) {
+        }
+        catch (CloneNotSupportedException cnse) {
             System.err.println(cnse);
             return null;
         }

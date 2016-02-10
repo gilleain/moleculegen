@@ -22,7 +22,9 @@ import handler.molecule.DataFormat;
  */
 public class SingleInputAugmentor {
 
-    private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
 
     /**
      * @param argsH the argument handler
@@ -30,7 +32,7 @@ public class SingleInputAugmentor {
      * @param generator the augmenting generator
      * @param heavyAtomCount the number of heavy (non-hydrogen) atoms in the formula
      * @throws CDKException 
-     * @throws IOException if the chemobject reader has an error
+     * @throws IOException if the chem object reader has an error
      */
     public static void run(
             ArgumentHandler argsH,
@@ -42,7 +44,7 @@ public class SingleInputAugmentor {
         IAtomContainer parent;
         if (inputFormat == DataFormat.MOL) {
             MDLV2000Reader reader = new MDLV2000Reader(in);
-            parent = reader.read(builder.newInstance(IAtomContainer.class));
+            parent = reader.read(getBuilder().newInstance(IAtomContainer.class));
             reader.close();
         } else {
             // XXX - other single file formats?

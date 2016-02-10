@@ -16,13 +16,12 @@ import view.draw.Drawer;
 import view.tree.DrawingTreeWalker;
 import view.tree.TreeBuilder;
 import view.tree.layout.CircularTreeLayout;
-import view.tree.layout.TreeLayout;
 
 public class TestDrawer {
     
-    @Test
+//    @Test
     public void testC4H11N() {
-        drawTree(getTree("C2NO", true));
+        drawTree(getTree("C3H8", true));
     }
     
     private DrawNode getTree(String formula, boolean canonicalOnly) {

@@ -11,7 +11,7 @@ import handler.Handler;
 
 public class TestBondFromFile extends TestFromFile {
     
-    @Test
+//    @Test
     public void run() throws IOException {
         super.runTest(new GeneratorFactory() {
 

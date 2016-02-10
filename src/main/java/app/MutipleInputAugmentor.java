@@ -22,7 +22,6 @@ import io.IteratingSignatureReader;
  * in the difference between the input and the heavyAtomCount.
  * 
  * @author maclean
- *
  */
 public class MutipleInputAugmentor {
 
@@ -33,7 +32,7 @@ public class MutipleInputAugmentor {
      * @param inputFile the input file path
      * @param generator the augmenting generator
      * @param heavyAtomCount the number of heavy (non-hydrogen) atoms in the formula
-     * @throws IOException if the iterating chemobject reader has an error
+     * @throws IOException if the iterating chem object reader has an error
      */
     public static void run(
             ArgumentHandler argsH, String inputFile, AugmentingGenerator generator) throws IOException {
@@ -76,9 +75,9 @@ public class MutipleInputAugmentor {
      * a problem.
      * 
      * @param argsH
-     * @params builder a chem object builder
      * @return
      * @throws FileNotFoundException 
+     * @params builder a chem object builder
      */
     private static IIteratingChemObjectReader<IAtomContainer> getInputReader(
             ArgumentHandler argsH, IChemObjectBuilder builder) throws FileNotFoundException {

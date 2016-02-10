@@ -9,7 +9,6 @@ import java.util.SortedSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import app.FormulaParser;
-import augment.Augmentation;
 import augment.Augmentor;
 import augment.SaturationCalculator;
 import augment.constraints.ElementConstraints;
@@ -20,6 +19,8 @@ import group.PermutationGroup;
 
 public class BondAugmentor implements Augmentor<BondAugmentation> {
    
+    private static final long serialVersionUID = -6431033396785487930L;
+
     private SaturationCalculator saturationCalculator;
     
     private FormulaParser formulaParser;

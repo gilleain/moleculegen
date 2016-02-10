@@ -16,13 +16,16 @@ import augment.constraints.ElementConstraints;
 import io.AtomContainerPrinter;
 
 public class TestAtomAugmentor {
-    
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+
+    public static IChemObjectBuilder getBuilder() {
+        return SilentChemObjectBuilder.getInstance();
+    }
+
     
     private List<AtomAugmentation> gen(String elementString, String startingGraph) {
         AtomAugmentor augmentor = new AtomAugmentor(elementString);
         ElementConstraints elements = new ElementConstraints(elementString);
-        AtomAugmentation start = new AtomAugmentation(AtomContainerPrinter.fromString(startingGraph, builder), elements);
+        AtomAugmentation start = new AtomAugmentation(AtomContainerPrinter.fromString(startingGraph, getBuilder()), elements);
         return augmentor.augment(start);
     }
     

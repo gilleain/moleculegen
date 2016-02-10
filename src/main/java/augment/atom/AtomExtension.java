@@ -1,12 +1,14 @@
 package augment.atom;
 
+import java.io.Serializable;
+
 /**
  * The atom and bond information to add when augmenting.
  * 
  * @author maclean
  *
  */
-public class AtomExtension {
+public class AtomExtension implements Serializable {
     
     private final String elementSymbol;
     

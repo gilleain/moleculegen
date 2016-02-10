@@ -2,7 +2,6 @@ package view;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.atom.AtomGenerator;
@@ -12,10 +11,9 @@ import view.tree.TreeBuilder;
 
 public class TestTreeBuilder {
     
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-    
     private IAtomContainer mol(String molString) {
-        return io.AtomContainerPrinter.fromString(molString, builder);
+        return io.AtomContainerPrinter.fromString(
+                molString, SilentChemObjectBuilder.getInstance());
     }
     
     @Test

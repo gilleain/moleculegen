@@ -1,7 +1,5 @@
 package io;
 
-import group.Permutation;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +8,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+
+import group.Permutation;
 
 public class AtomContainerPrinter {
 
