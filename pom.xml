@@ -136,30 +136,6 @@
     </dependency>
     <dependency>
       <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-render</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-renderbasic</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-renderawt</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-sdg</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-standard</artifactId>
       <version>1.5.12</version>
       <scope>compile</scope>
