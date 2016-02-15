@@ -5,6 +5,7 @@
   <artifactId>moleculegen</artifactId>
   <packaging>jar</packaging>
   <name>AMG</name>
+  <version>1.0</version>
   <version>1.0-SNAPSHOT</version>
   <url>https://github.com/gilleain/moleculegen</url>
   <description>Molecule generation</description>
