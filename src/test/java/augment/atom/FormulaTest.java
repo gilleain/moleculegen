@@ -6,11 +6,15 @@ import java.util.Map;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import handler.molecule.DuplicateCountingHandler;
+import util.molecule.CDKUtilities;
 
 public class FormulaTest {
-    
+
+
+
     public int countNFromAtom(String elementFormula) {
-        return countNFromAtom(elementFormula, false);
+        boolean printResults = CDKUtilities.ADD_DEBUG_PRINTING;  // set true for result printout
+        return countNFromAtom(elementFormula, printResults);
     }
     
     public int countNFromAtom(String elementFormula, boolean printDupMap) {

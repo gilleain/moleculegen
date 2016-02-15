@@ -5,7 +5,7 @@
   <artifactId>moleculegen</artifactId>
   <packaging>jar</packaging>
   <name>AMG</name>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <url>https://github.com/gilleain/moleculegen</url>
   <description>Molecule generation</description>
   <inceptionYear>2012</inceptionYear>
@@ -33,12 +33,14 @@
     </developer>
   </developers>
   <build>
+    <sourceDirectory>src/main</sourceDirectory>
+    <testSourceDirectory>src/test/</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -128,36 +130,14 @@
       <version>1.5.12</version>
       <scope>compile</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-interfaces</artifactId>
       <version>1.5.12</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-render</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-renderbasic</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-renderawt</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openscience.cdk</groupId>
-      <artifactId>cdk-sdg</artifactId>
-      <version>1.5.12</version>
-      <scope>compile</scope>
-    </dependency>
+    -->
     <dependency>
       <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-standard</artifactId>
@@ -187,6 +167,11 @@
       <artifactId>cdk-valencycheck</artifactId>
       <version>1.5.12</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.11</artifactId>
+      <version>1.6.0</version>
     </dependency>
   </dependencies>
 </project>

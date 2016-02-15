@@ -8,16 +8,19 @@ public class CNOTests extends FormulaTest {
 
     @Test
     public void cH5NOTest() {
-        Assert.assertEquals(3, countNFromAtom("CH5NO"));
+        int ch5NO = countNFromAtom("CH5NO");
+        Assert.assertEquals(3, ch5NO);
     }
     
     @Test
     public void c3HNOTest() {
-        Assert.assertEquals(46, countNFromAtom("C3HNO"));
+        int c3HNO = countNFromAtom("C3HNO");
+        Assert.assertEquals(46, c3HNO);
     }
     
     @Test
     public void c2H7NOTest() {
-        Assert.assertEquals(8, countNFromAtom("C2H7NO"));
+        int c2H7NO = countNFromAtom("C2H7NO");
+        Assert.assertEquals(8, c2H7NO);
     }
 }

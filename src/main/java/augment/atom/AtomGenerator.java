@@ -9,10 +9,13 @@ import augment.constraints.ElementConstraintSource;
 import augment.constraints.ElementConstraints;
 import handler.CanonicalHandler;
 import handler.Handler;
+import util.molecule.CDKUtilities;
 import validate.HCountValidator;
 
 
 public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
+
+    public static final boolean SHOW_INTERMEDIATE_DATA = false; // add debugging code
     
     private static final long serialVersionUID = -5861481514308795440L;
 
@@ -71,8 +74,13 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
         counter++;
         if (index >= maxIndex) {
             IAtomContainer atomContainer = parent.getAugmentedObject();
+            if(SHOW_INTERMEDIATE_DATA)
+                System.out.println(CDKUtilities.atomContainerToString(atomContainer));
             if (hCountValidator.isValidMol(atomContainer, maxIndex + 1)) {
                 handler.handle(atomContainer);
+                if(SHOW_INTERMEDIATE_DATA)
+                    System.out.println("OK " + CDKUtilities.atomContainerToString(atomContainer));
+
 //                System.out.println("SOLN " + io.AtomContainerPrinter.toString(atomContainer));
             }
             return;

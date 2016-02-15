@@ -50,7 +50,7 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
         List<AtomAugmentation> augmentations = new ArrayList<AtomAugmentation>();
         ElementConstraints constraints = parent.getConstraints();
         if (constraints == null)
-            throw new UnsupportedOperationException("Fix This"); // ToDo
+            throw new UnsupportedOperationException("Constraints are null - should not be");
         IChemObjectBuilder builder = getBuilder();
         for (String elementSymbol : constraints) {
             for (int[] bondOrders : getBondOrderArrays(atomContainer, elementSymbol)) {
