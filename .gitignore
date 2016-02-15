@@ -2,3 +2,6 @@ build/
 trials/
 .gradle
 target/
+/*.iml
+/*.ipr
+/*.iws
