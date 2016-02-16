@@ -24,7 +24,7 @@ public class ElementConstraints implements Iterable<String>, Serializable {
         }
     }
     
-    public ElementConstraints(Map<String, Integer> elementCounts, String toRemove) {
+    public ElementConstraints(Map<String, Integer> elementCounts, String... toRemove) {
         this.elementCounts = new HashMap<String, Integer>();
         for (String element : elementCounts.keySet()) {
             int count;
@@ -37,6 +37,10 @@ public class ElementConstraints implements Iterable<String>, Serializable {
                 this.elementCounts.put(element, count);
             }
         }
+    }
+    
+    public Map<String, Integer> getMap() {
+        return this.elementCounts;
     }
 
     @Override
