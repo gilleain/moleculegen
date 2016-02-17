@@ -1,7 +1,9 @@
 package augment.constraints;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import app.FormulaParser;
@@ -22,11 +24,15 @@ public class VertexColorConstraints implements Iterable<String> {
         }
     }
     
-    public VertexColorConstraints(Map<String, Integer> elementCounts, String toRemove) {
+    public VertexColorConstraints(Map<String, Integer> elementCounts, String... toRemove) {
         this.colorCounts = new HashMap<String, Integer>();
+        List<String> toRemoveCandidates = new ArrayList<String>();
+        for (String toRemoveCandidate : toRemove) {
+            toRemoveCandidates.add(toRemoveCandidate);
+        }
         for (String element : elementCounts.keySet()) {
             int count;
-            if (element.equals(toRemove)) {
+            if (remove(element, toRemoveCandidates)) {
                 count = elementCounts.get(element) - 1;
             } else {
                 count = elementCounts.get(element);
@@ -35,6 +41,19 @@ public class VertexColorConstraints implements Iterable<String> {
                 this.colorCounts.put(element, count);
             }
         }
+    }
+    
+    private boolean remove(String element, List<String> toRemoveCandidates) {
+        if (toRemoveCandidates.contains(element))  {
+            toRemoveCandidates.remove(element);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public Map<String, Integer> getMap() {
+        return this.colorCounts;
     }
 
     @Override

@@ -53,8 +53,12 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     }
     
     public void run(Graph initial) {
-        // XXX index = atomCount?
-        VertexColorConstraints remaining = null;    // TODO
+        String[] toRemove = new String[initial.getVertexCount()];
+        for (int index = 0; index < initial.getVertexCount(); index++) {
+            toRemove[index] = initial.getVertexColor(index);
+        }
+        VertexColorConstraints remaining = 
+                new VertexColorConstraints(initialConstraints.getMap(), toRemove);
         augment(new ByVertexAugmentation(initial, remaining), initial.getVertexCount() - 1);  
     }
     
