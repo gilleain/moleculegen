@@ -1,5 +1,6 @@
 package augment.atom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -56,16 +57,17 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     public void run() {
         for (IAtomContainer start : initialStateSource.get()) {
             String symbol = start.getAtom(0).getSymbol();
-            ElementConstraints minus = initialConstraints.minus(symbol);
-            AtomAugmentation parent = new AtomAugmentation(start, minus);
-            augment(parent, 0);
+            augment(new AtomAugmentation(start, initialConstraints.minus(symbol)), 0);
         }
         // System.out.println("counter = " + counter);
     }
     
     public void run(IAtomContainer initial) {
-        // XXX index = atomCount?
-        ElementConstraints remaining = null;    // TODO
+        List<String> elements = new ArrayList<String>();
+        for (int index = 0; index < initial.getAtomCount(); index++) {
+            elements.add(initial.getAtom(index).getSymbol());
+        }
+        ElementConstraints remaining = new ElementConstraints(initialConstraints, new ElementConstraints(elements));
         augment(new AtomAugmentation(initial, remaining), initial.getAtomCount() - 1);  
     }
     
@@ -86,8 +88,7 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
             return;
         }
         
-        List<AtomAugmentation> augment = augmentor.augment(parent);
-        for (AtomAugmentation augmentation : augment) {
+        for (AtomAugmentation augmentation : augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation)) {
                 report(true, parent, augmentation);
                 augment(augmentation, index + 1);
