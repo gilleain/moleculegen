@@ -1,4 +1,4 @@
-package augment.vertex;
+package group;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import group.PermutationGroup;
 import group.graph.GraphDiscretePartitionRefiner;
 import model.Graph;
 
-public class CanonicalTest {
+public class GraphAutomorphismGroupTest {
     
     private void test(String graphString) {
         Graph graph = new Graph(graphString);
