@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import app.FormulaParser;
@@ -180,7 +181,7 @@ public class HCountValidator implements Serializable {
     }
 
     private IAtomTypeMatcher getMatcher() {
-        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+        IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
         return CDKAtomTypeMatcher.getInstance(builder);
     }
     

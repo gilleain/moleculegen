@@ -1,7 +1,9 @@
 package util.graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import model.Edge;
 import model.Graph;
@@ -14,7 +16,7 @@ import model.Graph;
  */
 public class CutCalculator {
     
-    public static List<Integer> getCutEdges(Graph graph) {
+    public static Set<Integer> getCutEdges(Graph graph) {
         if (isTree(graph)) {
             return getEdgesForTree(graph); 
         } else {
@@ -22,7 +24,7 @@ public class CutCalculator {
         }
      }
     
-    public static List<Integer> getCutVertices(Graph graph) {
+    public static Set<Integer> getCutVertices(Graph graph) {
        if (isTree(graph)) {
            return getVerticesForTree(graph); 
        } else {
@@ -30,9 +32,9 @@ public class CutCalculator {
        }
     }
     
-    private static List<Integer> getEdgesForTree(Graph graph) {
-        List<Integer> cutEdges = new ArrayList<Integer>();
-        List<Integer> leaves = getLeaves(graph);
+    private static Set<Integer> getEdgesForTree(Graph graph) {
+        Set<Integer> cutEdges = new HashSet<>();
+        Set<Integer> leaves = getLeaves(graph);
         for (int bondIndex = 0; bondIndex < graph.getEdgeCount(); bondIndex++) {
             Edge bond = graph.getEdge(bondIndex);
             int a0 = bond.getVertex(0);
@@ -45,9 +47,9 @@ public class CutCalculator {
     }
     
     
-    private static List<Integer> getVerticesForTree(Graph graph) {
-        List<Integer> cutVertices = new ArrayList<Integer>();
-        List<Integer> leaves = getLeaves(graph);
+    private static Set<Integer> getVerticesForTree(Graph graph) {
+        Set<Integer> cutVertices = new HashSet<>();
+        Set<Integer> leaves = getLeaves(graph);
         for (int x = 0; x < graph.getVertexCount(); x++) {
             if (!leaves.contains(x)) {
                 cutVertices.add(x);
@@ -56,8 +58,8 @@ public class CutCalculator {
         return cutVertices;
     }
     
-    private static List<Integer> getEdgesForCyclic(Graph graph) {
-        List<Integer> cutEdges = new ArrayList<Integer>();
+    private static Set<Integer> getEdgesForCyclic(Graph graph) {
+        Set<Integer> cutEdges = new HashSet<Integer>();
         ChainDecomposition chainDecomposition = new ChainDecomposition(graph);
         for (Edge bond : chainDecomposition.getBridges()) {
             cutEdges.add(graph.getEdgeNumber(bond));
@@ -65,7 +67,7 @@ public class CutCalculator {
         return cutEdges;
     }
     
-    private static List<Integer> getVerticesForCyclic(Graph graph) {
+    private static Set<Integer> getVerticesForCyclic(Graph graph) {
 //        List<Integer> cutVertices = new ArrayList<Integer>();
 //        List<Integer> leaves = getLeaves(graph);
 //        ChainDecomposition chainDecomposition = new ChainDecomposition(graph);
@@ -97,8 +99,8 @@ public class CutCalculator {
         return false;
     }
     
-    private static List<Integer> getLeaves(Graph graph) {
-        List<Integer> leaves = new ArrayList<Integer>();
+    private static Set<Integer> getLeaves(Graph graph) {
+        Set<Integer> leaves = new HashSet<>();
         for (int x = 0; x < graph.getVertexCount(); x++) {
             if (graph.getConnectedVertexCount(x) == 1) {
                 leaves.add(x);

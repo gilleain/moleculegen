@@ -1,8 +1,6 @@
 package augment.vertex;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.*;
 
 import augment.CanonicalChecker;
 import group.Partition;
@@ -20,7 +18,7 @@ public class VertexCanonicalChecker implements CanonicalChecker<ByVertexAugmenta
             return true;
         }
         
-        List<Integer> nonSeparatingAtoms = getNonSeparatingAtoms(augmentedMolecule);
+        Set<Integer> nonSeparatingAtoms = getNonSeparatingAtoms(augmentedMolecule);
 //        System.out.println(nonSeparatingAtoms);
         if (nonSeparatingAtoms.size() == 0) {
             return true;
@@ -46,7 +44,7 @@ public class VertexCanonicalChecker implements CanonicalChecker<ByVertexAugmenta
     }
     
     // TODO : combine this method with get non separating atoms
-    private int getChosen(List<Integer> nonSeparatingAtoms, Permutation labelling) {
+    private int getChosen(Set<Integer> nonSeparatingAtoms, Permutation labelling) {
         for (int index = labelling.size() - 1; index >= 0; index--) {
             int label = labelling.get(index);
             if (nonSeparatingAtoms.contains(label)) {
@@ -58,9 +56,9 @@ public class VertexCanonicalChecker implements CanonicalChecker<ByVertexAugmenta
         return -1;  // XXX shouldn't happen...
     }
     
-    private List<Integer> getNonSeparatingAtoms(Graph mol) {
-        List<Integer> nonSeparatingVertices = new ArrayList<Integer>(); 
-        List<Integer> cutVertices = CutCalculator.getCutVertices(mol);
+    private Set<Integer> getNonSeparatingAtoms(Graph mol) {
+        Set<Integer> nonSeparatingVertices = new HashSet<>();
+        Set<Integer> cutVertices = CutCalculator.getCutVertices(mol);
 //        System.out.println(cutVertices);
         for (int index = 0; index < mol.getVertexCount(); index++) {
             if (cutVertices.contains(index)) {

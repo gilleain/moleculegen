@@ -1,8 +1,6 @@
 package augment.atom;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.*;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -21,7 +19,7 @@ public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> 
             return true;
         }
         
-        List<Integer> nonSeparatingAtoms = getNonSeparatingAtoms(augmentedMolecule);
+        Set<Integer> nonSeparatingAtoms = getNonSeparatingAtoms(augmentedMolecule);
 //        System.out.println(nonSeparatingAtoms);
         if (nonSeparatingAtoms.size() == 0) {
             return true;
@@ -47,7 +45,7 @@ public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> 
     }
     
     // TODO : combine this method with get non separating atoms
-    private int getChosen(List<Integer> nonSeparatingAtoms, Permutation labelling) {
+    private int getChosen(Set<Integer> nonSeparatingAtoms, Permutation labelling) {
         for (int index = labelling.size() - 1; index >= 0; index--) {
             int label = labelling.get(index);
             if (nonSeparatingAtoms.contains(label)) {
@@ -59,9 +57,9 @@ public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> 
         return -1;  // XXX shouldn't happen...
     }
     
-    private List<Integer> getNonSeparatingAtoms(IAtomContainer mol) {
-        List<Integer> nonSeparatingVertices = new ArrayList<Integer>(); 
-        List<Integer> cutVertices = CutCalculator.getCutVertices(mol);
+    private Set<Integer> getNonSeparatingAtoms(IAtomContainer mol) {
+        Set<Integer> nonSeparatingVertices = new HashSet<>();
+        Set<Integer> cutVertices = CutCalculator.getCutVertices(mol);
 //        System.out.println(cutVertices);
         for (int index = 0; index < mol.getAtomCount(); index++) {
             if (cutVertices.contains(index)) {

@@ -2,12 +2,14 @@ package util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import io.AtomContainerPrinter;
@@ -15,7 +17,7 @@ import util.molecule.CutCalculator;
 
 public class TestCutCalculator {
     
-    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    private IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
     
     private String bondToString(IAtomContainer mol, IBond bond) {
         return mol.getAtomNumber(bond.getAtom(0)) + ":" +  mol.getAtomNumber(bond.getAtom(1));
@@ -29,14 +31,14 @@ public class TestCutCalculator {
     
     private void testEdges(String molString, int expectedCount) {
         IAtomContainer mol = AtomContainerPrinter.fromString(molString, builder); 
-        List<Integer> indices = CutCalculator.getCutEdges(mol);
+        List<Integer> indices = new ArrayList<>(CutCalculator.getCutEdges(mol));
         printBonds(indices, mol);
         assertEquals(expectedCount, indices.size());
     }
     
     private void testVertices(String molString, int expectedCount) {
-        IAtomContainer mol = AtomContainerPrinter.fromString(molString, builder); 
-        List<Integer> indices = CutCalculator.getCutVertices(mol);
+        IAtomContainer mol = AtomContainerPrinter.fromString(molString, builder);
+        List<Integer> indices = new ArrayList<>(CutCalculator.getCutEdges(mol));
         System.out.println(indices);
         assertEquals(expectedCount, indices.size());
     }

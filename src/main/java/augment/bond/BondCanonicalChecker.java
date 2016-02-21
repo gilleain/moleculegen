@@ -2,6 +2,7 @@ package augment.bond;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -62,7 +63,7 @@ public class BondCanonicalChecker {
     }
     
     private List<Integer> getNonSeparatingEdges(IAtomContainer mol) {
-        List<Integer> cutEdges = CutCalculator.getCutEdges(mol);
+        Set<Integer> cutEdges = CutCalculator.getCutEdges(mol);
         // TODO use set diff
         List<Integer> nonSeparatingEdges = new ArrayList<Integer>();
         for (int index = 0; index < mol.getBondCount(); index++) {
