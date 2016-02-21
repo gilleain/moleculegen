@@ -17,7 +17,7 @@ public class TestAugmentingGeneratorFactory {
     @Test
     public void testMakeCountingAtomGen() throws IOException {
         ArgumentHandler argsH = new ArgumentHandler();
-        argsH.setAugmentationMethod(AugmentationMethod.ATOM);
+        argsH.setAugmentationMethod(AugmentationMethod.VERTEX);
         argsH.setFormula("C3H8");
         argsH.setComparingToFile(false);
         argsH.setOutputStringFormat("");
