@@ -37,7 +37,7 @@ public class SingleInputAugmentor {
     public static void run(
             ArgumentHandler argsH,
             String inputFile, 
-            AugmentingGenerator generator) throws CDKException, IOException {
+            AugmentingGenerator<IAtomContainer> generator) throws CDKException, IOException {
         DataFormat inputFormat = argsH.getInputFormat();
         String filepath = argsH.getInputFilepath();
         InputStream in = new FileInputStream(filepath);

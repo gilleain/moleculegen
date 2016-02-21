@@ -35,7 +35,7 @@ public class MutipleInputAugmentor {
      * @throws IOException if the iterating chem object reader has an error
      */
     public static void run(
-            ArgumentHandler argsH, String inputFile, AugmentingGenerator generator) throws IOException {
+            ArgumentHandler argsH, String inputFile, AugmentingGenerator<IAtomContainer> generator) throws IOException {
 
         // allow for selecting a range of input from the input file
         String rangeString = argsH.getRangeString();
