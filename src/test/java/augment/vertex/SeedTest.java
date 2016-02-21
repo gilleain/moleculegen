@@ -20,7 +20,7 @@ import model.Graph;
 public class SeedTest {
     
     private void grow(String elementFormula, String seed) {
-        Handler<IAtomContainer> moleculeHandler = new PrintStreamHandler(System.out);
+        Handler<IAtomContainer> moleculeHandler = new PrintStreamHandler(System.out, false);
         HBondCheckingHandler hBondCheckingHandler = 
                 new HBondCheckingHandler(elementFormula, moleculeHandler);
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
@@ -32,12 +32,17 @@ public class SeedTest {
     
     @Test
     public void ringOfSix() {
-        grow("C8H16", "C0C1C2C3C4C5 0:1(1),0:5(1),1:2(1),2:3(1),3:4(1),4:5(1)");
+        grow("C9H18", "C0C1C2C3C4C5 0:1(1),0:5(1),1:2(1),2:3(1),3:4(1),4:5(1)");
     }
     
     @Test
     public void ringOfFour() {
-        grow("C6H8", "C0C1C2C3 0:1(1),0:3(1),1:2(1),2:3(1)");
+        grow("C6H10", "C0C1C2C3 0:1(1),0:3(1),1:2(1),2:3(1)");
+    }
+    
+    @Test
+    public void coco() {
+        grow("C2H4O2", "C0C1O2 0:1(1),0:2(1)");
     }
 
 }

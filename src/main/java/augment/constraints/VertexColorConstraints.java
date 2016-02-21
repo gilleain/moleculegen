@@ -1,6 +1,5 @@
 package augment.constraints;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,15 +23,22 @@ public class VertexColorConstraints implements Iterable<String> {
         }
     }
     
-    public VertexColorConstraints(Map<String, Integer> elementCounts, String... toRemove) {
+    public VertexColorConstraints(List<String> elements) {
         this.colorCounts = new HashMap<String, Integer>();
-        List<String> toRemoveCandidates = new ArrayList<String>();
-        for (String toRemoveCandidate : toRemove) {
-            toRemoveCandidates.add(toRemoveCandidate);
+        for (String elementSymbol : elements) {
+            if (colorCounts.containsKey(elementSymbol)) {
+                colorCounts.put(elementSymbol, colorCounts.get(elementSymbol) + 1);
+            } else {
+                colorCounts.put(elementSymbol, 1);
+            }
         }
+    }
+    
+    public VertexColorConstraints(Map<String, Integer> elementCounts, String toRemove) {
+        this.colorCounts = new HashMap<String, Integer>();
         for (String element : elementCounts.keySet()) {
             int count;
-            if (remove(element, toRemoveCandidates)) {
+            if (element.equals(toRemove)) {
                 count = elementCounts.get(element) - 1;
             } else {
                 count = elementCounts.get(element);
@@ -43,12 +49,19 @@ public class VertexColorConstraints implements Iterable<String> {
         }
     }
     
-    private boolean remove(String element, List<String> toRemoveCandidates) {
-        if (toRemoveCandidates.contains(element))  {
-            toRemoveCandidates.remove(element);
-            return true;
-        } else {
-            return false;
+    public VertexColorConstraints(VertexColorConstraints source, VertexColorConstraints diff) {
+        this.colorCounts = new HashMap<String, Integer>();
+        for (String element : source.colorCounts.keySet()) {
+            int count;
+            if (diff.colorCounts.containsKey(element)) {
+                count = source.colorCounts.get(element) - diff.colorCounts.get(element);
+                diff.colorCounts.remove(element);
+            } else {
+                count = source.colorCounts.get(element);
+            }
+            if (count > 0) {
+                this.colorCounts.put(element, count);
+            }
         }
     }
     
