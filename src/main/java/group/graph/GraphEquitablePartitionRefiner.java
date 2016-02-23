@@ -4,7 +4,7 @@ import java.util.Set;
 
 import group.AbstractEquitablePartitionRefiner;
 import group.IEquitablePartitionRefiner;
-import model.Graph;
+import group.Refinable;
 
 
 /**
@@ -16,29 +16,26 @@ import model.Graph;
 public class GraphEquitablePartitionRefiner extends AbstractEquitablePartitionRefiner 
                                        implements IEquitablePartitionRefiner {
     
-    private Graph graph;
+    private final Refinable refinable;
     
-    private final GraphDiscretePartitionRefiner discreteRefiner;
-    
-    public GraphEquitablePartitionRefiner(Graph graph, GraphDiscretePartitionRefiner discreteRefiner) {
-        this.graph = graph;
-        this.discreteRefiner = discreteRefiner;
+    public GraphEquitablePartitionRefiner(Refinable refinable) {
+        this.refinable = refinable;
     }
 
     public int getNumberOfVertices() {
-        return graph.getVertexCount();
+        return refinable.getVertexCount();
     }
 
     @Override
     public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
-        int n = 0;
+        int count = 0;
         
-        for (int i : discreteRefiner.getConnectedIndices(vertexIndex)) {
-            if (block.contains(i)) {
-                n++;
+        for (int connectedIndex : refinable.getConnectedIndices(vertexIndex)) {
+            if (block.contains(connectedIndex)) {
+                count++;
             }
         }
-        return n;
+        return count;
     }
 
 }

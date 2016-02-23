@@ -27,21 +27,12 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
     
     private boolean ignoreVertexColors;
     
-    /**
-     * A convenience lookup table for connections.
-     */
-    private int[][] connectionTable;
-    
-    /**
-     * A convenience lookup table for edge colors.
-     */
-    private int[][] edgeColors;
+    private GraphRefinable lazyRefinable;
     
     /**
      * The vertex colors
      */
     private Partition colors;
-    
     
     public GraphDiscretePartitionRefiner() {
     	this(false, false);
@@ -52,8 +43,11 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
     	this.ignoreEdgeColors = ignoreEdgeColors;
     }
     
-    public int[] getConnectedIndices(int vertexIndex) {
-        return connectionTable[vertexIndex];
+    private GraphRefinable getRefinable(Graph graph) {
+        if (lazyRefinable == null) {
+            lazyRefinable = new GraphRefinable(graph, ignoreEdgeColors);
+        }
+        return lazyRefinable;
     }
     
     public Partition getInitialPartition(Graph graph) {
@@ -62,9 +56,7 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
             return Partition.unit(n);
         }
         
-        if (connectionTable == null) {
-            setupConnectionTable(graph);
-        }
+        getRefinable(graph);
         
         Map<String, SortedSet<Integer>> cellMap = 
                 new HashMap<String, SortedSet<Integer>>();
@@ -91,6 +83,12 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
         }
         
         return colorPartition;
+    }
+    
+
+    @Override
+    public int getVertexCount() {
+        return lazyRefinable.getVertexCount();
     }
     
     @Override
@@ -122,17 +120,15 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
 
     
     public void setup(Graph graph) {
-    	if (connectionTable == null) {
-    		setupConnectionTable(graph);
-    	}
+    	GraphRefinable refinable = getRefinable(graph);
         int n = graph.getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(n));
-        super.setup(group, new GraphEquitablePartitionRefiner(graph, this));
+        super.setup(group, new GraphEquitablePartitionRefiner(refinable));
     }
     
     private void setup(Graph graph, PermutationGroup group) {
-    	setupConnectionTable(graph);
-    	super.setup(group, new GraphEquitablePartitionRefiner(graph, this));
+        GraphRefinable refinable = getRefinable(graph);
+    	super.setup(group, new GraphEquitablePartitionRefiner(refinable));
     }
 
     public boolean isCanonical(Graph graph) {
@@ -190,10 +186,6 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
      * @return a partition of the vertex indices based on the colors
      */
     public Partition getElementPartition(Graph graph) {
-        if (connectionTable == null) {
-            setupConnectionTable(graph);
-        }
-        
         Map<String, SortedSet<Integer>> cellMap = new HashMap<String, SortedSet<Integer>>();
         int numberOfAtoms = graph.getVertexCount(); 
         for (int index = 0; index < numberOfAtoms; index++) {
@@ -224,36 +216,6 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
         return elementPartition;
     }
     
-    @Override
-    public int getVertexCount() {
-        return connectionTable.length;
-    }
-    
-    private void setupConnectionTable(Graph graph) {
-    	int vertexCount = graph.getVertexCount();
-        connectionTable = new int[vertexCount][];
-        if (!ignoreEdgeColors) {
-            edgeColors = new int[vertexCount][];
-        }
-        for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
-        	List<Integer> connected = graph.getConnected(vertexIndex);
-            int numConnVertices = connected.size();
-            connectionTable[vertexIndex] = new int[numConnVertices];
-            if (!ignoreEdgeColors) {
-                edgeColors[vertexIndex] = new int[numConnVertices];
-            }
-            int i = 0;
-            for (int connectedVertex : connected) {
-                connectionTable[vertexIndex][i] = connectedVertex;
-                if (!ignoreEdgeColors) {
-                    int color = graph.getEdgeColor(vertexIndex, connectedVertex);
-                    edgeColors[vertexIndex][i] = color;
-                }
-                i++;
-            }
-        }
-    }
-    
     public Map<Integer, List<Integer>> makeCompactConnectionTable(Graph graph) {
         List<List<Integer>> table = new ArrayList<List<Integer>>();
         int tableIndex = 0;
@@ -281,25 +243,6 @@ public class GraphDiscretePartitionRefiner extends AbstractDiscretePartitionRefi
 
     @Override
     public int getConnectivity(int vertexI, int vertexJ) {
-    	 int indexInRow;
-         int maxRowIndex = connectionTable[vertexI].length;
-         for (indexInRow = 0; indexInRow < maxRowIndex; indexInRow++) {
-             if (connectionTable[vertexI][indexInRow] == vertexJ) {
-                 break;
-             }
-         }
-         if (ignoreEdgeColors) {
-             if (indexInRow < maxRowIndex) {
-                 return 1;
-             } else {
-                 return 0;
-             }
-         } else {
-             if (indexInRow < maxRowIndex) {
-                 return edgeColors[vertexI][indexInRow];
-             } else {
-                 return 0;
-             }
-         }
-     }
+        return lazyRefinable.getConnectivity(vertexI, vertexJ);
+    }
 }

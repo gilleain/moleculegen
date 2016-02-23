@@ -75,43 +75,43 @@ public abstract class AbstractEquitablePartitionRefiner {
     }
     
     /**
-     * Refines the coarse partition <code>a</code> into a finer one.
+     * Refines the coarse partition <code>coarse</code> into a finer one.
      *  
-     * @param a the partition to refine
+     * @param coarse the partition to refine
      * @return a finer partition
      */
-    public Partition refine(Partition a) {
-        Partition b = new Partition(a);
+    public Partition refine(Partition coarse) {
+        Partition finer = new Partition(coarse);
         
-        // start the queue with the blocks of a in reverse order
+        // start the queue with the blocks of the coarse partition in reverse order
         blocksToRefine = new LinkedList<Set<Integer>>();
-        for (int i = 0; i < b.size(); i++) {
-            blocksToRefine.add(b.copyBlock(i));
+        for (int i = 0; i < finer.size(); i++) {
+            blocksToRefine.add(finer.copyBlock(i));
         }
         
         int numberOfVertices = getNumberOfVertices();
         while (!blocksToRefine.isEmpty()) {
             Set<Integer> t = blocksToRefine.remove();
             currentBlockIndex = 0;
-            while (currentBlockIndex < b.size() && b.size() < numberOfVertices) {
-                if (!b.isDiscreteCell(currentBlockIndex)) {
+            while (currentBlockIndex < finer.size() && finer.size() < numberOfVertices) {
+                if (!finer.isDiscreteCell(currentBlockIndex)) {
 
                     // get the neighbor invariants for this block
-                    Map<Integer, SortedSet<Integer>> invariants = getInvariants(b, t);
+                    Map<Integer, SortedSet<Integer>> invariants = getInvariants(finer, t);
 
                     // split the block on the basis of these invariants
-                    split(invariants, b);
+                    split(invariants, finer);
                 }
                 currentBlockIndex++;
             }
-//            System.out.println(b);
+//            System.out.println(finer);
 
             // the partition is discrete
-            if (b.size() == numberOfVertices) {
-                return b;
+            if (finer.size() == numberOfVertices) {
+                return finer;
             }
         }
-        return b;
+        return finer;
     }
     
     /**
