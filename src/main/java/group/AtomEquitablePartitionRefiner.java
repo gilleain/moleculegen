@@ -26,7 +26,7 @@ public class AtomEquitablePartitionRefiner extends
         this.connectionTable = connectionTable;
     }
 
-    public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
+    public Invariant neighboursInBlock(Set<Integer> block, int vertexIndex) {
         int neighbours = 0;
         Map<Integer, Integer> connectedOrders = connectionTable.get(vertexIndex); 
         for (int connected : connectedOrders.keySet()) {
@@ -34,7 +34,7 @@ public class AtomEquitablePartitionRefiner extends
                 neighbours++;
             }
         }
-        return neighbours;
+        return new IntegerInvariant(neighbours);
     }
     
     @Override

@@ -27,6 +27,9 @@ import java.util.TreeSet;
  */
 public abstract class AbstractEquitablePartitionRefiner {
     
+    public interface Invariant extends Comparable<Invariant> { }
+    
+    
     /**
      * A forward split order tends to favor partitions where the cells are
      * refined from lowest to highest. A reverse split order is, of course, the
@@ -60,7 +63,7 @@ public abstract class AbstractEquitablePartitionRefiner {
      * @param vertexIndex the element to compare
      * @return the size of the intersection
      */
-    public abstract int neighboursInBlock(Set<Integer> block, int vertexIndex);
+    public abstract Invariant neighboursInBlock(Set<Integer> block, int vertexIndex);
 
     /**
      * Set the preference for splitting cells.
@@ -95,7 +98,7 @@ public abstract class AbstractEquitablePartitionRefiner {
                     SortedSet<Integer> currentBlock = finer.getCell(currentBlockIndex);
                     
                     // get the neighbor invariants for this block
-                    Map<Integer, SortedSet<Integer>> invariants = 
+                    Map<Invariant, SortedSet<Integer>> invariants = 
                             getInvariants(currentBlock, targetBlock);
 
                     // split the block on the basis of these invariants
@@ -124,20 +127,20 @@ public abstract class AbstractEquitablePartitionRefiner {
      * @param targetBlock the current target block of the partition
      * @return a map of set intersection sizes to partition cells
      */
-    private Map<Integer, SortedSet<Integer>> getInvariants(
+    private Map<Invariant, SortedSet<Integer>> getInvariants(
             SortedSet<Integer> currentBlock, Set<Integer> targetBlock) {
-        Map<Integer, SortedSet<Integer>> invariantMap = new HashMap<Integer, SortedSet<Integer>>();
+        Map<Invariant, SortedSet<Integer>> invariantMap = new HashMap<Invariant, SortedSet<Integer>>();
         for (int element : currentBlock) {
-            int numberOfNeighbours = neighboursInBlock(targetBlock, element);
-            if (invariantMap.containsKey(numberOfNeighbours)) {
-                invariantMap.get(numberOfNeighbours).add(element);
+            Invariant invariant = neighboursInBlock(targetBlock, element);
+            if (invariantMap.containsKey(invariant)) {
+                invariantMap.get(invariant).add(element);
             } else {
                 SortedSet<Integer> set = new TreeSet<Integer>();
                 set.add(element);
-                invariantMap.put(numberOfNeighbours, set);
+                invariantMap.put(invariant, set);
             }
         }
-//        System.out.println("current block " + currentBlock + " target block " + targetBlock + " inv " + setList);
+//        System.out.println("current block " + currentBlock + " target block " + targetBlock + " inv " + invariantMap);
         return invariantMap;
     }
     
@@ -147,19 +150,20 @@ public abstract class AbstractEquitablePartitionRefiner {
      * @param invariantMap a map of neighbor counts to elements
      * @param partition the partition that is being refined
      */
-    private int split(Map<Integer, SortedSet<Integer>> invariantMap, 
+    private int split(Map<Invariant, SortedSet<Integer>> invariantMap, 
                        int currentBlockIndex, Partition partition) {
-        List<Integer> invariantKeys =  new ArrayList<Integer>();
+        List<Invariant> invariantKeys =  new ArrayList<Invariant>();
         invariantKeys.addAll(invariantMap.keySet());
         if (splitOrder == SplitOrder.REVERSE) {
             sort(invariantKeys);
         } else {
             sort(invariantKeys, reverseOrder());
         }
+//        System.out.println(invariantKeys);
         
         partition.removeCell(currentBlockIndex);
         int insertPoint = currentBlockIndex;
-        for (int invariant : invariantKeys) {
+        for (Invariant invariant : invariantKeys) {
             SortedSet<Integer> setH = invariantMap.get(invariant);
             partition.insertCell(insertPoint, setH);
             blocksToRefine.add(setH);

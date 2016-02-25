@@ -1,5 +1,6 @@
 package group.graph;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import group.AbstractEquitablePartitionRefiner;
@@ -16,6 +17,44 @@ import group.Refinable;
 public class GraphEquitablePartitionRefiner extends AbstractEquitablePartitionRefiner 
                                        implements IEquitablePartitionRefiner {
     
+    private class IntegerListInvariant implements Invariant {
+        
+        private int[] values;
+        
+        public IntegerListInvariant(int[] values) {
+            this.values = values;
+        }
+
+        @Override
+        public int compareTo(Invariant o) {
+            int[] other = ((IntegerListInvariant)o).values;
+            for (int index = 0; index < values.length; index++) {
+                if (values[index] > other[index]) {
+                    return -1;
+                } else if (values[index] < other[index]) {
+                    return 1;
+                } else {
+                    continue;
+                }
+            }
+            return 0;
+        }
+        
+        public int hashCode() {
+            return Arrays.hashCode(values);
+        }
+        
+        public boolean equals(Object other) {
+            return other instanceof IntegerListInvariant
+                    && Arrays.equals(values, ((IntegerListInvariant)other).values);
+        }
+        
+        public String toString() {
+            return Arrays.toString(values);
+        }
+        
+    }
+    
     private final Refinable refinable;
     
     public GraphEquitablePartitionRefiner(Refinable refinable) {
@@ -27,15 +66,19 @@ public class GraphEquitablePartitionRefiner extends AbstractEquitablePartitionRe
     }
 
     @Override
-    public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
+    public Invariant neighboursInBlock(Set<Integer> block, int vertexIndex) {
+        int[] colorCounts = new int[refinable.getMaxConnectivity()];
         int count = 0;
         
         for (int connectedIndex : refinable.getConnectedIndices(vertexIndex)) {
             if (block.contains(connectedIndex)) {
+                int color = refinable.getConnectivity(vertexIndex, connectedIndex);
+                colorCounts[color - 1]++;
                 count++;
             }
         }
-        return count;
+        return new IntegerListInvariant(colorCounts);
+//        return new IntegerInvariant(count);
     }
 
 }

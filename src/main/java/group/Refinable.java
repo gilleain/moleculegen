@@ -13,5 +13,7 @@ public interface Refinable {
     int getVertexCount();
 
     int getConnectivity(int vertexI, int vertexJ);
+    
+    int getMaxConnectivity();
 
 }

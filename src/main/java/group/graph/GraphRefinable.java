@@ -19,6 +19,11 @@ public class GraphRefinable implements Refinable {
      */
     private int[][] edgeColors;
     
+    /**
+     * The maximum value in the edge color table.
+     */
+    private int maxEdgeColor;
+    
     private final boolean ignoreEdgeColors;
     
     public GraphRefinable(Graph graph) {
@@ -74,6 +79,9 @@ public class GraphRefinable implements Refinable {
                 if (!ignoreEdgeColors) {
                     int color = graph.getEdgeColor(vertexIndex, connectedVertex);
                     edgeColors[vertexIndex][i] = color;
+                    if (color > maxEdgeColor) {
+                        maxEdgeColor = color;
+                    }
                 }
                 i++;
             }
@@ -90,6 +98,11 @@ public class GraphRefinable implements Refinable {
     @Override
     public int getVertexCount() {
         return graph.getVertexCount();
+    }
+
+    @Override
+    public int getMaxConnectivity() {
+        return maxEdgeColor;
     }
 
 }
