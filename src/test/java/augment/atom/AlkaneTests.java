@@ -39,6 +39,12 @@ public class AlkaneTests extends FormulaTest {
         Assert.assertEquals(9, countNFromAtom("C7H16"));
     }
 
+    @Test
+    public void c12H26Test() {
+        int c12H26 = countNFromAtom("C12H26");
+        System.out.println(c12H26);
+    }
+
 //    @Test
 //    public void c8H14Test() {
 //        int c8H14 = countNFromAtom("C8H14");

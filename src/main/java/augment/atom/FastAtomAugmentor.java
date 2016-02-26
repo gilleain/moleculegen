@@ -1,45 +1,46 @@
 package augment.atom;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
-
 import augment.Augmentor;
 import augment.SaturationCalculator;
 import augment.constraints.ElementConstraints;
 import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.FastChemObjectBuilder;
 
-public class AtomAugmentor implements Augmentor<AtomAugmentation> {
-    
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * class to experiment with better caching in AtomAugmentation
+ */
+public class FastAtomAugmentor implements Augmentor<AtomAugmentation> {
+
     private static final long serialVersionUID = -1795216862782671835L;
 
     public static IChemObjectBuilder getBuilder() {
         return  FastChemObjectBuilder.getInstance();   // changed SLewis for control
     }
-    
+
     /**
      * The elements (in order) used to make molecules for this run.
      */
     private List<String> elementSymbols;
-    
+
     private transient SaturationCalculator saturationCalculatorX; // do not serialize
-    
-    public AtomAugmentor(String elementString) {
+
+    public FastAtomAugmentor(String elementString) {
         elementSymbols = new ArrayList<String>();
         for (int i = 0; i < elementString.length(); i++) {
             elementSymbols.add(String.valueOf(elementString.charAt(i)));
         }
      }
-    
-    public AtomAugmentor(List<String> elementSymbols) {
+
+    public FastAtomAugmentor(List<String> elementSymbols) {
         this.elementSymbols = elementSymbols;
      }
 
@@ -49,7 +50,7 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
             saturationCalculatorX = new SaturationCalculator(elementSymbols);
         return  saturationCalculatorX;
     }
-    
+
     @Override
     public List<AtomAugmentation> augment(AtomAugmentation parent) {
         IAtomContainer atomContainer = parent.getAugmentedObject();
@@ -65,10 +66,10 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
                         new AtomAugmentation(atomContainer, atomToAdd, bondOrders, constraints.minus(elementSymbol)));
             }
         }
-        
+
         return augmentations;
     }
-    
+
     private List<int[]> getBondOrderArrays(IAtomContainer atomContainer, String symbol) {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup autG = refiner.getAutomorphismGroup(atomContainer);
