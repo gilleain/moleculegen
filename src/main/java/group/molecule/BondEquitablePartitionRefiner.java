@@ -1,8 +1,13 @@
-package group;
+package group.molecule;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import group.AbstractEquitablePartitionRefiner;
+import group.IEquitablePartitionRefiner;
+import group.invariant.IntegerInvariant;
+import group.invariant.Invariant;
 
 /**
  * Refiner for atom containers, which refines partitions of the bonds to

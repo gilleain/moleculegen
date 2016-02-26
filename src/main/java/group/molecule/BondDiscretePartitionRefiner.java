@@ -1,4 +1,4 @@
-package group;
+package group.molecule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +10,11 @@ import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+
+import group.AbstractDiscretePartitionRefiner;
+import group.Partition;
+import group.Permutation;
+import group.PermutationGroup;
 
 /**
  * Determine the automorphism group of the bonds for an atom container.

@@ -15,6 +15,7 @@ import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import group.molecule.AtomDiscretePartitionRefiner;
 import io.AtomContainerPrinter;
 
 public class AutPartitionTests {

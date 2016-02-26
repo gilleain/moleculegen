@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import group.invariant.Invariant;
+
 
 /**
  * Refines a 'coarse' partition (with more blocks) to a 'finer' partition that
@@ -26,8 +28,6 @@ import java.util.TreeSet;
  * @cdk.module group
  */
 public abstract class AbstractEquitablePartitionRefiner {
-    
-    public interface Invariant extends Comparable<Invariant> { }
     
     
     /**

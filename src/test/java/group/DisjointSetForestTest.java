@@ -12,6 +12,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import group.molecule.AtomDiscretePartitionRefiner;
 import io.AtomContainerPrinter;
 
 

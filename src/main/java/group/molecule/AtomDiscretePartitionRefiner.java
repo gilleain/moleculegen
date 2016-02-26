@@ -1,4 +1,4 @@
-package group;
+package group.molecule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,11 @@ import java.util.TreeSet;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+
+import group.AbstractDiscretePartitionRefiner;
+import group.Partition;
+import group.Permutation;
+import group.PermutationGroup;
 
 /**
  * A refiner for CDK atom containers; see: 

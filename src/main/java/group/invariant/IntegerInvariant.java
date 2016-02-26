@@ -1,6 +1,4 @@
-package group;
-
-import group.AbstractEquitablePartitionRefiner.Invariant;
+package group.invariant;
 
 public class IntegerInvariant implements Invariant {
     
