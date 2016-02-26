@@ -45,7 +45,7 @@ public class TestCutCalculator {
     
     @Test
     public void testTree() {
-        testEdges("C0C1C2C3C4C5C6 0:1(1),1:2(1),1:3(1),3:5(1),4:5(1),5:6(1)", 6);
+        testEdges("C0C1C2C3C4C5C6 0:1(1),1:2(1),1:3(1),3:5(1),4:5(1),5:6(1)", 2);
     }
     
     @Test

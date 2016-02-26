@@ -1,5 +1,8 @@
 package augment.vertex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import augment.AugmentingGenerator;
 import augment.constraints.VertexColorConstraintSource;
 import augment.constraints.VertexColorConstraints;
@@ -16,6 +19,8 @@ import validate.HCountValidator;
  */
 public class VertexGenerator implements AugmentingGenerator<Graph> {
     
+    private static final long serialVersionUID = 3475558636229126090L;
+
     private VertexAugmentor augmentor;
     
     private Handler<Graph> handler;
@@ -53,8 +58,13 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     }
     
     public void run(Graph initial) {
-        // XXX index = atomCount?
-        VertexColorConstraints remaining = null;    // TODO
+        List<String> toRemove = new ArrayList<String>(initial.getVertexCount());
+        for (int index = 0; index < initial.getVertexCount(); index++) {
+            toRemove.add(initial.getVertexColor(index));
+        }
+        VertexColorConstraints remaining = 
+                new VertexColorConstraints(initialConstraints, 
+                        new VertexColorConstraints(toRemove));
         augment(new ByVertexAugmentation(initial, remaining), initial.getVertexCount() - 1);  
     }
     

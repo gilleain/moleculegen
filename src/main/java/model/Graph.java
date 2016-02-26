@@ -37,6 +37,32 @@ public class Graph implements Serializable {
         }
         this.edgeColors.addAll(other.edgeColors);
     }
+    
+    public Graph(String acpString) {
+        this();
+        int gapIndex = acpString.indexOf(' ');
+        if (gapIndex == -1) {
+            return;    // TODO : raise error
+        }
+        
+        String elementString = acpString.substring(0, gapIndex);
+        // skip the atom number, as this is just a visual convenience
+        for (int index = 0; index < elementString.length(); index += 2) {
+            String elementSymbol = String.valueOf(elementString.charAt(index));
+            vertexColors.add(elementSymbol);
+        }
+        
+        String bondString = acpString.substring(gapIndex + 1);
+        for (String bondPart : bondString.split(",")) {
+            int colonIndex = bondPart.indexOf(':');
+            int openBracketIndex = bondPart.indexOf('(');
+            int closeBracketIndex = bondPart.indexOf(')');
+            int a0 = Integer.parseInt(bondPart.substring(0, colonIndex));
+            int a1 = Integer.parseInt(bondPart.substring(colonIndex + 1, openBracketIndex));
+            String o = bondPart.substring(openBracketIndex + 1, closeBracketIndex);
+            addEdge(a0, a1, Integer.valueOf(o));
+        }
+    }
 
     public void addVertex(String vertexColor) {
         this.vertexColors.add(vertexColor);
@@ -144,5 +170,4 @@ public class Graph implements Serializable {
         }
         return sb.toString();
     }
-
 }

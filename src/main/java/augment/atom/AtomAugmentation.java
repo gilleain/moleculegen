@@ -98,4 +98,10 @@ public class AtomAugmentation implements Augmentation<IAtomContainer> {
     public AtomExtension getExtension() {
         return atomExtension;
     }
+    
+    public String toString() {
+        return io.AtomContainerPrinter.toString(augmentedMolecule)
+                + " -> " + atomExtension
+                + " " + elementConstraints;
+    }
 }

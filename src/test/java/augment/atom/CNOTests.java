@@ -1,15 +1,14 @@
 package augment.atom;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import junit.framework.Assert;
 
 public class CNOTests extends FormulaTest {
 
     @Test
     public void cH5NOTest() {
-        int ch5NO = countNFromAtom("CH5NO");
-        Assert.assertEquals(3, ch5NO);
+        Assert.assertEquals(3, countNFromAtom("CH5NO"));
     }
     
     @Test

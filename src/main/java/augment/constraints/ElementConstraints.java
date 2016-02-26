@@ -3,6 +3,7 @@ package augment.constraints;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import app.FormulaParser;
@@ -13,9 +14,12 @@ public class ElementConstraints implements Iterable<String>, Serializable {
     private Map<String, Integer> elementCounts;
     
     public ElementConstraints(String elementFormula) {
+        this(new FormulaParser(elementFormula).getElementSymbols());
+    }
+    
+    public ElementConstraints(List<String> elements) {
         this.elementCounts = new HashMap<String, Integer>();
-        FormulaParser parser = new FormulaParser(elementFormula);
-        for (String elementSymbol : parser.getElementSymbols()) {
+        for (String elementSymbol : elements) {
             if (elementCounts.containsKey(elementSymbol)) {
                 elementCounts.put(elementSymbol, elementCounts.get(elementSymbol) + 1);
             } else {
@@ -37,6 +41,26 @@ public class ElementConstraints implements Iterable<String>, Serializable {
                 this.elementCounts.put(element, count);
             }
         }
+    }
+    
+    public ElementConstraints(ElementConstraints source, ElementConstraints diff) {
+        this.elementCounts = new HashMap<String, Integer>();
+        for (String element : source.elementCounts.keySet()) {
+            int count;
+            if (diff.elementCounts.containsKey(element)) {
+                count = source.elementCounts.get(element) - diff.elementCounts.get(element);
+                diff.elementCounts.remove(element);
+            } else {
+                count = source.elementCounts.get(element);
+            }
+            if (count > 0) {
+                this.elementCounts.put(element, count);
+            }
+        }
+    }
+    
+    public Map<String, Integer> getMap() {
+        return this.elementCounts;
     }
 
     @Override
