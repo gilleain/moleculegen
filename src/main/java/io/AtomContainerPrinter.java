@@ -107,9 +107,14 @@ public class AtomContainerPrinter {
         IAtomContainer atomContainer = builder.newInstance(IAtomContainer.class);
         String elementString = acpString.substring(0, gapIndex);
         // skip the atom number, as this is just a visual convenience
-        for (int index = 0; index < elementString.length(); index += 2) {
+        for (int index = 0; index < elementString.length();) {
             String elementSymbol = String.valueOf(elementString.charAt(index));
             atomContainer.addAtom(builder.newInstance(IAtom.class, elementSymbol));
+            if (index < 20) {
+                index += 2;
+            } else {
+                index += 3;
+            }
         }
         
         String bondString = acpString.substring(gapIndex + 1);
