@@ -1,5 +1,6 @@
 package group;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -177,6 +178,7 @@ public abstract class AbstractDiscretePartitionRefiner {
         if (bestExist) {
             finer.setAsPermutation(pi1, firstNonDiscreteCell);
             result = compareRowwise(pi1);
+//            System.out.println(result + " " + pi1);
         }
         
         // partition is discrete
@@ -235,16 +237,35 @@ public abstract class AbstractDiscretePartitionRefiner {
      * @return BETTER, EQUAL, or WORSE
      */
     public Result compareRowwise(Permutation perm) {
+//        Permutation b1 = best.invert();
+        Permutation b1 = best;
+//        Permutation p1 = perm.invert();
+        Permutation p1 = perm;
+//        System.out.println("comparing " + b1 + " and " + p1);
+        Result result = Result.EQUAL;
         int m = perm.size();
+        List<Integer> a = new ArrayList<Integer>();
+        List<Integer> b = new ArrayList<Integer>();
         for (int i = 0; i < m - 1; i++) {
             for (int j = i + 1; j < m; j++) {
-                int x = getConnectivity(best.get(i), best.get(j));
-                int y = getConnectivity(perm.get(i), perm.get(j));
-                if (x > y) return Result.WORSE;
-                if (x < y) return Result.BETTER;
+                int x = getConnectivity(b1.get(i), b1.get(j));
+                int y = getConnectivity(p1.get(i), p1.get(j));
+                a.add(x);
+                b.add(y);
+                if (x > y && result == Result.EQUAL) {
+                    result = Result.WORSE;
+//                    return Result.WORSE;
+                }
+                if (x < y && result == Result.EQUAL) {
+                    result = Result.BETTER;
+//                    return Result.BETTER;
+                }
             }
         }
-        return Result.EQUAL;
+//        return Result.EQUAL;
+//        System.out.println(a);
+//        System.out.println(b);
+        return result;
     }
     
     public abstract boolean colorsPreserved(Permutation p);

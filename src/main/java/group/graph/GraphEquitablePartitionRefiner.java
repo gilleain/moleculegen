@@ -4,7 +4,9 @@ import java.util.Set;
 
 import group.AbstractEquitablePartitionRefiner;
 import group.IEquitablePartitionRefiner;
-import model.Graph;
+import group.Refinable;
+import group.invariant.IntegerListInvariant;
+import group.invariant.Invariant;
 
 
 /**
@@ -16,29 +18,29 @@ import model.Graph;
 public class GraphEquitablePartitionRefiner extends AbstractEquitablePartitionRefiner 
                                        implements IEquitablePartitionRefiner {
     
-    private Graph graph;
+  
     
-    private final GraphDiscretePartitionRefiner discreteRefiner;
+    private final Refinable refinable;
     
-    public GraphEquitablePartitionRefiner(Graph graph, GraphDiscretePartitionRefiner discreteRefiner) {
-        this.graph = graph;
-        this.discreteRefiner = discreteRefiner;
+    public GraphEquitablePartitionRefiner(Refinable refinable) {
+        this.refinable = refinable;
     }
 
     public int getNumberOfVertices() {
-        return graph.getVertexCount();
+        return refinable.getVertexCount();
     }
 
     @Override
-    public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
-        int n = 0;
+    public Invariant neighboursInBlock(Set<Integer> block, int vertexIndex) {
+        int[] colorCounts = new int[refinable.getMaxConnectivity()];
         
-        for (int i : discreteRefiner.getConnectedIndices(vertexIndex)) {
-            if (block.contains(i)) {
-                n++;
+        for (int connectedIndex : refinable.getConnectedIndices(vertexIndex)) {
+            if (block.contains(connectedIndex)) {
+                int color = refinable.getConnectivity(vertexIndex, connectedIndex);
+                colorCounts[color - 1]++;
             }
         }
-        return n;
+        return new IntegerListInvariant(colorCounts);
     }
 
 }

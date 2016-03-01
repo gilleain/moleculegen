@@ -1,8 +1,13 @@
-package group;
+package group.molecule;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import group.AbstractEquitablePartitionRefiner;
+import group.IEquitablePartitionRefiner;
+import group.invariant.IntegerInvariant;
+import group.invariant.Invariant;
 
 /**
  * Refiner for atom containers, which refines partitions of the bonds to
@@ -26,7 +31,7 @@ public class BondEquitablePartitionRefiner extends
         this.connectionTable = connectionTable;
     }
 
-    public int neighboursInBlock(Set<Integer> block, int vertexIndex) {
+    public Invariant neighboursInBlock(Set<Integer> block, int vertexIndex) {
         int neighbours = 0;
         List<Integer> connectedBonds = connectionTable.get(vertexIndex); 
         for (int connected : connectedBonds) {
@@ -34,7 +39,7 @@ public class BondEquitablePartitionRefiner extends
                 neighbours++;
             }
         }
-        return neighbours;
+        return new IntegerInvariant(neighbours);
     }
     
     @Override

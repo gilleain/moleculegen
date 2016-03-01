@@ -1,7 +1,9 @@
 package group;
 
+import static java.util.Collections.reverseOrder;
+import static java.util.Collections.sort;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import group.invariant.Invariant;
 
 
 /**
@@ -25,6 +29,7 @@ import java.util.TreeSet;
  */
 public abstract class AbstractEquitablePartitionRefiner {
     
+    
     /**
      * A forward split order tends to favor partitions where the cells are
      * refined from lowest to highest. A reverse split order is, of course, the
@@ -37,11 +42,6 @@ public abstract class AbstractEquitablePartitionRefiner {
      * The bias in splitting cells when refining
      */
     private SplitOrder splitOrder = SplitOrder.FORWARD;
-    
-    /**
-     * The block of the partition that is being refined
-     */
-    private int currentBlockIndex;
     
     /**
      * The blocks to be refined, or at least considered for refinement
@@ -63,7 +63,7 @@ public abstract class AbstractEquitablePartitionRefiner {
      * @param vertexIndex the element to compare
      * @return the size of the intersection
      */
-    public abstract int neighboursInBlock(Set<Integer> block, int vertexIndex);
+    public abstract Invariant neighboursInBlock(Set<Integer> block, int vertexIndex);
 
     /**
      * Set the preference for splitting cells.
@@ -75,43 +75,46 @@ public abstract class AbstractEquitablePartitionRefiner {
     }
     
     /**
-     * Refines the coarse partition <code>a</code> into a finer one.
+     * Refines the coarse partition <code>coarse</code> into a finer one.
      *  
-     * @param a the partition to refine
+     * @param coarse the partition to refine
      * @return a finer partition
      */
-    public Partition refine(Partition a) {
-        Partition b = new Partition(a);
+    public Partition refine(Partition coarse) {
+        Partition finer = new Partition(coarse);
         
-        // start the queue with the blocks of a in reverse order
+        // start the queue with the blocks of the coarse partition in reverse order
         blocksToRefine = new LinkedList<Set<Integer>>();
-        for (int i = 0; i < b.size(); i++) {
-            blocksToRefine.add(b.copyBlock(i));
+        for (int i = 0; i < finer.size(); i++) {
+            blocksToRefine.add(finer.copyBlock(i));
         }
         
         int numberOfVertices = getNumberOfVertices();
         while (!blocksToRefine.isEmpty()) {
-            Set<Integer> t = blocksToRefine.remove();
-            currentBlockIndex = 0;
-            while (currentBlockIndex < b.size() && b.size() < numberOfVertices) {
-                if (!b.isDiscreteCell(currentBlockIndex)) {
-
+            Set<Integer> targetBlock = blocksToRefine.remove();
+            int currentBlockIndex = 0;
+            while (currentBlockIndex < finer.size() && finer.size() < numberOfVertices) {
+                if (!finer.isDiscreteCell(currentBlockIndex)) {
+                    SortedSet<Integer> currentBlock = finer.getCell(currentBlockIndex);
+                    
                     // get the neighbor invariants for this block
-                    Map<Integer, SortedSet<Integer>> invariants = getInvariants(b, t);
+                    Map<Invariant, SortedSet<Integer>> invariants = 
+                            getInvariants(currentBlock, targetBlock);
 
                     // split the block on the basis of these invariants
-                    split(invariants, b);
+                    if (invariants.size() > 1) {
+                        currentBlockIndex = split(invariants, currentBlockIndex, finer);
+                    }
                 }
                 currentBlockIndex++;
             }
-//            System.out.println(b);
 
             // the partition is discrete
-            if (b.size() == numberOfVertices) {
-                return b;
+            if (finer.size() == numberOfVertices) {
+                return finer;
             }
         }
-        return b;
+        return finer;
     }
     
     /**
@@ -122,54 +125,52 @@ public abstract class AbstractEquitablePartitionRefiner {
      *  
      * @param partition the current partition
      * @param targetBlock the current target block of the partition
-     * @return a map of set intersection sizes to elements
+     * @return a map of set intersection sizes to partition cells
      */
-    private Map<Integer, SortedSet<Integer>> getInvariants(
-            Partition partition, Set<Integer> targetBlock) {
-        Map<Integer, SortedSet<Integer>> setList = new HashMap<Integer, SortedSet<Integer>>();
-        for (int u : partition.getCell(currentBlockIndex)) {
-            int h = neighboursInBlock(targetBlock, u);
-            if (setList.containsKey(h)) {
-                setList.get(h).add(u);
+    private Map<Invariant, SortedSet<Integer>> getInvariants(
+            SortedSet<Integer> currentBlock, Set<Integer> targetBlock) {
+        Map<Invariant, SortedSet<Integer>> invariantMap = new HashMap<Invariant, SortedSet<Integer>>();
+        for (int element : currentBlock) {
+            Invariant invariant = neighboursInBlock(targetBlock, element);
+            if (invariantMap.containsKey(invariant)) {
+                invariantMap.get(invariant).add(element);
             } else {
                 SortedSet<Integer> set = new TreeSet<Integer>();
-                set.add(u);
-                setList.put(h, set);
+                set.add(element);
+                invariantMap.put(invariant, set);
             }
         }
-//        System.out.println("current block " + partition.getCell(currentBlockIndex) + " target block " + targetBlock + " inv " + setList);
-        return setList;
+//        System.out.println("current block " + currentBlock + " target block " + targetBlock + " inv " + invariantMap);
+        return invariantMap;
     }
     
     /**
      * Split the current block using the invariants calculated in getInvariants.
      * 
-     * @param invariants a map of neighbor counts to elements
+     * @param invariantMap a map of neighbor counts to elements
      * @param partition the partition that is being refined
      */
-    private void split(Map<Integer, SortedSet<Integer>> invariants, Partition partition) {
-        int nonEmptyInvariants = invariants.keySet().size();
-        if (nonEmptyInvariants > 1) {
-            List<Integer> invariantKeys =  new ArrayList<Integer>();
-            invariantKeys.addAll(invariants.keySet());
-            partition.removeCell(currentBlockIndex);
-            int k = currentBlockIndex;
-            if (splitOrder == SplitOrder.REVERSE) {
-                Collections.sort(invariantKeys);
-            } else {
-                Collections.sort(invariantKeys, Collections.reverseOrder());
-            }
-            for (int h : invariantKeys) {
-                SortedSet<Integer> setH = invariants.get(h);
-//                System.out.println("adding block " + setH + " at " + k + " h=" + h);
-                partition.insertCell(k, setH);
-                blocksToRefine.add(setH);
-                k++;
-                
-            }
-            // skip over the newly added blocks
-            currentBlockIndex += nonEmptyInvariants - 1;
+    private int split(Map<Invariant, SortedSet<Integer>> invariantMap, 
+                       int currentBlockIndex, Partition partition) {
+        List<Invariant> invariantKeys =  new ArrayList<Invariant>();
+        invariantKeys.addAll(invariantMap.keySet());
+        if (splitOrder == SplitOrder.REVERSE) {
+            sort(invariantKeys);
+        } else {
+            sort(invariantKeys, reverseOrder());
         }
+//        System.out.println(invariantKeys);
+        
+        partition.removeCell(currentBlockIndex);
+        int insertPoint = currentBlockIndex;
+        for (Invariant invariant : invariantKeys) {
+            SortedSet<Integer> setH = invariantMap.get(invariant);
+            partition.insertCell(insertPoint, setH);
+            blocksToRefine.add(setH);
+            insertPoint++;
+        }
+        // skip over the newly added blocks
+        return currentBlockIndex + invariantMap.keySet().size() - 1;
     }
 
 }

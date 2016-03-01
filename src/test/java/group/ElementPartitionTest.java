@@ -5,6 +5,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import group.molecule.AtomDiscretePartitionRefiner;
 import io.AtomContainerPrinter;
 import junit.framework.Assert;
 

@@ -7,9 +7,9 @@ import java.util.Set;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
-import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
+import group.molecule.AtomDiscretePartitionRefiner;
 import util.molecule.CutCalculator;
 
 /**

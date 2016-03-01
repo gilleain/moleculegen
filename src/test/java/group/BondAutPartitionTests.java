@@ -13,6 +13,7 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import group.molecule.BondDiscretePartitionRefiner;
 import io.AtomContainerPrinter;
 
 

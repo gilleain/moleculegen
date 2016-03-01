@@ -1,4 +1,4 @@
-package group;
+package group.molecule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +8,12 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
+
+import group.AbstractDiscretePartitionRefiner;
+import group.Partition;
+import group.Permutation;
+import group.PermutationGroup;
 
 /**
  * A refiner for CDK atom containers; see: 
@@ -21,18 +24,9 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefiner {
     
-    /**
-     * A convenience lookup table for atom-atom connections
-     * TODO : less expensive to use Map<Integer, List<Integer>>?
-     */
-    private List<Map<Integer, Integer>> connectionTable;
-    
-    /**
-     * For compact connection tables, this is necessary to map the original atom indices
-     * to the ones used in the compact table.
-     * 
-     */
-    private int[] indexMap;
+    // TODO : use interface
+    private MoleculeRefinable refinable;
+   
     
     /**
      * If there are atoms in the structure without bonds, this should be true
@@ -91,114 +85,28 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
     }
     
     public void reset() {
-        connectionTable = null;
+        refinable = null;
     }
     
-    /**
-     * Makes a lookup table for the connection between atoms, to avoid looking
-     * through the bonds each time.
-     * 
-     * @return a connection table of atom indices to connected atom indices
-     */
-    public List<Map<Integer, Integer>> makeConnectionTable(IAtomContainer atomContainer) {
-        List<Map<Integer, Integer>> table = new ArrayList<Map<Integer, Integer>>();
-        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
-            IAtom a = atomContainer.getAtom(i);
-            Map<Integer, Integer> connectedIndices = new HashMap<Integer, Integer>();
-            for (IAtom connected : atomContainer.getConnectedAtomsList(a)) {
-                int index = atomContainer.getAtomNumber(connected);
-                if (ignoreBondOrders) {
-                    connectedIndices.put(index, 1);
-                } else {
-                    IBond bond = atomContainer.getBond(a, connected);
-                    connectedIndices.put(index, bondOrder(bond.getOrder()));
-                }
-            }
-            table.add(connectedIndices);
-        }
-        return table;
-    }
-    
-    private int bondOrder(IBond.Order order) {
-        switch (order) {
-            case SINGLE: return 1;
-            case DOUBLE: return 2;
-            case TRIPLE: return 3;
-            default: return 4;
-        }
-    }
-    
-    /**
-     * Alternate connection table that ignores atoms with no connections.
-     * 
-     * @return
-     */
-    public List<Map<Integer, Integer>> makeCompactConnectionTable(IAtomContainer atomContainer) {
-        List<Map<Integer, Integer>> table = new ArrayList<Map<Integer, Integer>>();
-        
-        // make the index map anew
-        indexMap = new int[atomContainer.getAtomCount()];
-        
-        int tableIndex = 0;
-        for (int i = 0; i < atomContainer.getAtomCount(); i++) {
-            IAtom atom = atomContainer.getAtom(i);
-            List<IAtom> connected = atomContainer.getConnectedAtomsList(atom);
-            if (connected.size() > 0) {
-                Map<Integer, Integer> connectedIndices = new HashMap<Integer, Integer>();
-                for (IAtom connectedAtom : connected) {
-                    int index = atomContainer.getAtomNumber(connectedAtom);
-                    if (ignoreBondOrders) {
-                        connectedIndices.put(index, 1);
-                    } else {
-                        IBond bond = atomContainer.getBond(atom, connectedAtom);
-                        connectedIndices.put(index, bondOrder(bond.getOrder()));
-                    }
-                }
-                table.add(connectedIndices);
-                indexMap[i] = tableIndex;
-                tableIndex++;
-            } else {
-                indexMap[i] = -1;
-            }
-        }
-        List<Map<Integer, Integer>> shortTable =  new ArrayList<Map<Integer, Integer>>();
-        for (int i = 0; i < table.size(); i++) {
-            Map<Integer, Integer> originalConnections = table.get(i);
-            Map<Integer, Integer> mappedConnections = new HashMap<Integer, Integer>();
-            for (int j : originalConnections.keySet()) {
-                mappedConnections.put(indexMap[j], originalConnections.get(j));
-            }
-            shortTable.add(mappedConnections);
-        }
-        return shortTable;
-    }
     
     public int[] getIndexMap() {
-        return indexMap;
-    }
-    
-    private void setupConnectionTable(IAtomContainer atomContainer) {
-        if (checkForDisconnectedAtoms) {
-            this.connectionTable = makeCompactConnectionTable(atomContainer);
-        } else {
-            this.connectionTable = makeConnectionTable(atomContainer);
-        }
+        return refinable.getIndexMap();
     }
     
     private void setup(IAtomContainer atomContainer) {
         // have to setup the connection table before making the group 
         // otherwise the size may be wrong, but only setup if it doesn't exist
-        if (connectionTable == null) {
-            setupConnectionTable(atomContainer);
+        if (refinable == null) {
+            refinable = new MoleculeRefinable(atomContainer, checkForDisconnectedAtoms, ignoreBondOrders);
         }
         int size = getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(size));
-        setup(group, new AtomEquitablePartitionRefiner(connectionTable));
+        setup(group, new AtomEquitablePartitionRefiner(refinable));
     }
     
     private void setup(IAtomContainer atomContainer, PermutationGroup group) {
-        setupConnectionTable(atomContainer);
-        setup(group, new AtomEquitablePartitionRefiner(connectionTable));
+        refinable = new MoleculeRefinable(atomContainer, checkForDisconnectedAtoms, ignoreBondOrders);
+        setup(group, new AtomEquitablePartitionRefiner(refinable));
     }
     
     /**
@@ -257,14 +165,14 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      * @return a partition of the atom indices based on the element symbols
      */
     public Partition getElementPartition(IAtomContainer atomContainer) {
-        if (connectionTable == null) {
-            setupConnectionTable(atomContainer);
+        if (refinable == null) {
+            refinable = new MoleculeRefinable(atomContainer, checkForDisconnectedAtoms, ignoreBondOrders);
         }
         
         Map<String, SortedSet<Integer>> cellMap = new HashMap<String, SortedSet<Integer>>();
         int numberOfAtoms = atomContainer.getAtomCount(); 
         for (int atomIndex = 0; atomIndex < numberOfAtoms; atomIndex++) {
-            int index = (indexMap == null)? atomIndex : indexMap[atomIndex];
+            int index = (refinable.getIndexMap() == null)? atomIndex : refinable.getIndexMap()[atomIndex];
             if (index >= 0) {
                 String symbol = atomContainer.getAtom(atomIndex).getSymbol();
                 SortedSet<Integer> cell;
@@ -331,7 +239,7 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      */
     @Override
     public int getVertexCount() {
-        return connectionTable.size();
+        return refinable.getVertexCount();
     }
 
     /* (non-Javadoc)
@@ -339,11 +247,7 @@ public class AtomDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
      */
     @Override
     public int getConnectivity(int i, int j) {
-        if (connectionTable.get(i).containsKey(j)) {
-            return connectionTable.get(i).get(j);
-        } else {
-            return 0;
-        }
+        return refinable.getConnectivity(i, j);
     }
 
     @Override

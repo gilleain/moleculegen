@@ -12,10 +12,10 @@ import app.FormulaParser;
 import augment.Augmentor;
 import augment.SaturationCalculator;
 import augment.constraints.ElementConstraints;
-import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
 import group.PermutationGroup;
+import group.molecule.AtomDiscretePartitionRefiner;
 
 public class BondAugmentor implements Augmentor<BondAugmentation> {
    

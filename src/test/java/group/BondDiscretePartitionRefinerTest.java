@@ -8,6 +8,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import group.molecule.BondDiscretePartitionRefiner;
+
 
 
 public class BondDiscretePartitionRefinerTest {

@@ -5,9 +5,9 @@ import java.util.*;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.CanonicalChecker;
-import group.AtomDiscretePartitionRefiner;
 import group.Partition;
 import group.Permutation;
+import group.molecule.AtomDiscretePartitionRefiner;
 import util.molecule.CutCalculator;
 
 public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> {
