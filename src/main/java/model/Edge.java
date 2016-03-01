@@ -41,6 +41,16 @@ public class Edge implements Serializable {
         }
     }
     
+    public boolean equals(Object other) {
+        if (other != null && other instanceof Edge) {
+            Edge o = (Edge) other;
+            return contains(o.vertexZero) && contains(o.vertexOne);
+        } else {
+            return false;
+        }
+        
+    }
+    
     public String toString() {
         return "(" + vertexZero + ", " + vertexOne + ")";
      }

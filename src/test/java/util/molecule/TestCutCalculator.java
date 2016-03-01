@@ -1,4 +1,4 @@
-package util;
+package util.molecule;
 
 import static org.junit.Assert.assertEquals;
 
