@@ -60,5 +60,10 @@ public class TestCutCalculator {
     public void testCutVerticesInSingleRing() {
         testVertices("C0C1N2C3 0:1(3),0:2(1),1:2(1),2:3(1)", 1);
     }
+    
+    @Test
+    public void testWonkyBowtie() {
+        testEdges("C0C1C2C3C4C5C6 0:1(1),0:2(1),1:3(1),2:4(1),3:5(1),0:4(1),1:5(1),5:6(1)", 1);
+    }
 
 }

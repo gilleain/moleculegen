@@ -57,12 +57,13 @@ public class BondCanonicalChecker {
 
         int bi = augmentedMolecule.getAtomNumber(canDelBond.getAtom(0));
         int bj = augmentedMolecule.getAtomNumber(canDelBond.getAtom(1));
-//        System.out.println("Is: (" + ai + "," + aj + ") should be: (" + bi + "," + bj + ")");
+        System.out.println("Is: (" + ai + "," + aj + ") should be: (" + bi + "," + bj + ")");
         return inOrbit(ai, aj, bi, bj, aut);
     }
     
     private List<Integer> getNonSeparatingEdges(IAtomContainer mol) {
         List<Integer> cutEdges = CutCalculator.getCutEdges(mol);
+        System.out.println("cute edges " + cutEdges);
         // TODO use set diff
         List<Integer> nonSeparatingEdges = new ArrayList<Integer>();
         for (int index = 0; index < mol.getBondCount(); index++) {

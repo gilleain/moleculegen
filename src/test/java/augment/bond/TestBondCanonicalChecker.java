@@ -1,6 +1,7 @@
 package augment.bond;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -30,6 +31,11 @@ public class TestBondCanonicalChecker {
     @Test
     public void testAlkaneA() {
         assertFalse(test("C0N1O2C3 0:1(1),1:2(1)", "C", 2, 3, 1));
+    }
+    
+    @Test
+    public void testBowtie() {
+        assertTrue(test("C0C1C2C3C4C5 0:1(1),0:2(1),1:3(1),2:4(1),3:5(1),0:4(1),1:5(1)", "C", 0, 6, 1));
     }
    
 }
