@@ -3,9 +3,9 @@ package augment.atom;
 import augment.Augmentor;
 import augment.SaturationCalculator;
 import augment.constraints.ElementConstraints;
-import group.AtomDiscretePartitionRefiner;
 import group.Permutation;
 import group.PermutationGroup;
+import group.molecule.AtomDiscretePartitionRefiner;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * class to experiment with better caching in AtomAugmentation
+ * class to experiment with augmentation
  */
 public class FastAtomAugmentor implements Augmentor<AtomAugmentation> {
 
@@ -50,7 +50,7 @@ public class FastAtomAugmentor implements Augmentor<AtomAugmentation> {
             saturationCalculatorX = new SaturationCalculator(elementSymbols);
         return  saturationCalculatorX;
     }
-
+    
     @Override
     public List<AtomAugmentation> augment(AtomAugmentation parent) {
         IAtomContainer atomContainer = parent.getAugmentedObject();
@@ -66,10 +66,10 @@ public class FastAtomAugmentor implements Augmentor<AtomAugmentation> {
                         new AtomAugmentation(atomContainer, atomToAdd, bondOrders, constraints.minus(elementSymbol)));
             }
         }
-
+        
         return augmentations;
     }
-
+    
     private List<int[]> getBondOrderArrays(IAtomContainer atomContainer, String symbol) {
         AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
         PermutationGroup autG = refiner.getAutomorphismGroup(atomContainer);

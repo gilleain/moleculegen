@@ -1,5 +1,6 @@
 package augment.vertex;
 
+import handler.molecule.StringStreamHandler;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -20,7 +21,8 @@ import model.Graph;
 public class SeedTest {
     
     private void grow(String elementFormula, String seed) {
-        Handler<IAtomContainer> moleculeHandler = new PrintStreamHandler(System.out, false);
+        StringBuilder sb = new StringBuilder();
+        Handler<IAtomContainer> moleculeHandler = new StringStreamHandler(sb, false);
         HBondCheckingHandler hBondCheckingHandler = 
                 new HBondCheckingHandler(elementFormula, moleculeHandler);
         IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
