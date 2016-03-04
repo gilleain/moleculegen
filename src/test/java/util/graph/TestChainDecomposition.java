@@ -94,8 +94,8 @@ public class TestChainDecomposition {
         printAll(chainDecomposition);
         
         cycleCount(2, chainDecomposition);
-        bridgeCount(1, chainDecomposition);
-        pathCount(1, chainDecomposition);
+        bridgeCount(2, chainDecomposition);
+        pathCount(0, chainDecomposition);
     }
     
     @Test

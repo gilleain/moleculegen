@@ -45,7 +45,7 @@ public class AlkaneTests extends FormulaTest {
         System.out.println(c12H26);
     }
 
-    @Test
+//    @Test
     public void c8H14Test() {
         int c8H14 = countNFromAtom("C8H14");
         Assert.assertEquals(654, c8H14);

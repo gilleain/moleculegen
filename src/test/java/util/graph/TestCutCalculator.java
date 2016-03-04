@@ -2,7 +2,7 @@ package util.graph;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import model.Graph;
 public class TestCutCalculator {
     
     
-    private void printBonds(List<Integer> edgeIndices, Graph g) {
+    private void printBonds(Set<Integer> edgeIndices, Graph g) {
         for (int edgeIndex : edgeIndices) {
             System.out.println(g.getEdge(edgeIndex));
         }
@@ -19,14 +19,14 @@ public class TestCutCalculator {
     
     private void testEdges(String gString, int expectedCount) {
         Graph g = new Graph(gString); 
-        List<Integer> indices = CutCalculator.getCutEdges(g);
+        Set<Integer> indices = CutCalculator.getCutEdges(g);
         printBonds(indices, g);
         assertEquals(expectedCount, indices.size());
     }
     
     private void testVertices(String gString, int expectedCount) {
         Graph g = new Graph(gString); 
-        List<Integer> indices = CutCalculator.getCutVertices(g);
+        Set<Integer> indices = CutCalculator.getCutVertices(g);
         System.out.println(indices);
         assertEquals(expectedCount, indices.size());
     }
@@ -53,7 +53,7 @@ public class TestCutCalculator {
     
     @Test
     public void testWonkyBowtie() {
-        testEdges("C0C1C2C3C4C5C6 0:1(1),0:2(1),1:3(1),2:4(1),3:5(1),0:4(1),1:5(1),5:6(1)", 1);
+        testEdges("C0C1C2C3C4C5C6 0:1(1),0:2(1),1:3(1),2:4(1),3:5(1),0:4(1),1:5(1),5:6(1)", 2);
     }
 
 }

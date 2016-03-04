@@ -78,8 +78,8 @@ public class ChainDecomposition {
         parentIndex = new int[vsize];
         dfiIndex = 0;
         span(0, -1, g);
-        System.out.println("dfi " + Arrays.toString(dfi) + " parent " + Arrays.toString(parentIndex));
-        System.out.println(backEdges);
+//        System.out.println("dfi " + Arrays.toString(dfi) + " parent " + Arrays.toString(parentIndex));
+//        System.out.println(backEdges);
         
         findChains(g);
         findBridges(g);
