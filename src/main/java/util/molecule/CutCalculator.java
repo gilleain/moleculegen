@@ -1,7 +1,9 @@
 package util.molecule;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -15,7 +17,7 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class CutCalculator {
     
-    public static List<Integer> getCutEdges(IAtomContainer graph) {
+    public static Set<Integer> getCutEdges(IAtomContainer graph) {
         if (isTree(graph)) {
             return getEdgesForTree(graph); 
         } else {
@@ -23,17 +25,17 @@ public class CutCalculator {
         }
      }
     
-    public static List<Integer> getCutVertices(IAtomContainer graph) {
+    public static Set<Integer> getCutVertices(IAtomContainer graph) {
        if (isTree(graph)) {
            return getVerticesForTree(graph); 
        } else {
-           return getVerticesForCyclic(graph);
+           return  new HashSet<>(getVerticesForCyclic(graph));
        }
     }
     
-    private static List<Integer> getEdgesForTree(IAtomContainer graph) {
-        List<Integer> cutEdges = new ArrayList<Integer>();
-        List<Integer> leaves = getLeaves(graph);
+    private static Set<Integer> getEdgesForTree(IAtomContainer graph) {
+        Set<Integer> cutEdges = new HashSet<>();
+        Set<Integer> leaves = new HashSet<>(getLeaves(graph));
         for (int bondIndex = 0; bondIndex < graph.getBondCount(); bondIndex++) {
             IBond bond = graph.getBond(bondIndex);
             int a0 = graph.getAtomNumber(bond.getAtom(0));
@@ -46,9 +48,9 @@ public class CutCalculator {
     }
     
     
-    private static List<Integer> getVerticesForTree(IAtomContainer graph) {
-        List<Integer> cutVertices = new ArrayList<Integer>();
-        List<Integer> leaves = getLeaves(graph);
+    private static Set<Integer> getVerticesForTree(IAtomContainer graph) {
+        Set<Integer> cutVertices = new HashSet<Integer>();
+        Set<Integer> leaves = new HashSet<Integer>(getLeaves(graph));
         for (int x = 0; x < graph.getAtomCount(); x++) {
             if (!leaves.contains(x)) {
                 cutVertices.add(x);
@@ -57,8 +59,8 @@ public class CutCalculator {
         return cutVertices;
     }
     
-    private static List<Integer> getEdgesForCyclic(IAtomContainer graph) {
-        List<Integer> cutEdges = new ArrayList<Integer>();
+    private static Set<Integer> getEdgesForCyclic(IAtomContainer graph) {
+        Set<Integer> cutEdges = new HashSet<Integer>();
         ChainDecomposition chainDecomposition = new ChainDecomposition(graph);
         for (IBond bond : chainDecomposition.getBridges()) {
             // FIXME blech!
@@ -83,7 +85,7 @@ public class CutCalculator {
     }
     
     private static List<Integer> getVerticesForCyclicFromCD(IAtomContainer graph) {
-        List<IAtom> cutVertexAtoms = 
+        List<IAtom> cutVertexAtoms =
                 new ChainDecomposition(graph).getCutVertices(graph);
         List<Integer> cutVertices = new ArrayList<Integer>();
         for (IAtom atom : cutVertexAtoms) {

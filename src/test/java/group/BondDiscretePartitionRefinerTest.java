@@ -5,6 +5,7 @@ import static io.AtomContainerPrinter.fromString;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import group.molecule.BondDiscretePartitionRefiner;
@@ -13,7 +14,7 @@ import group.molecule.BondDiscretePartitionRefiner;
 
 public class BondDiscretePartitionRefinerTest {
     
-    public static final IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+    public static final IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
     
     @Test
     public void testAlleneA() {

@@ -4,6 +4,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.Augmentation;
@@ -20,7 +21,7 @@ public class BondAugmentation implements Augmentation<IAtomContainer> {
     private static final long serialVersionUID = 3351098953211663257L;
 
     public static IChemObjectBuilder getBuilder() {
-        return SilentChemObjectBuilder.getInstance();
+        return  FastChemObjectBuilder.getInstance();   // changed SLewis for control
     }
 
     private final IAtomContainer augmentedMolecule;

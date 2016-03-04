@@ -1,7 +1,9 @@
 package util.graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import model.Graph;
 
@@ -61,7 +63,7 @@ public class CutVertexCalculator {
     }
 
     // The function to do DFS traversal.
-    public List<Integer> getCutVertices(Graph graph) {
+    public Set<Integer> getCutVertices(Graph graph) {
         int V = graph.getVertexCount();
         // Mark all the vertices as not visited
         boolean visited[] = new boolean[V];
@@ -87,7 +89,7 @@ public class CutVertexCalculator {
         }
 
         // Now ap[] contains articulation points, print them
-        List<Integer> articulationPoints = new ArrayList<Integer>();
+        Set<Integer> articulationPoints = new HashSet<>();
         for (int i = 0; i < V; i++) {
             if (ap[i] == true) {
 //                System.out.print(i + " ");

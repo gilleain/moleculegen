@@ -13,6 +13,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.signature.Orbit;
+import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import group.molecule.AtomDiscretePartitionRefiner;
@@ -21,7 +22,7 @@ import io.AtomContainerPrinter;
 public class AutPartitionTests {
     
     public static IChemObjectBuilder getBuilder() {
-        return SilentChemObjectBuilder.getInstance();
+        return  FastChemObjectBuilder.getInstance();   // changed SLewis for control
     }
 
     public void sort(IAtomContainer ac) {
