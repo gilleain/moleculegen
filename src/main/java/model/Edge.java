@@ -51,6 +51,10 @@ public class Edge implements Serializable {
         
     }
     
+    public int hashCode() {
+        return 32 * vertexZero * vertexOne;
+    }
+    
     public String toString() {
         return "(" + vertexZero + ", " + vertexOne + ")";
      }

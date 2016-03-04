@@ -81,6 +81,20 @@ public class ChainDecomposition {
         dfiIndex = 0;
         span(0, -1, g);
         
+//        System.out.println("dfi " + Arrays.toString(dfi) + " parent " + Arrays.toString(parentIndex));
+//        System.out.print("{");
+//        for (int index : backEdges.keySet()) {
+//            System.out.print(index + "=[");
+//            for (IBond bond : backEdges.get(index)) {
+//                System.out.print(g.getAtomNumber(bond.getAtom(0)));
+//                System.out.print(":");
+//                System.out.print(g.getAtomNumber(bond.getAtom(1)));
+//                System.out.print(", ");
+//            }
+//            System.out.print("], ");
+//        }
+//        System.out.println("}");
+        
         findChains(g);
         findBridges(g);
     }
@@ -178,7 +192,7 @@ public class ChainDecomposition {
                     
                 if (backEdges.containsKey(dfi[vertex])) {
                     // relies on (v, w) = (w, v)
-                    if (backEdges.get(dfi[vertex]).contains(backedge)) {
+                    if (contains(g, backedge, backEdges.get(dfi[vertex]))) {
                         addEdge = false;
                     }
                 }
@@ -187,6 +201,21 @@ public class ChainDecomposition {
                 }
             }
         }
+    }
+    
+    // UGH
+    private boolean contains(IAtomContainer g, IBond query, List<IBond> container) {
+        int query0 = g.getAtomNumber(query.getAtom(0));
+        int query1 = g.getAtomNumber(query.getAtom(1));
+        for (IBond target : container) {
+            int target0 = g.getAtomNumber(target.getAtom(0));
+            int target1 = g.getAtomNumber(target.getAtom(1));
+            if ((query0 == target0 && query1 == target1)
+                    || (query0 == target1 && query1 == target0)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     private void findChains(IAtomContainer g) {
