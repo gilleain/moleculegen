@@ -47,7 +47,7 @@ public class FastAtomAugmentor implements Augmentor<AtomAugmentation> {
     protected SaturationCalculator getSaturationCalculator()
     {
         if(saturationCalculatorX == null)
-            saturationCalculatorX = new SaturationCalculator(elementSymbols);
+            saturationCalculatorX = new SaturationCalculator();
         return  saturationCalculatorX;
     }
     

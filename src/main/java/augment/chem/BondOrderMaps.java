@@ -1,7 +1,6 @@
 package augment.chem;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BondOrderMaps {
@@ -12,22 +11,15 @@ public class BondOrderMaps {
      * attached to an atom of this element type. eg if maxBOS = 4, 
      * then the atom can have any of {{4}, {3, 1}, {2, 2}, {2, 1, 1}, ...} 
      */
-    private Map<String, Integer> maxBondOrderSumMap;
+    private final Map<String, Integer> maxBondOrderSumMap;
     
     /**
      * TODO : this is a very crude method
      * The max bond order is the maximum order of any bond attached.
      */
-    private Map<String, Integer> maxBondOrderMap;
+    private final Map<String, Integer> maxBondOrderMap;
     
-    /**
-     * The elements (in order) used to make this molecule.
-     */
-    private final List<String> elementSymbols;
-    
-    public BondOrderMaps(List<String> elementSymbols) {
-        this.elementSymbols = elementSymbols;
-        
+    public BondOrderMaps() {
         maxBondOrderSumMap = new HashMap<String, Integer>();
         maxBondOrderSumMap.put("C", 4);
         maxBondOrderSumMap.put("O", 2);
@@ -57,17 +49,9 @@ public class BondOrderMaps {
         maxBondOrderMap.put("I", 1);
         maxBondOrderMap.put("Cl", 1);
     }
-    
-    public int getMaxBondOrderSum(int index) {
-        return maxBondOrderSumMap.get(elementSymbols.get(index));
-    }
-    
+
     public int getMaxBondOrderSum(String elementSymbol) {
         return maxBondOrderSumMap.get(elementSymbol);
-    }
-
-    public int getMaxBondOrder(int currentAtomIndex) {
-        return maxBondOrderMap.get(elementSymbols.get(currentAtomIndex));
     }
     
     public int getMaxBondOrder(String elementSymbol) {

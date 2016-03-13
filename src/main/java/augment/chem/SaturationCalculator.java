@@ -18,16 +18,16 @@ public class SaturationCalculator implements Serializable {
 
     private final BondOrderMaps bondOrderMaps;
     
-    public SaturationCalculator(List<String> elementSymbols) {
-        this.bondOrderMaps = new BondOrderMaps(elementSymbols);
+    public SaturationCalculator() {
+        this.bondOrderMaps = new BondOrderMaps();
     }
-    
-    public int getMaxBondOrderSum(int index) {
-        return bondOrderMaps.getMaxBondOrderSum(index);
+
+    public int getMaxBondOrder(String elementSymbol) {
+        return bondOrderMaps.getMaxBondOrder(elementSymbol);
     }
-    
-    public int getMaxBondOrder(int currentAtomIndex) {
-        return getMaxBondOrder(currentAtomIndex);
+
+    public int getMaxBondOrderSum(String symbol) {
+        return bondOrderMaps.getMaxBondOrderSum(symbol);
     }
     
     public List<int[]> getBondOrderArrays(
@@ -112,12 +112,5 @@ public class SaturationCalculator implements Serializable {
         }
         return pairs;
     }
-    
-    public int getMaxBondOrder(String elementSymbol) {
-        return bondOrderMaps.getMaxBondOrder(elementSymbol);
-    }
-
-    public int getMaxBondOrderSum(String symbol) {
-        return bondOrderMaps.getMaxBondOrderSum(symbol);
-    }
+   
 }

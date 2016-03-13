@@ -27,7 +27,7 @@ public class BondAugmentor implements Augmentor<BondAugmentation> {
     
     public BondAugmentor(String elementFormula) {
         this.formulaParser = new FormulaParser(elementFormula);
-        this.saturationCalculator = new SaturationCalculator(formulaParser.getElementSymbols());
+        this.saturationCalculator = new SaturationCalculator();
     }
 
     @Override

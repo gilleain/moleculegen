@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import app.FormulaParser;
 import augment.AugmentingGenerator;
+import augment.chem.HCountExtensionChecker;
 import augment.chem.HCountValidator;
 import augment.constraints.ElementConstraintSource;
 import augment.constraints.ElementConstraints;
@@ -29,6 +30,8 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private HCountValidator hCountValidator;
     
+    private HCountExtensionChecker hCountExtensionChecker;
+    
     private AtomCanonicalChecker canonicalChecker;
     
     private ElementConstraints initialConstraints;
@@ -44,11 +47,12 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
         this.initialConstraints = new ElementConstraints(elementFormula);
         FormulaParser formulaParser = new FormulaParser(elementFormula);
         this.hCountValidator = new HCountValidator(formulaParser);
+        this.hCountExtensionChecker = new HCountExtensionChecker(formulaParser.getHydrogenCount());
         initialStateSource = new ElementConstraintSource(initialConstraints);
-        this.augmentor = new AtomAugmentor(hCountValidator.getElementSymbols());
+        this.augmentor = new AtomAugmentor(formulaParser.getElementSymbols());
         this.canonicalChecker = new AtomCanonicalChecker();
         this.handler = handler;
-        this.maxIndex = hCountValidator.getElementSymbols().size() - 1;
+        this.maxIndex = formulaParser.getElementSymbols().size() - 1;
     }
     
     public void setCanonicalHandler(CanonicalHandler<IAtomContainer> canonicalHandler) {
@@ -74,7 +78,7 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private void augment(AtomAugmentation parent, int index) {
         
-//        if (!hCountValidator.canExtend(parent.getAugmentedObject())) return;
+        if (!hCountExtensionChecker.canExtend(parent.getAugmentedObject(), parent.getConstraints())) return;
         
         counter++;
         if (index >= maxIndex) {

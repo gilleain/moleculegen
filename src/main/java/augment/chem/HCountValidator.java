@@ -7,7 +7,6 @@ import java.util.List;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
@@ -19,8 +18,6 @@ import app.FormulaParser;
 
 /**
  * Validate a molecule as having the correct number of hydrogens.
- * 
- * XXX it extends base child lister to get access to the BOS stuff - not nice design...
  * 
  * @author maclean
  */
@@ -44,46 +41,22 @@ public class HCountValidator implements Serializable {
     
     private final BondOrderMaps bondOrderMaps;
     
-    /**
-     * The elements (in order) used to make this molecule.
-     */
-    private List<String> elementSymbols;
-    
-    public HCountValidator(List<String> elementSymbols) {
-        this.bondOrderMaps = new BondOrderMaps(elementSymbols);
+    public HCountValidator() {
+        this.bondOrderMaps = new BondOrderMaps();
     }
     
     public HCountValidator(FormulaParser formulaParser) {
-        this(formulaParser.getElementSymbols());
+        this();
         hCount = formulaParser.getHydrogenCount();
         this.setSymbols(formulaParser.getElementSymbols());
     }
-    
-    public List<String> getElementSymbols() {
-        return elementSymbols;
-    }
-    
-    public int getMaxBondOrderSum(int index) {
-        return bondOrderMaps.getMaxBondOrderSum(index);
-    }
-    
-    public int getMaxBondOrderSum(String elementSymbol) {
-        return bondOrderMaps.getMaxBondOrderSum(elementSymbol);
-    }
 
-    public int getMaxBondOrder(int currentAtomIndex) {
-        return bondOrderMaps.getMaxBondOrder(currentAtomIndex);
-    }
-    
-    public void setElementSymbols(List<String> elementSymbols) {
-        this.elementSymbols = elementSymbols;
-    }
     
     protected int[] getSaturationCapacity(IAtomContainer parent) {
         int[] satCap = new int[parent.getAtomCount()];
         for (int index = 0; index < parent.getAtomCount(); index++) {
             IAtom atom = parent.getAtom(index);
-            int maxDegree = getMaxBondOrderSum(atom.getSymbol());
+            int maxDegree = bondOrderMaps.getMaxBondOrderSum(atom.getSymbol());
             int degree = 0;
             for (IBond bond : parent.getConnectedBondsList(atom)) {
                 degree += bond.getOrder().ordinal() + 1;
@@ -92,31 +65,7 @@ public class HCountValidator implements Serializable {
         }
         return satCap;
     }
-   
     
-    public boolean isConnected(IAtomContainer atomContainer) {
-        Object connectedProperty = atomContainer.getProperty("IS_CONNECTED");
-        if (connectedProperty == null) {
-            return true; // assume connected
-        }
-        else {
-            if ((Boolean) connectedProperty) {
-                return true;
-            }
-            else {
-                boolean connected = ConnectivityChecker.isConnected(atomContainer);
-                if (connected) {
-                    atomContainer.setProperty("IS_CONNECTED", true);    
-                }
-                else {
-                    atomContainer.setProperty("IS_CONNECTED", false);
-                }
-                return connected;
-            }
-        }
-    }
-  
-
     public static int HydrogensIncorrectCount = 0;
     public static int CountIncorrectCount = 0;
     public static int MoleculeCorrectCount = 0;
@@ -195,7 +144,7 @@ public class HCountValidator implements Serializable {
         for (IAtom atom : atomContainer.atoms()) {
 //        	Integer hCount = atom.getImplicitHydrogenCount(); 
 //            implH += (hCount == null)? 0 : hCount;
-            int atomHCount = getMaxBondOrderSum(atom.getSymbol());
+            int atomHCount = bondOrderMaps.getMaxBondOrderSum(atom.getSymbol());
             for (IBond bond : atomContainer.getConnectedBondsList(atom)) {
                 atomHCount -= bond.getOrder().numeric();
             }
@@ -223,7 +172,7 @@ public class HCountValidator implements Serializable {
 
     public void setImplicitHydrogens(IAtomContainer parent) {
         for (IAtom atom : parent.atoms()) {
-            int maxBos = getMaxBondOrderSum(atom.getSymbol());
+            int maxBos = bondOrderMaps.getMaxBondOrderSum(atom.getSymbol());
             int neighbourCount = parent.getConnectedAtomsCount(atom);
             atom.setImplicitHydrogenCount(maxBos - neighbourCount);
         }
@@ -231,13 +180,12 @@ public class HCountValidator implements Serializable {
 
     private void setSymbols(List<String> elementSymbols) {
         Collections.sort(elementSymbols);
-        setElementSymbols(elementSymbols);
         maxBOS = 0;
         int size = elementSymbols.size();
         int[] bosList = new int[size];
         for (int index = 0; index < elementSymbols.size(); index++) {
             String elementSymbol = elementSymbols.get(index);
-            maxBOS += getMaxBondOrderSum(elementSymbol);
+            maxBOS += bondOrderMaps.getMaxBondOrderSum(elementSymbol);
             bosList[index] = maxBOS;
         }
         
