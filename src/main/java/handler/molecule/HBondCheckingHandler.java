@@ -2,6 +2,7 @@ package handler.molecule;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import app.FormulaParser;
 import augment.chem.HCountValidator;
 import handler.Handler;
 
@@ -13,7 +14,7 @@ public class HBondCheckingHandler implements Handler<IAtomContainer> {
     
     public HBondCheckingHandler(String elementFormula, Handler<IAtomContainer> delegate) {
         this.delegate = delegate;
-        this.hCountValidator = new HCountValidator(elementFormula);
+        this.hCountValidator = new HCountValidator(new FormulaParser(elementFormula));
     }
 
     @Override

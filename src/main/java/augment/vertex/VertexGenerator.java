@@ -3,6 +3,7 @@ package augment.vertex;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.FormulaParser;
 import augment.AugmentingGenerator;
 import augment.chem.HCountValidator;
 import augment.constraints.VertexColorConstraintSource;
@@ -40,8 +41,8 @@ public class VertexGenerator implements AugmentingGenerator<Graph> {
     public VertexGenerator(String elementFormula, Handler<Graph> handler) {
         // XXX - parse the formula once and pass down the parser!
         this.initialConstraints = new VertexColorConstraints(elementFormula);
-        
-        this.hCountValidator = new HCountValidator(elementFormula);
+        FormulaParser formulaParser = new FormulaParser(elementFormula);
+        this.hCountValidator = new HCountValidator(formulaParser);
         initialStateSource = new VertexColorConstraintSource(initialConstraints);
         this.augmentor = new VertexAugmentor(hCountValidator.getElementSymbols());
         this.canonicalChecker = new VertexCanonicalChecker();

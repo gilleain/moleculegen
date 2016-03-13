@@ -2,6 +2,7 @@ package augment.bond;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import app.FormulaParser;
 import augment.AugmentingGenerator;
 import augment.chem.HCountValidator;
 import augment.constraints.ElementConstraintSource;
@@ -25,12 +26,13 @@ public class BondGenerator implements AugmentingGenerator<IAtomContainer> {
     private int counter;
     
     public BondGenerator(String elementFormula, Handler<IAtomContainer> handler) {
+        FormulaParser formulaParser = new FormulaParser(elementFormula);
         this.initialConstraints = new ElementConstraints(elementFormula); 
         this.augmentor = new BondAugmentor(elementFormula);
         this.handler = handler;
         canonicalChecker = new BondCanonicalChecker();
         initialStateSource = new ElementConstraintSource(initialConstraints);
-        hCountValidator = new HCountValidator(elementFormula);
+        hCountValidator = new HCountValidator(formulaParser);
     }
     
     public void run() {

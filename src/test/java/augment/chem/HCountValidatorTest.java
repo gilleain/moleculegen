@@ -6,6 +6,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import app.FormulaParser;
 import augment.chem.HCountValidator;
 import io.AtomContainerPrinter;
 import junit.framework.Assert;
@@ -27,7 +28,7 @@ public class HCountValidatorTest {
         String acp = "C0C1C2O3O4O5 0:1(1),0:3(1),1:3(1),0:4(1),2:5(1),4:5(1)";
         IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
         setHydrogens(ac, 1, 2, 3, 0, 0, 0);
-        HCountValidator validator = new HCountValidator(formula);
+        HCountValidator validator = new HCountValidator(new FormulaParser(formula));
         Assert.assertTrue(validator.isValidMol(ac, size));
     }
     
@@ -39,7 +40,7 @@ public class HCountValidatorTest {
         String acp = "C0C1N2 0:2(1),1:2(1)";
         IAtomContainer ac = AtomContainerPrinter.fromString(acp, builder);
         setHydrogens(ac, 3, 3, 1);
-        HCountValidator validator = new HCountValidator(formula);
+        HCountValidator validator = new HCountValidator(new FormulaParser(formula));
         Assert.assertTrue(validator.isValidMol(ac, size));
     }
 }

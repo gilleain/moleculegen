@@ -2,9 +2,7 @@ package augment.chem;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
@@ -16,7 +14,6 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.FastChemObjectBuilder;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import app.FormulaParser;
 
@@ -45,60 +42,19 @@ public class HCountValidator implements Serializable {
      */
     private int[] maxHRem;
     
-    
-    /**
-     * TODO : this is a very crude method
-     * The max BOS is the maximum sum of bond orders of the bonds 
-     * attached to an atom of this element type. eg if maxBOS = 4, 
-     * then the atom can have any of {{4}, {3, 1}, {2, 2}, {2, 1, 1}, ...} 
-     */
-    private Map<String, Integer> maxBondOrderSumMap;
-    
-    /**
-     * TODO : this is a very crude method
-     * The max bond order is the maximum order of any bond attached.
-     */
-    private Map<String, Integer> maxBondOrderMap;
+    private final BondOrderMaps bondOrderMaps;
     
     /**
      * The elements (in order) used to make this molecule.
      */
     private List<String> elementSymbols;
     
-    public HCountValidator() {
-        maxBondOrderSumMap = new HashMap<String, Integer>();
-        maxBondOrderSumMap.put("C", 4);
-        maxBondOrderSumMap.put("O", 2);
-        maxBondOrderSumMap.put("N", 3);
-//        maxBondOrderSumMap.put("N", 5); XXX pentavalent N is rare
-        maxBondOrderSumMap.put("Ag", 4);
-        maxBondOrderSumMap.put("As", 4);
-        maxBondOrderSumMap.put("Fe", 5);
-        maxBondOrderSumMap.put("S", 6);
-        maxBondOrderSumMap.put("P", 5);
-        maxBondOrderSumMap.put("Br", 1);
-        maxBondOrderSumMap.put("F", 1);
-        maxBondOrderSumMap.put("I", 1);
-        maxBondOrderSumMap.put("Cl", 1);
-        
-        maxBondOrderMap = new HashMap<String, Integer>();
-        maxBondOrderMap.put("C", 3);
-        maxBondOrderMap.put("O", 2);
-        maxBondOrderMap.put("N", 3);
-        maxBondOrderMap.put("Ag", 1);
-        maxBondOrderMap.put("As", 1);
-        maxBondOrderMap.put("Fe", 1);
-        maxBondOrderMap.put("S", 2);
-        maxBondOrderMap.put("P", 2);
-        maxBondOrderMap.put("Br", 1);
-        maxBondOrderMap.put("F", 1);
-        maxBondOrderMap.put("I", 1);
-        maxBondOrderMap.put("Cl", 1);
+    public HCountValidator(List<String> elementSymbols) {
+        this.bondOrderMaps = new BondOrderMaps(elementSymbols);
     }
     
-    public HCountValidator(String formulaString) {
-        this();
-        FormulaParser formulaParser = new FormulaParser(formulaString);
+    public HCountValidator(FormulaParser formulaParser) {
+        this(formulaParser.getElementSymbols());
         hCount = formulaParser.getHydrogenCount();
         this.setSymbols(formulaParser.getElementSymbols());
     }
@@ -108,15 +64,15 @@ public class HCountValidator implements Serializable {
     }
     
     public int getMaxBondOrderSum(int index) {
-        return maxBondOrderSumMap.get(elementSymbols.get(index));
+        return bondOrderMaps.getMaxBondOrderSum(index);
     }
     
     public int getMaxBondOrderSum(String elementSymbol) {
-        return maxBondOrderSumMap.get(elementSymbol);
+        return bondOrderMaps.getMaxBondOrderSum(elementSymbol);
     }
 
     public int getMaxBondOrder(int currentAtomIndex) {
-        return maxBondOrderMap.get(elementSymbols.get(currentAtomIndex));
+        return bondOrderMaps.getMaxBondOrder(currentAtomIndex);
     }
     
     public void setElementSymbols(List<String> elementSymbols) {
@@ -127,7 +83,7 @@ public class HCountValidator implements Serializable {
         int[] satCap = new int[parent.getAtomCount()];
         for (int index = 0; index < parent.getAtomCount(); index++) {
             IAtom atom = parent.getAtom(index);
-            int maxDegree = maxBondOrderSumMap.get(atom.getSymbol());
+            int maxDegree = getMaxBondOrderSum(atom.getSymbol());
             int degree = 0;
             for (IBond bond : parent.getConnectedBondsList(atom)) {
                 degree += bond.getOrder().ordinal() + 1;
@@ -252,17 +208,17 @@ public class HCountValidator implements Serializable {
         int max = implH + hAdd;
         boolean extensible = (min <= hCount && hCount <= max); 
         String acp = io.AtomContainerPrinter.toString(atomContainer);
-        System.out.println(
-                    hCount
-                    + "\t" +  implH 
-                    + "\t" + hAdd
-                    + "\t" + hRem
-                    + "\t" + min 
-                    + "\t" + max
-                    + "\t" + extensible
-                    + "\t" + acp);
-        return true;
-//        return extensible;
+//        System.out.println(
+//                    hCount
+//                    + "\t" +  implH 
+//                    + "\t" + hAdd
+//                    + "\t" + hRem
+//                    + "\t" + min 
+//                    + "\t" + max
+//                    + "\t" + extensible
+//                    + "\t" + acp);
+//        return true;
+        return extensible;
     }
 
     public void setImplicitHydrogens(IAtomContainer parent) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import app.FormulaParser;
 import augment.AugmentingGenerator;
 import augment.chem.HCountValidator;
 import augment.constraints.ElementConstraintSource;
@@ -41,8 +42,8 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     public AtomGenerator(String elementFormula, Handler<IAtomContainer> handler) {
         // XXX - parse the formula once and pass down the parser!
         this.initialConstraints = new ElementConstraints(elementFormula);
-        
-        this.hCountValidator = new HCountValidator(elementFormula);
+        FormulaParser formulaParser = new FormulaParser(elementFormula);
+        this.hCountValidator = new HCountValidator(formulaParser);
         initialStateSource = new ElementConstraintSource(initialConstraints);
         this.augmentor = new AtomAugmentor(hCountValidator.getElementSymbols());
         this.canonicalChecker = new AtomCanonicalChecker();
@@ -73,7 +74,7 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private void augment(AtomAugmentation parent, int index) {
         
-        if (!hCountValidator.canExtend(parent.getAugmentedObject())) return;
+//        if (!hCountValidator.canExtend(parent.getAugmentedObject())) return;
         
         counter++;
         if (index >= maxIndex) {
