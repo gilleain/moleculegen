@@ -1,4 +1,4 @@
-package validate;
+package augment.chem;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -6,6 +6,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import augment.chem.HCountValidator;
 import io.AtomContainerPrinter;
 import junit.framework.Assert;
 

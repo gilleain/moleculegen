@@ -1,4 +1,4 @@
-package validate;
+package augment.chem;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -237,8 +237,13 @@ public class HCountValidator implements Serializable {
     public boolean canExtend(IAtomContainer atomContainer) {
         int implH = 0;
         for (IAtom atom : atomContainer.atoms()) {
-        	Integer hCount = atom.getImplicitHydrogenCount(); 
-            implH += (hCount == null)? 0 : hCount;
+//        	Integer hCount = atom.getImplicitHydrogenCount(); 
+//            implH += (hCount == null)? 0 : hCount;
+            int atomHCount = getMaxBondOrderSum(atom.getSymbol());
+            for (IBond bond : atomContainer.getConnectedBondsList(atom)) {
+                atomHCount -= bond.getOrder().numeric();
+            }
+            implH += atomHCount;
         }
         int index = atomContainer.getAtomCount() - 1;
         int hAdd = maxHAdd[index];
@@ -246,16 +251,18 @@ public class HCountValidator implements Serializable {
         int min = implH - hRem;
         int max = implH + hAdd;
         boolean extensible = (min <= hCount && hCount <= max); 
-//        String acp = test.AtomContainerPrinter.toString(atomContainer);
-//        System.out.println(implH 
-//                    + "\t" + hAdd
-//                    + "\t" + hRem
-//                    + "\t" + min 
-//                    + "\t" + max
-//                    + "\t" + extensible
-//                    + "\t" + acp);
-//        return true;
-        return extensible;
+        String acp = io.AtomContainerPrinter.toString(atomContainer);
+        System.out.println(
+                    hCount
+                    + "\t" +  implH 
+                    + "\t" + hAdd
+                    + "\t" + hRem
+                    + "\t" + min 
+                    + "\t" + max
+                    + "\t" + extensible
+                    + "\t" + acp);
+        return true;
+//        return extensible;
     }
 
     public void setImplicitHydrogens(IAtomContainer parent) {

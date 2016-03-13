@@ -6,12 +6,12 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
+import augment.chem.HCountValidator;
 import augment.constraints.ElementConstraintSource;
 import augment.constraints.ElementConstraints;
 import handler.CanonicalHandler;
 import handler.Handler;
 import util.molecule.CDKUtilities;
-import validate.HCountValidator;
 
 
 public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
@@ -72,6 +72,8 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     }
     
     private void augment(AtomAugmentation parent, int index) {
+        
+        if (!hCountValidator.canExtend(parent.getAugmentedObject())) return;
         
         counter++;
         if (index >= maxIndex) {

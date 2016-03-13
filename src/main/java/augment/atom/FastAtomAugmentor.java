@@ -1,7 +1,7 @@
 package augment.atom;
 
 import augment.Augmentor;
-import augment.SaturationCalculator;
+import augment.chem.SaturationCalculator;
 import augment.constraints.ElementConstraints;
 import group.Permutation;
 import group.PermutationGroup;

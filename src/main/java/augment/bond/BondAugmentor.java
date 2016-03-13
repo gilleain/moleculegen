@@ -10,7 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import app.FormulaParser;
 import augment.Augmentor;
-import augment.SaturationCalculator;
+import augment.chem.SaturationCalculator;
 import augment.constraints.ElementConstraints;
 import group.Partition;
 import group.Permutation;

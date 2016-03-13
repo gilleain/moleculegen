@@ -14,14 +14,12 @@ public class AlkaneTests extends FormulaTest {
     
     @Test
     public void c3H8Test() {
-        int c3H8 = countNFromAtom("C3H8");
-        Assert.assertEquals(1, c3H8);
+        Assert.assertEquals(1, countNFromAtom("C3H8"));
     }
     
     @Test
     public void c4H10Test() {
-        int c4H10 = countNFromAtom("C4H10");
-        Assert.assertEquals(2, c4H10);
+        Assert.assertEquals(2, countNFromAtom("C4H10"));
     }
     
     @Test

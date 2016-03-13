@@ -3,10 +3,10 @@ package augment.bond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.AugmentingGenerator;
+import augment.chem.HCountValidator;
 import augment.constraints.ElementConstraintSource;
 import augment.constraints.ElementConstraints;
 import handler.Handler;
-import validate.HCountValidator;
 
 public class BondGenerator implements AugmentingGenerator<IAtomContainer> {
     

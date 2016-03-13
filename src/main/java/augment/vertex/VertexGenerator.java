@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import augment.AugmentingGenerator;
+import augment.chem.HCountValidator;
 import augment.constraints.VertexColorConstraintSource;
 import augment.constraints.VertexColorConstraints;
 import handler.Handler;
 import model.Graph;
-import validate.HCountValidator;
 
 
 /**

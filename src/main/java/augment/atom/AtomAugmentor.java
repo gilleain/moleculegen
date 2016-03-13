@@ -11,7 +11,7 @@ import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.Augmentor;
-import augment.SaturationCalculator;
+import augment.chem.SaturationCalculator;
 import augment.constraints.ElementConstraints;
 import group.Permutation;
 import group.PermutationGroup;
@@ -90,9 +90,7 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
                 representatives.add(bondOrderArray);
             }
         }
-        // for disconnected graphs
-//        int[] emptySet = new int[atomCount];
-//        representatives.add(emptySet);
+
         return representatives;
     }
     

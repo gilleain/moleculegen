@@ -1,4 +1,4 @@
-package augment;
+package augment.chem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -133,12 +133,8 @@ public class SaturationCalculator implements Serializable {
 
     public List<IndexPair> getUndersaturatedBonds(IAtomContainer atomContainer, List<Integer> undersaturatedAtoms, int[] saturationCapacity) {
         List<IndexPair> pairs = new ArrayList<IndexPair>();
-        List<Integer> filtered = filterOutDisconnected(atomContainer, undersaturatedAtoms);
-//        System.out.println(filtered);
-        if (filtered.isEmpty() || filtered.size() == 1) return pairs;
-        KSubsetLister<Integer> lister = new KSubsetLister<Integer>(2, filtered);
-//        KSubsetLister<Integer> lister = new KSubsetLister<Integer>(2, undersaturatedAtoms);
-        for (List<Integer> pair : lister) {
+        if (undersaturatedAtoms.isEmpty() || undersaturatedAtoms.size() == 1) return pairs;
+        for (List<Integer> pair : new KSubsetLister<Integer>(2, undersaturatedAtoms)) {
             int start = pair.get(0);
             int end = pair.get(1);
             IBond bond = atomContainer.getBond(atomContainer.getAtom(start), atomContainer.getAtom(end));
@@ -155,17 +151,6 @@ public class SaturationCalculator implements Serializable {
         return pairs;
     }
     
-    private List<Integer> filterOutDisconnected(IAtomContainer atomContainer, List<Integer> indices) {
-        List<Integer> filtered = new ArrayList<Integer>();
-        for (int index : indices) {
-            if (index < atomContainer.getAtomCount() - 1
-                    || atomContainer.getConnectedAtomsCount(atomContainer.getAtom(index)) > 0) {
-                filtered.add(index);
-            }
-        }
-        return filtered;
-    }
-
     public int getMaxBondOrder(String elementSymbol) {
         return maxBondOrderMap.get(elementSymbol);
     }
