@@ -75,4 +75,8 @@ public class ElementConstraints implements Iterable<String>, Serializable {
     public String toString() {
         return this.elementCounts.toString();
     }
+
+    public int getCount(String element) {
+        return this.elementCounts.get(element);
+    }
 }

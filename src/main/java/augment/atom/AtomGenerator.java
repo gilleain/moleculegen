@@ -78,8 +78,6 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
     
     private void augment(AtomAugmentation parent, int index) {
         
-        if (!hCountExtensionChecker.canExtend(parent.getAugmentedObject(), parent.getConstraints())) return;
-        
         counter++;
         if (index >= maxIndex) {
             IAtomContainer atomContainer = parent.getAugmentedObject();
@@ -94,6 +92,8 @@ public class AtomGenerator implements AugmentingGenerator<IAtomContainer> {
             }
             return;
         }
+        
+        if (!hCountExtensionChecker.canExtend(parent.getAugmentedObject(), parent.getConstraints())) return;
         
         for (AtomAugmentation augmentation : augmentor.augment(parent)) {
             if (canonicalChecker.isCanonical(augmentation)) {
