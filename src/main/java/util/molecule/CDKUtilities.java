@@ -1,9 +1,11 @@
 package util.molecule;
 
-import augment.atom.*;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
+import org.openscience.cdk.signature.MoleculeSignature;
+
+import augment.atom.AtomAugmentation;
 import io.AtomContainerPrinter;
-import org.openscience.cdk.interfaces.*;
-import org.openscience.cdk.signature.*;
 
 /**
  * util.molecule.CDKUtilities

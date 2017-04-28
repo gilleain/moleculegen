@@ -10,7 +10,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import group.molecule.BondDiscretePartitionRefiner;
@@ -21,14 +20,14 @@ import io.AtomContainerPrinter;
 public class BondAutPartitionTests {
 
     public static IChemObjectBuilder getBuilder() {
-        return  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+        return SilentChemObjectBuilder.getInstance();
     }
     
     public void sort(IAtomContainer ac) {
         for (IBond bond : ac.bonds()) {
             IAtom a0 = bond.getAtom(0);
             IAtom a1 = bond.getAtom(1);
-            if (ac.getAtomNumber(a0) > ac.getAtomNumber(a1)) {
+            if (ac.indexOf(a0) > ac.indexOf(a1)) {
                 bond.setAtom(a1, 0);
                 bond.setAtom(a0, 1);
             }

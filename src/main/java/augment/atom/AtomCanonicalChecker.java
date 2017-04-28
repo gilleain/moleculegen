@@ -1,6 +1,8 @@
 package augment.atom;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.SortedSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 

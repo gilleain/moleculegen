@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 import org.openscience.cdk.exception.CDKException;
+
 import augment.AugmentingGenerator;
 import handler.molecule.DataFormat;
 

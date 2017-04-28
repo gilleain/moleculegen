@@ -5,14 +5,14 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.constraints.ElementConstraints;
 import io.AtomContainerPrinter;
 
 public class TestBondCanonicalChecker {
     
-    private IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     private BondCanonicalChecker checker = new BondCanonicalChecker();
     

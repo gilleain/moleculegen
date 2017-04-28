@@ -1,8 +1,9 @@
 package augment.atom;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import augment.Augmentation;
 import augment.constraints.ElementConstraints;
-import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * augment.atom.IAtomAugmentation

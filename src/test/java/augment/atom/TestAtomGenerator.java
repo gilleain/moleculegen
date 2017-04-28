@@ -8,7 +8,6 @@ import java.util.Map;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import handler.Handler;
@@ -19,7 +18,7 @@ import io.AtomContainerPrinter;
 
 public class TestAtomGenerator {
     
-    private IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     private void run(String elementFormula, String fromString, Handler handler) {
         AtomGenerator gen = new AtomGenerator(elementFormula, handler);
@@ -42,8 +41,7 @@ public class TestAtomGenerator {
         return handler.getCount();
     }
     
-    // not configures correctly SLewis  
-  //  @Test  taken out this does not work
+    @Test  
     public void testFromCCSingle() {
         printFrom("C4H6", "C0C1 0:1(1)");
     }
@@ -54,12 +52,12 @@ public class TestAtomGenerator {
     }
     
     
-    // not configures correctly SLewis   @Test
+    @Test
     public void testFromCCDouble() {
         printFrom("CCCC", "C0C1 0:1(2)");
     }
     
-    // not configures correctly SLewis  @Test
+    @Test
     public void testToFours() {
         int count  = countFrom("C4H6", "C0C1 0:1(1)");
             count += countFrom("C4H6", "C0C1 0:1(2)");
@@ -103,7 +101,7 @@ public class TestAtomGenerator {
         }
     }
     
-    // not configures correctly SLewis   @Test
+    @Test
     public void testDups() {
         DuplicateHandler handler = new DuplicateHandler();
         run("C4H6", "C0C1 0:1(1)", handler);

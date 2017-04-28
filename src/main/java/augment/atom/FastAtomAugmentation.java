@@ -1,10 +1,10 @@
 package augment.atom;
 
-import augment.Augmentation;
-import augment.constraints.ElementConstraints;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond.Order;
+
+import augment.constraints.ElementConstraints;
 
 /**
  * An augmentation of an atom container by atom.

@@ -8,16 +8,16 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import io.AtomContainerPrinter;
 
 public class TestCutCalculator {
     
-    private IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+    private IChemObjectBuilder builder =  SilentChemObjectBuilder.getInstance(); 
     
     private String bondToString(IAtomContainer mol, IBond bond) {
-        return mol.getAtomNumber(bond.getAtom(0)) + ":" +  mol.getAtomNumber(bond.getAtom(1));
+        return mol.indexOf(bond.getAtom(0)) + ":" +  mol.indexOf(bond.getAtom(1));
     }
     
     private void printBonds(Set<Integer> edgeIndices, IAtomContainer mol) {

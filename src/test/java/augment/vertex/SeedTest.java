@@ -1,6 +1,5 @@
 package augment.vertex;
 
-import handler.molecule.StringStreamHandler;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -9,7 +8,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import handler.Handler;
 import handler.graph.MoleculeAdaptor;
 import handler.molecule.HBondCheckingHandler;
-import handler.molecule.PrintStreamHandler;
+import handler.molecule.StringStreamHandler;
 import model.Graph;
 
 /**

@@ -1,13 +1,9 @@
 package handler.molecule;
 
-import handler.Handler;
-import io.AtomContainerPrinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import handler.Handler;
+import io.AtomContainerPrinter;
 
 public class StringStreamHandler implements Handler<IAtomContainer> {
 

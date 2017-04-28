@@ -8,7 +8,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 /**
@@ -33,7 +33,7 @@ public class FormulaParser implements Serializable {
     private final int hCount;
     
     public FormulaParser(String formulaString) {
-        IChemObjectBuilder builder = FastChemObjectBuilder.getInstance();   //  changed slewis for more control
+        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         IMolecularFormula formula = 
             MolecularFormulaManipulator.getMolecularFormula(formulaString, builder);
         List<IElement> elements = MolecularFormulaManipulator.elements(formula);

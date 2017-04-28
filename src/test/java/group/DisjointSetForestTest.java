@@ -9,7 +9,6 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -24,7 +23,7 @@ public class DisjointSetForestTest {
         for (IBond bond : ac.bonds()) {
             IAtom a0 = bond.getAtom(0);
             IAtom a1 = bond.getAtom(1);
-            if (ac.getAtomNumber(a0) > ac.getAtomNumber(a1)) {
+            if (ac.indexOf(a0) > ac.indexOf(a1)) {
                 bond.setAtom(a1, 0);
                 bond.setAtom(a0, 1);
             }
@@ -105,7 +104,7 @@ public class DisjointSetForestTest {
     @Test
     public void molAutomorphismTest() throws InvalidSmilesException {
         IAtomContainer ac = new SmilesParser(
-                FastChemObjectBuilder.getInstance() ).parseSmiles("C1=CCCC1");
+                SilentChemObjectBuilder.getInstance() ).parseSmiles("C1=CCCC1");
         sort(ac);
         AtomContainerPrinter.print(ac);
         AtomDiscretePartitionRefiner refiner = 

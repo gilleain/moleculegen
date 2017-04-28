@@ -2,8 +2,6 @@ package group;
 
 import org.junit.Test;
 
-import group.Permutation;
-import group.PermutationGroup;
 import group.graph.GraphDiscretePartitionRefiner;
 import model.Graph;
 

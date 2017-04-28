@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import handler.Handler;
@@ -24,7 +23,7 @@ public class FormulaTest {
         DuplicateCountingHandler moleculeHandler = new DuplicateCountingHandler();
         HBondCheckingHandler hBondCheckingHandler = 
                 new HBondCheckingHandler(elementFormula, moleculeHandler);
-        IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
         Handler<Graph> moleculeAdaptor = new MoleculeAdaptor(builder, hBondCheckingHandler);
         VertexGenerator gen = new VertexGenerator(elementFormula, moleculeAdaptor);
         gen.run();

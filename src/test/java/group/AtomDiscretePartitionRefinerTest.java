@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import group.molecule.AtomDiscretePartitionRefiner;
@@ -14,7 +13,7 @@ import io.AtomContainerPrinter;
 
 public class AtomDiscretePartitionRefinerTest {
     
-    private IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+    private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
     
     public IAtomContainer makeAtomContainer(String elements) {
         IAtomContainer ac = builder.newInstance(IAtomContainer.class);

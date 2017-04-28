@@ -10,7 +10,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.AugmentingGenerator;
 import handler.molecule.DataFormat;
@@ -25,7 +25,7 @@ import io.IteratingSignatureReader;
  */
 public class MutipleInputAugmentor {
 
-    private static IChemObjectBuilder builder = FastChemObjectBuilder.getInstance();   // changed SLewis for control
+    private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 
     /**
      * @param argsH the argument handler

@@ -5,7 +5,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import group.molecule.AtomDiscretePartitionRefiner;
@@ -14,7 +13,7 @@ public class PermGroupTest {
     
     
     private IAtomContainer getAtomContainer(String elements, int[][] bonds) {
-        IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+        IChemObjectBuilder builder =  SilentChemObjectBuilder.getInstance();
         IAtomContainer ac = builder.newInstance(IAtomContainer.class); 
         for (int i = 0; i < elements.length(); i++) {
             String eS = String.valueOf(elements.charAt(i));

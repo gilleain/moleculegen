@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import io.AtomContainerPrinter;
@@ -16,7 +15,7 @@ import util.molecule.ChainDecomposition;
 
 public class TestChainDecomposition {
     
-    private IChemObjectBuilder builder =  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+    private IChemObjectBuilder builder =  SilentChemObjectBuilder.getInstance();
     
     private void printBridges(IAtomContainer mol, ChainDecomposition chainDecomposition) {
         for (IBond bond : chainDecomposition.getBridges()) {

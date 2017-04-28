@@ -1,11 +1,10 @@
 package group.molecule;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import group.AbstractEquitablePartitionRefiner;
 import group.IEquitablePartitionRefiner;
+import group.Refinable;
 import group.invariant.IntegerInvariant;
 import group.invariant.Invariant;
 
@@ -21,19 +20,17 @@ public class BondEquitablePartitionRefiner extends
         AbstractEquitablePartitionRefiner implements IEquitablePartitionRefiner {
     
     /**
-     * The connections between bonds in the atom container, expressed as a map
-     * between bond indices. So, for each bond, there is a mapping to other bonds
-     * it is connected to.
+     * The bond refinable.
      */
-    private Map<Integer, List<Integer>> connectionTable;
+    private final Refinable refinable;
     
-    public BondEquitablePartitionRefiner(Map<Integer, List<Integer>> connectionTable) {
-        this.connectionTable = connectionTable;
+    public BondEquitablePartitionRefiner(Refinable refinable) {
+        this.refinable = refinable;
     }
 
     public Invariant neighboursInBlock(Set<Integer> block, int vertexIndex) {
         int neighbours = 0;
-        List<Integer> connectedBonds = connectionTable.get(vertexIndex); 
+        int[] connectedBonds = refinable.getConnectedIndices(vertexIndex); 
         for (int connected : connectedBonds) {
             if (block.contains(connected)) {
                 neighbours++;
@@ -44,7 +41,7 @@ public class BondEquitablePartitionRefiner extends
     
     @Override
     public int getNumberOfVertices() {
-        return connectionTable.size();
+        return refinable.getVertexCount();
     }
 
 }

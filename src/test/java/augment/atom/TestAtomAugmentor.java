@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.signature.MoleculeSignature;
-import org.openscience.cdk.silent.FastChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import augment.CanonicalChecker;
@@ -19,7 +18,7 @@ import io.AtomContainerPrinter;
 public class TestAtomAugmentor {
 
     public static IChemObjectBuilder getBuilder() {
-        return  FastChemObjectBuilder.getInstance();   // changed SLewis for control
+        return SilentChemObjectBuilder.getInstance();
     }
 
     

@@ -186,12 +186,12 @@ public class BondDiscretePartitionRefiner extends AbstractDiscretePartitionRefin
         
         int n = getVertexCount();
         PermutationGroup group = new PermutationGroup(new Permutation(n));
-        setup(group, new BondEquitablePartitionRefiner(connectionTable));
+//        setup(group, new BondEquitablePartitionRefiner(connectionTable)); // TODO
     }
     
     private void setup(IAtomContainer atomContainer, PermutationGroup group) {
         setupConnectionTable(atomContainer);
-        setup(group, new BondEquitablePartitionRefiner(connectionTable));
+//        setup(group, new BondEquitablePartitionRefiner(connectionTable)); // TODO
     }
     
     private void setupConnectionTable(IAtomContainer atomContainer) {
