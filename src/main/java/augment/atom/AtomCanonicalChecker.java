@@ -4,12 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.openscience.cdk.group.AtomContainerDiscretePartitionRefiner;
+import org.openscience.cdk.group.Partition;
+import org.openscience.cdk.group.PartitionRefinement;
+import org.openscience.cdk.group.Permutation;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import augment.CanonicalChecker;
-import group.Partition;
-import group.Permutation;
-import group.molecule.AtomDiscretePartitionRefiner;
+//import group.Partition;
+//import group.Permutation;
+//import group.molecule.AtomDiscretePartitionRefiner;
 import util.molecule.CutCalculator;
 
 public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> {
@@ -27,7 +31,7 @@ public class AtomCanonicalChecker implements CanonicalChecker<AtomAugmentation> 
             return true;
         }
 
-        AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
+        AtomContainerDiscretePartitionRefiner refiner = PartitionRefinement.forAtoms().create();
         refiner.getAutomorphismGroup(augmentedMolecule);
 
         int chosen = getChosen(nonSeparatingAtoms, refiner.getBest());

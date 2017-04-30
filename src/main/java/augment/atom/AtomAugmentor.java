@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openscience.cdk.group.AtomContainerDiscretePartitionRefiner;
+import org.openscience.cdk.group.PartitionRefinement;
+import org.openscience.cdk.group.Permutation;
+import org.openscience.cdk.group.PermutationGroup;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -12,9 +16,9 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import augment.Augmentor;
 import augment.chem.SaturationCalculator;
 import augment.constraints.ElementConstraints;
-import group.Permutation;
-import group.PermutationGroup;
-import group.molecule.AtomDiscretePartitionRefiner;
+//import group.Permutation;
+//import group.PermutationGroup;
+//import group.molecule.AtomDiscretePartitionRefiner;
 
 public class AtomAugmentor implements Augmentor<AtomAugmentation> {
     
@@ -29,7 +33,7 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
      */
     private List<String> elementSymbols;
     
-    private transient SaturationCalculator saturationCalculatorX; // do not serialize
+    private SaturationCalculator saturationCalculator = new SaturationCalculator();
     
     public AtomAugmentor(String elementString) {
         elementSymbols = new ArrayList<String>();
@@ -42,12 +46,6 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
         this.elementSymbols = elementSymbols;
      }
 
-    protected SaturationCalculator getSaturationCalculator()
-    {
-        if(saturationCalculatorX == null)
-            saturationCalculatorX = new SaturationCalculator();
-        return  saturationCalculatorX;
-    }
     
     @Override
     public List<AtomAugmentation> augment(AtomAugmentation parent) {
@@ -69,11 +67,9 @@ public class AtomAugmentor implements Augmentor<AtomAugmentation> {
     }
     
     private List<int[]> getBondOrderArrays(IAtomContainer atomContainer, String symbol) {
-        AtomDiscretePartitionRefiner refiner = new AtomDiscretePartitionRefiner();
+        AtomContainerDiscretePartitionRefiner refiner = PartitionRefinement.forAtoms().create();
         PermutationGroup autG = refiner.getAutomorphismGroup(atomContainer);
         int atomCount = atomContainer.getAtomCount();
-
-        SaturationCalculator saturationCalculator =  getSaturationCalculator();
 
         // these are the atom indices that can have bonds added
         int[] saturationCapacity = saturationCalculator.getSaturationCapacity(atomContainer);
